@@ -33,7 +33,7 @@ repositories {
     }
 }
 
-if (System.getenv('TRAVIS') != null) {
+/*if (System.getenv('TRAVIS') != null) {
     if (System.env.TRAVIS_TAG != null && System.env.TRAVIS_TAG != "") { // Strangely it has to be both, because it's sometimes set as TRAVIS_TAG="" when we're in travis but no tag is set
         // v3.3.0-stable-sdk1 becomes 3.3.0-stable
         // Intentionally not using lastIndexOf here, we want the second "-".
@@ -69,7 +69,7 @@ if (System.getenv('TRAVIS') != null) {
 	
 	// This is the engine version that will be used per default on every regular commit
 	ext.jmeEngineVersion = "3.3.0" + ext.branchSpec + "-SNAPSHOT"
-}
+}*/
 
 configurations {
     corelibs
@@ -84,31 +84,34 @@ dependencies {
     corelibs dep("com.badlogicgames.gdx:gdx-ai:1.8.1", true, true)
     corelibs dep("javax.help:javahelp:2.0.05", false, false)
 
-    corelibs dep("org.jmonkeyengine:jme3-core:$jmeEngineVersion", true, true)
-    corelibs dep("org.jmonkeyengine:jme3-desktop:$jmeEngineVersion", true, true)
-    corelibs dep("org.jmonkeyengine:jme3-lwjgl:$jmeEngineVersion", true, true)
-    corelibs dep("org.jmonkeyengine:jme3-effects:$jmeEngineVersion", true, true)
-    corelibs dep("org.jmonkeyengine:jme3-blender:$jmeEngineVersion", true, true)
+    corelibs dep("org.jmonkeyengine:jme3-core", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-desktop", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-lwjgl", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-effects", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-blender", false, false)
 
-    corelibs dep("org.jmonkeyengine:jme3-bullet:$jmeEngineVersion", true, true)
-    corelibs dep("org.jmonkeyengine:jme3-bullet-native:$jmeEngineVersion", true, true)
+    corelibs dep("org.jmonkeyengine:jme3-bullet", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-bullet-native", false, false)
     corelibs dep(fileTree("lib"), false, false)
-    corelibs dep("org.jmonkeyengine:jme3-jogg:$jmeEngineVersion", true, true)
+    corelibs dep("org.jmonkeyengine:jme3-jogg", false, false)
 
-    corelibs dep("org.jmonkeyengine:jme3-networking:$jmeEngineVersion", true, true)
-    corelibs dep("org.jmonkeyengine:jme3-niftygui:$jmeEngineVersion", true, true)
-    corelibs dep("org.jmonkeyengine:jme3-plugins:$jmeEngineVersion", true, true)
-    corelibs dep("org.jmonkeyengine:jme3-terrain:$jmeEngineVersion", true, true)
+    corelibs dep("org.jmonkeyengine:jme3-networking", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-niftygui", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-plugins", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-terrain", false, false)
 
-    optlibs dep("org.jmonkeyengine:jme3-jbullet:$jmeEngineVersion", true, true)
-    optlibs dep("org.jmonkeyengine:jme3-jogl:$jmeEngineVersion", true, true)
-    optlibs dep("org.jmonkeyengine:jme3-android:$jmeEngineVersion", true, true)
-    optlibs dep("org.jmonkeyengine:jme3-ios:$jmeEngineVersion", true, true)
-    optlibs dep("org.jmonkeyengine:jme3-android-native:$jmeEngineVersion", true, true)
-    optlibs dep("org.jmonkeyengine:jme3-bullet-native-android:$jmeEngineVersion", true, true)
-    testdatalibs dep("org.jmonkeyengine:jme3-testdata:$jmeEngineVersion", false, false)
+    optlibs dep("org.jmonkeyengine:jme3-jbullet", false, false)
+    optlibs dep("org.jmonkeyengine:jme3-jogl", false, false)
+    optlibs dep("org.jmonkeyengine:jme3-android", false, false)
+    optlibs dep("org.jmonkeyengine:jme3-ios", false, false)
+    optlibs dep("org.jmonkeyengine:jme3-android-native", false, false)
+    optlibs dep("org.jmonkeyengine:jme3-bullet-native-android", false, false)
+    optlibs dep("com.github.stephengold:Heart:5.0.0for33", false, false)
+    optlibs dep("com.github.stephengold:Minie:1.5.0for33", false, false)
+    optlibs dep("com.github.stephengold:Wes:0.4.8for33", false, false)
+    testdatalibs dep("org.jmonkeyengine:jme3-testdata", false, false)
 
-    examplelibs dep("org.jmonkeyengine:jme3-examples:$jmeEngineVersion", false, true)
+    examplelibs dep("org.jmonkeyengine:jme3-examples", false, false)
 
 }
 
@@ -568,7 +571,7 @@ ant.properties['plugins.version'] = jmeVersion
 ant.properties['app.version']= jmePomVersion
 ant.properties['nbm.revision']= jmeNbmRevision
 
-task overrideHarness(dependsOn: checkPlatformConfig) {
+task overrideHarness(dependsOn: ['checkPlatformConfig', 'updateNetbeans']) {
     doLast {
         def props = new Properties()
         props.load(new FileInputStream("$rootDir/harness-override/override.properties"))
@@ -612,6 +615,15 @@ task overrideHarness(dependsOn: checkPlatformConfig) {
 overrideHarness.outputs.files([ 'netbeans/harness/launchers/app.exe', 'netbeans/harness/launchers/app64.exe', 'netbeans/harness/launchers/pre7_app.exe'])
 overrideHarness.inputs.files([ 'netbeans/harness/launchers/app.exe', 'netbeans/harness/launchers/app64.exe', 'netbeans/harness/launchers/pre7_app.exe', 'harness-override/override.properties'])
 
+task updateNetbeans(type: Exec, dependsOn: checkPlatformConfig) {
+    ignoreExitValue true // We make netbeans fail by specifying "exit" which is no java file to open (this command would open the whole IDE)
+    if (org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.currentOperatingSystem.isWindows()) {
+        commandLine 'netbeans/bin/netbeans.exe', '--update-all', '--modules', '--refresh', '--nosplash', '--nogui', 'exit'
+    } else {
+        commandLine 'netbeans/bin/netbeans', '--update-all', '--modules', '--refresh', '--nosplash', '--nogui', 'exit'
+    }
+}
+
 task downloadAvian() {
     doLast {
         def avianFile = file("jme3-ios/src/com/jme3/gde/ios/avian-openjdk-mac.zip")
@@ -623,7 +635,7 @@ task downloadAvian() {
     }
 }
 
-task buildSdk(dependsOn: [copyBaseLibs, copyProjectLibs, createProjectXml, createBaseXml, copyTestSources, overrideHarness, downloadAvian]) {
+task buildSdk(dependsOn: [copyBaseLibs, copyProjectLibs, createProjectXml, createBaseXml, copyTestSources, downloadAvian]) {
     doLast {
         ant.propertyfile(file: "nbproject/project.properties") {
             entry( key: "plugins.version", value: "${jmeVersion}")
@@ -698,7 +710,7 @@ task fixPlatformIndependent(dependsOn: patchPlatformIndependent, type: Zip) {
 }
 
 wrapper {
-    gradleVersion = '4.10.2'
+    gradleVersion = '5.6.4'
 }
 
 //jar.dependsOn(buildSdk)

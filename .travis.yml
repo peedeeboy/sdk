@@ -1,5 +1,4 @@
 language: java
-sudo: false
 jdk: openjdk11
 dist: bionic
 
@@ -9,11 +8,10 @@ cache:
   directories:
    - $HOME/.gradle/caches/
    - $HOME/.gradle/wrapper/
-   - netbeans
-   - jdks/local/8u152-b16/compiled
+   - jdks/local/*/compiled
 
 addons:
-  ssh_known_hosts: updates.jmonkeyengine.org
+  #ssh_known_hosts: updates.jmonkeyengine.org
   apt:
     packages:
     - p7zip-full
@@ -42,8 +40,9 @@ install:
   - ./build_engine.sh
   # Now we have to patch the engine
   - ./fix_engine.sh
+  # Can't do that currently was we now use engine/ as subproject...
   # Remove Engine Source and built class files since travis is low on disk space
-  - rm -rf engine/
+  # - rm -rf engine/
   - ./gradlew buildSdk
   #- '[ -z "$TRAVIS_TAG" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && ant -Dstorepass="$NBM_SIGN_PASS" hudson-nightly | awk "{printf(\".\"); fflush(stdout)}" || :'
   #- '[ -z "$TRAVIS_TAG" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && scp -rp -i nbproject/private/www-updater.key build/updates/* www-updater@updates.jmonkeyengine.org:/var/www/updates/nightly/3.1/plugins || :'
@@ -66,6 +65,8 @@ before_deploy:
   
   # Force Freeing Space.
   - rm -rf build/
+  - ./gradlew overrideHarness # This will patch the launcher exes to have our custom icon
+  - set -o pipefail # Allow failing in ant to be up-propagated
   - ant -Dstorepass="$NBM_SIGN_PASS" -Dpack200.enabled=true set-spec-version build-installers unset-spec-version | awk '{printf("."); fflush(stdout)}'
   
   # Has to be done before deploy (due to the rm command)

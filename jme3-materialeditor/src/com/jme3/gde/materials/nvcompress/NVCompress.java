@@ -92,7 +92,7 @@ public class NVCompress extends javax.swing.JFrame {
         lblCompressType = new javax.swing.JLabel();
         chkCuda = new javax.swing.JCheckBox();
         sclFileList = new javax.swing.JScrollPane();
-        lstFileList = new javax.swing.JList();
+        lstFileList = new javax.swing.JList<>();
         btnAddFiles = new javax.swing.JButton();
         btnRemoveFiles = new javax.swing.JButton();
         pnlExportOpt = new javax.swing.JPanel();
@@ -356,7 +356,7 @@ public class NVCompress extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(barProgress, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                    .addComponent(btnRemoveFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 24, Short.MAX_VALUE)
+                    .addComponent(btnRemoveFiles, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
                     .addComponent(btnAddFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -365,7 +365,7 @@ public class NVCompress extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private String[] computeCompressParameters(){
-        List<String> params = new ArrayList<String>();
+        List<String> params = new ArrayList<>();
 
         if (!chkCuda.isSelected())
             params.add("-nocuda");
@@ -453,16 +453,17 @@ public class NVCompress extends javax.swing.JFrame {
         if (manager == null)
             manager = JmeSystem.newAssetManager();
 
-        manager.registerLocator(input.getParent().toString(),
+        manager.registerLocator(input.getParent(),
                                 FileLocator.class);
 
         String format = (String) cmbCompressType.getSelectedItem();
         if (format.equals("PNG-RGBE")){
             HDRLoader loader = new HDRLoader(true);
             try{
-                FileInputStream in = new FileInputStream(input);
-                Image image = loader.load(in, false);
-                in.close();
+                Image image;
+                try (FileInputStream in = new FileInputStream(input)) {
+                    image = loader.load(in, false);
+                }
 
                 BufferedImage rgbeImage = ImageToAwt.convert(image, false, true, 0);
                 if (output == null){
@@ -500,22 +501,22 @@ public class NVCompress extends javax.swing.JFrame {
             ProcessBuilder builder = new ProcessBuilder(args);
             updateWork(statusStr, 0);
             p = builder.start();
-            BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String ln;
-            while ((ln = r.readLine()) != null){
-                if (Thread.interrupted())
-                    throw new InterruptedException();
-                
-                if (ln.endsWith("%")){
-                    // show status in bar
-                    int percent = Integer.parseInt(ln.substring(0, ln.length()-1));
-                    updateWork(statusStr, percent);
-                }else if (ln.startsWith("time taken")){
-                    ln = ln.substring(12, ln.length()-7).trim();
-                    System.out.println("Time Taken: "+ln+" seconds");
+            try (BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+                String ln;
+                while ((ln = r.readLine()) != null){
+                    if (Thread.interrupted())
+                        throw new InterruptedException();
+                    
+                    if (ln.endsWith("%")){
+                        // show status in bar
+                        int percent = Integer.parseInt(ln.substring(0, ln.length()-1));
+                        updateWork(statusStr, percent);
+                    }else if (ln.startsWith("time taken")){
+                        ln = ln.substring(12, ln.length()-7).trim();
+                        System.out.println("Time Taken: "+ln+" seconds");
+                    }
                 }
             }
-            r.close();
             int error = p.waitFor();
             if (error != 0){
                 System.out.println("Error Code: " + error);
@@ -573,20 +574,20 @@ public class NVCompress extends javax.swing.JFrame {
     }
 
     private Object[] compileFileList(){
-        Object[] values = lstFileList.getSelectedValues();
-        if (values == null || values.length == 0){
+        List<File> values = lstFileList.getSelectedValuesList();
+        if (values == null || values.isEmpty()){
             // no specific files selected, add all of them
-            DefaultListModel listModel = (DefaultListModel) lstFileList.getModel();
-            values = listModel.toArray();
+            DefaultListModel<File> listModel = (DefaultListModel) lstFileList.getModel();
+            return listModel.toArray();
         }
-        return values;
+        return values.toArray();
     }
 
     private void runNVCompressAll(final File exportDir){
         final Object[] fileList = compileFileList();
         if (fileList != null && fileList.length > 0){
             startWork();
-            workThread = new Thread(){
+            workThread = new Thread("NVCompressor"){
                 @Override
                 public void run(){
                     for (Object val : fileList){
@@ -618,7 +619,7 @@ public class NVCompress extends javax.swing.JFrame {
         final Object[] fileList = compileFileList();
         if (fileList != null && fileList.length > 0){
             startWork();
-            workThread = new Thread(){
+            workThread = new Thread("J3Compressor"){
                 @Override
                 public void run(){
                     for (Object val : fileList){
@@ -650,7 +651,7 @@ public class NVCompress extends javax.swing.JFrame {
         final Object[] fileList = compileFileList();
         if (fileList != null && fileList.length > 0){
             startWork();
-            workThread = new Thread(){
+            workThread = new Thread("NVDecompressor"){
                 @Override
                 public void run(){
                     for (Object val : fileList){
@@ -748,9 +749,9 @@ public class NVCompress extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddFilesActionPerformed
 
     private void btnRemoveFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFilesActionPerformed
-        Object[] selected = lstFileList.getSelectedValues();
-        DefaultListModel listModel = (DefaultListModel) lstFileList.getModel();
-        for (Object val : selected){
+        List<File> selected = lstFileList.getSelectedValuesList();
+        DefaultListModel<File> listModel = (DefaultListModel) lstFileList.getModel();
+        for (File val : selected){
             listModel.removeElement(val);
         }
     }//GEN-LAST:event_btnRemoveFilesActionPerformed
@@ -866,9 +867,12 @@ public class NVCompress extends javax.swing.JFrame {
         }
 
         java.awt.EventQueue.invokeLater(new Runnable() {
+            
+            @Override
             public void run() {
                 new NVCompress().setVisible(true);
             }
+            
         });
     }
 
@@ -891,7 +895,7 @@ public class NVCompress extends javax.swing.JFrame {
     private javax.swing.JLabel lblCompressType;
     private javax.swing.JLabel lblMapType;
     private javax.swing.JLabel lblTargetDir;
-    private javax.swing.JList lstFileList;
+    private javax.swing.JList<File> lstFileList;
     private javax.swing.JMenuItem menuAbout;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuHelp;

@@ -1,0 +1,14 @@
+categories:
+  - title: 🚀 Features
+    label: feature
+  - title: 🐛 Bug Fixes
+    label: bug
+
+name-template: "Upcoming Release"
+tag-template: "$NEXT_PATCH_VERSION"
+version-template: "v$MAJOR.$MINOR-codename-sdk$PATCH"
+change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
+template: |
+  ## Upcoming Changes
+
+  $CHANGES
