@@ -42,7 +42,7 @@ import java.util.logging.Logger;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectManager;
 import org.netbeans.api.project.ProjectUtils;
-import org.netbeans.modules.gradle.NbGradleProjectImpl;
+import org.netbeans.modules.gradle.api.GradleBaseProject;
 import org.netbeans.modules.java.j2seproject.J2SEProject;
 import org.netbeans.modules.java.j2seproject.api.J2SEPropertyEvaluator;
 import org.netbeans.spi.project.LookupProvider;
@@ -97,7 +97,11 @@ public class AssetsLookupProvider implements LookupProvider {
     public Lookup createAdditionalLookup(Lookup lookup) {
         Project prj = lookup.lookup(Project.class);
         project = prj;
-        if (project instanceof NbGradleProjectImpl) {
+        if (project.getClass().getSimpleName().equals("NbGradleProjectImpl")) {
+            GradleBaseProject gradle = GradleBaseProject.get(project);
+            if (gradle.getSubProjects().containsKey("assets")) {
+                logger.log(Level.FINE, "Found assets subproject, extending with ProjectAssetManager");
+            }
             return Lookups.fixed();
         } else {
             FileObject assetsProperties = prj.getProjectDirectory().getFileObject("nbproject/project.properties");
