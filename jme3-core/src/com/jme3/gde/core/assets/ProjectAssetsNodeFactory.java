@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2010 jMonkeyEngine
+ * Copyright (c) 2009-2020 jMonkeyEngine
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,41 +37,37 @@ import org.netbeans.spi.project.ui.support.NodeFactory;
 import org.netbeans.spi.project.ui.support.NodeFactorySupport;
 import org.netbeans.spi.project.ui.support.NodeList;
 import org.openide.loaders.DataObject;
+import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 
 /**
- *
+ * This Factory creates the visual "Project Assets" Node in the Project View
  * @author normenhansen
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ProjectAssetsNodeFactory implements NodeFactory {
-
     private Project proj;
 
+    // return a new node for the project view if theres an assets folder
+    @Override
     public NodeList createNodes(Project project) {
-
         this.proj = project;
 
-        DataObject assetsFolder;
         try {
-            //return a new node for the project view if theres an assets folder:
             ProjectAssetManager item = project.getLookup().lookup(ProjectAssetManager.class);
             if (item != null) {
-                assetsFolder = DataObject.find(item.getAssetFolder());
-                Node node = assetsFolder.getNodeDelegate();
-//                return NodeFactorySupport.fixedNodeList(node);
-                ProjectAssetsNode nd = new ProjectAssetsNode(item, proj, node);
-//                return NodeFactorySupport.createCompositeChildren(project, item.getAssetFolderName());//fixedNodeList(nd);
+                DataObject assetsFolder = DataObject.find(item.getAssetFolder());
+                ProjectAssetsNode nd = new ProjectAssetsNode(item, proj, assetsFolder.getNodeDelegate());
                 return NodeFactorySupport.fixedNodeList(nd);
             }
-        } catch (Exception ex) {
+        } catch (DataObjectNotFoundException ex) {
             Exceptions.printStackTrace(ex);
         }
 
-        //If our item isn't in the lookup,
-        //then return an empty list of nodes:
+        /* If our item isn't in the lookup, which means it is no recognized project
+         * then return an empty list of nodes.
+         */
         return NodeFactorySupport.fixedNodeList();
-
     }
 }
