@@ -34,9 +34,12 @@ package com.jme3.gde.core.assets;
 import com.jme3.gde.core.j2seproject.ProjectExtensionManager;
 import com.jme3.gde.core.j2seproject.actions.UpgradeProjectWizardAction;
 import com.jme3.gde.core.projects.SDKProjectUtils;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -102,7 +105,29 @@ public class AssetsLookupProvider implements LookupProvider {
             GradleBaseProject gradle = GradleBaseProject.get(project);
             if (gradle.getSubProjects().containsKey("assets")) {
                 logger.log(Level.FINE, "Found assets subproject, extending with ProjectAssetManager");
-                return Lookups.fixed(new ProjectAssetManager(prj, gradle.getSubProjects().get("assets").getAbsolutePath()));
+                /* Note: The ProjectAssetManager needs the Subproject's Project,
+                 * because otherwise reading assets won't work (as assets is
+                 * not in the scope of the parent project). But it still needs 
+                 * to be added to the Parent Project's Lookup
+                */
+                
+                /* Complicated code to find the relative path, because the 
+                 * assets subproject could be stored in a folder called "foo"
+                 * or "bar" and we still need to locate it correctly
+                */
+                Path assetsPath = gradle.getSubProjects().get("assets").toPath();
+                Path parentPath = new File(prj.getProjectDirectory().getPath()).toPath();
+                Path relativePath = parentPath.relativize(assetsPath);
+                try {
+                    Project assetsProj = ProjectManager.getDefault().findProject(
+                        prj.getProjectDirectory().getFileObject(relativePath.toString()));
+                    if (assetsProj != null) {
+                        return Lookups.fixed(new ProjectAssetManager(assetsProj,
+                        "")); // the String is seen relative to the project root
+                    }
+                } catch (IOException io) {
+                    Exceptions.printStackTrace(io);
+                }
             }
         } else {
             FileObject assetsProperties = prj.getProjectDirectory().getFileObject("nbproject/project.properties");
