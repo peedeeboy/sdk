@@ -33,6 +33,7 @@ package com.jme3.gde.core.assets;
 
 import com.jme3.gde.core.j2seproject.ProjectExtensionManager;
 import com.jme3.gde.core.j2seproject.actions.UpgradeProjectWizardAction;
+import com.jme3.gde.core.projects.SDKProjectUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -46,6 +47,7 @@ import org.netbeans.modules.gradle.api.GradleBaseProject;
 import org.netbeans.modules.java.j2seproject.J2SEProject;
 import org.netbeans.modules.java.j2seproject.api.J2SEPropertyEvaluator;
 import org.netbeans.spi.project.LookupProvider;
+import org.netbeans.spi.project.SubprojectProvider;
 import org.netbeans.spi.project.support.ant.AntProjectHelper;
 import org.netbeans.spi.project.support.ant.EditableProperties;
 import org.netbeans.spi.project.ui.ProjectOpenedHook;
@@ -65,7 +67,6 @@ import org.openide.util.lookup.Lookups;
  * @author normenhansen
  */
 public class AssetsLookupProvider implements LookupProvider {
-
     private static final Logger logger = Logger.getLogger(AssetsLookupProvider.class.getName());
     private Project project;
     private ProjectOpenedHook openedHook;
@@ -76,9 +77,9 @@ public class AssetsLookupProvider implements LookupProvider {
         "assets.compress",
         "jme.project.version"
     };
-    private String extensionName = "assets";
-    private String extensionVersion = "v1.0";
-    private String extensionTargets =
+    private final String extensionName = "assets";
+    private final String extensionVersion = "v1.0";
+    private final String extensionTargets =
             "    <target name=\"-init-assets\">\n"
             + "        <jar jarfile=\"${build.dir}/${assets.jar.name}\" excludes=\"${assets.excludes}\" basedir=\"${assets.folder.name}\" compress=\"${assets.compress}\"/>\n"
             + "        <property location=\"${assets.folder.name}\" name=\"assets.dir.resolved\"/>\n"
@@ -90,36 +91,37 @@ public class AssetsLookupProvider implements LookupProvider {
             + "        <map from=\"${assets.dir.resolved}\" to=\"${assets.jar.resolved}\"/>\n"
             + "        </pathconvert>\n"
             + "    </target>\n";
-    private String[] extensionDependencies = new String[]{"-do-init", "-init-assets"};
-    private ProjectExtensionManager manager = new ProjectExtensionManager(extensionName, extensionVersion, extensionTargets, extensionDependencies);
+    private final String[] extensionDependencies = new String[]{"-do-init", "-init-assets"};
+    private final ProjectExtensionManager manager = new ProjectExtensionManager(extensionName, extensionVersion, extensionTargets, extensionDependencies);
 
     @Override
     public Lookup createAdditionalLookup(Lookup lookup) {
         Project prj = lookup.lookup(Project.class);
         project = prj;
-        if (project.getClass().getSimpleName().equals("NbGradleProjectImpl")) {
+        if (SDKProjectUtils.isGradleProject(prj)) {
             GradleBaseProject gradle = GradleBaseProject.get(project);
             if (gradle.getSubProjects().containsKey("assets")) {
                 logger.log(Level.FINE, "Found assets subproject, extending with ProjectAssetManager");
+                return Lookups.fixed(new ProjectAssetManager(prj, gradle.getSubProjects().get("assets").getAbsolutePath()));
             }
-            return Lookups.fixed();
         } else {
             FileObject assetsProperties = prj.getProjectDirectory().getFileObject("nbproject/project.properties");
             if (assetsProperties != null && assetsProperties.isValid()) {
                 FileLock lock = null;
                 try {
                     lock = assetsProperties.lock();
-                    InputStream in = assetsProperties.getInputStream();
-                    Properties properties = new Properties();
-                    properties.load(in);
-                    in.close();
+                    Properties properties;
+                    try (InputStream in = assetsProperties.getInputStream()) {
+                        properties = new Properties();
+                        properties.load(in);
+                    }
                     String assetsFolderName = properties.getProperty("assets.folder.name", "assets");
                     if (prj.getProjectDirectory().getFileObject(assetsFolderName) != null) {
                         logger.log(Level.FINE, "Valid jMP project, extending with ProjectAssetManager");
                         openedHook = genOpenedHook(project);
                         return Lookups.fixed(new ProjectAssetManager(prj, assetsFolderName), openedHook);
                     }
-                } catch (Exception ex) {
+                } catch (IOException ex) {
                     Exceptions.printStackTrace(ex);
                 } finally {
                     if (lock != null) {
@@ -127,9 +129,8 @@ public class AssetsLookupProvider implements LookupProvider {
                     }
                 }
             }
-
-            return Lookups.fixed();
         }
+        return Lookups.fixed();
     }
     
     private ProjectOpenedHook genOpenedHook(final Project context) {
@@ -149,24 +150,23 @@ public class AssetsLookupProvider implements LookupProvider {
                         String projectName = ProjectUtils.getInformation(context).getDisplayName();
                         if (version == null) {
                             if (UpgradeProjectWizardAction.isJME31(context)) { /* Upgrade project.properties */
-
-                                logger.log(Level.WARNING, "[" + projectName + "] Found 3.1 project, upgrading project.properties");
-
+                                logger.log(Level.WARNING, "[{0}] Found 3.1 project, upgrading project.properties", projectName);
                                 FileObject prProp = context.getProjectDirectory().getFileObject("nbproject/project.properties");
                                 if (prProp != null && prProp.isValid()) {
                                     FileLock lock = null;
                                     try {
                                         lock = prProp.lock();
-                                        InputStream in = prProp.getInputStream();
-                                        EditableProperties edProps = new EditableProperties(true);
-                                        edProps.load(in);
-                                        in.close();
+                                        EditableProperties edProps;
+                                        try (InputStream in = prProp.getInputStream()) {
+                                            edProps = new EditableProperties(true);
+                                            edProps.load(in);
+                                        }
 
                                         edProps.setProperty("jme.project.version", "3.1"); // Silently accept them.
                                         OutputStream out = prProp.getOutputStream(lock);
                                         edProps.store(out);
                                         out.close();
-                                    } catch (Exception e) {
+                                    } catch (IOException e) {
                                         logger.log(Level.WARNING, "Error when trying to write project.properties. Exception: {0}", e.getMessage());
                                     } finally {
                                         if (lock != null) {
