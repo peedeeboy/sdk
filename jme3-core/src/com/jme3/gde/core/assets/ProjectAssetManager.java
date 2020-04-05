@@ -72,7 +72,7 @@ import org.openide.util.Mutex;
 import org.openide.util.lookup.Lookups;
 
 /**
- *
+ * The ProjectAssetManager is the SDK specific AssetManager Implementation 
  * @author normenhansen
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
