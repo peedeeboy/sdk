@@ -33,13 +33,12 @@ package com.jme3.gde.core.sceneexplorer.nodes.animation;
 
 import com.jme3.anim.AnimComposer;
 import com.jme3.gde.core.icons.IconList;
-import com.jme3.gde.core.properties.AnimationProperty;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeControl;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeTrackChildren;
 import com.jme3.gde.core.sceneexplorer.nodes.SceneExplorerNode;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.ControlsPopup;
-import com.jme3.gde.core.util.PropertyUtils;
+import com.jme3.gde.core.sceneexplorer.nodes.actions.animation.AnimClipProperty;
 import java.awt.Image;
 import java.util.concurrent.ExecutionException;
 import javax.swing.Action;
@@ -97,7 +96,7 @@ public class JmeAnimComposer extends JmeControl {
         set.setName(AnimComposer.class.getName());
 
         if (animComposer != null) {
-            //set.put(new AnimationProperty(animComposer));
+            set.put(new AnimClipProperty(animComposer));
             set.put(makeProperty(this, JmeAnimComposer.class, "GlobalSpeed", "Global Animation Speed"));
             sheet.put(set);
         } // else: Empty Sheet
@@ -134,7 +133,6 @@ public class JmeAnimComposer extends JmeControl {
     @Override
     public Action[] getActions(boolean context) {
         return new Action[]{
-            //new TrackVisibilityPopup(this),
             new ControlsPopup(this),
             SystemAction.get(DeleteAction.class)
         };
@@ -190,90 +188,4 @@ public class JmeAnimComposer extends JmeControl {
             ((JmeTrackChildren) anim.getChildren()).refreshChildren(true);
         }
     }
-
-    /*
-    class ToggleBoneTrackAction extends BooleanStateAction {
-
-        @Override
-        public String getName() {
-            return "Display bone tracks";
-        }
-
-        @Override
-        public void setBooleanState(boolean value) {
-            super.setBooleanState(value);
-            displayBoneTracks = value;
-            for (Object node : getChildren().getNodes()) {
-                JmeAnimation anim = (JmeAnimation) node;
-                ((JmeTrackChildren) anim.getChildren()).refreshChildren(true);
-            }
-        }
-
-        @Override
-        public boolean getBooleanState() {
-            return displayBoneTracks;
-        }
-
-        @Override
-        public HelpCtx getHelpCtx() {
-            return JmeAnimComposer.this.getHelpCtx();
-        }
-    };
-
-    class ToggleEffectTrackAction extends BooleanStateAction {
-
-        @Override
-        public String getName() {
-            return "Display effect tracks";
-        }
-
-        @Override
-        public void setBooleanState(boolean value) {
-            super.setBooleanState(value);
-            displayEffectTracks = value;
-            for (Object node : getChildren().getNodes()) {
-                JmeAnimation anim = (JmeAnimation) node;
-                ((JmeTrackChildren) anim.getChildren()).refreshChildren(true);
-            }
-        }
-
-        @Override
-        public boolean getBooleanState() {
-            return displayEffectTracks;
-        }
-
-        @Override
-        public HelpCtx getHelpCtx() {
-            return JmeAnimComposer.this.getHelpCtx();
-        }
-    };
-
-    class ToggleAudioTrackAction extends BooleanStateAction {
-
-        @Override
-        public String getName() {
-            return "Display audio tracks";
-        }
-
-        @Override
-        public void setBooleanState(boolean value) {
-            super.setBooleanState(value);
-            displayAudioTracks = value;
-            for (Object node : getChildren().getNodes()) {
-                JmeAnimation anim = (JmeAnimation) node;
-                ((JmeTrackChildren) anim.getChildren()).refreshChildren(true);
-            }
-        }
-
-        @Override
-        public boolean getBooleanState() {
-            return displayAudioTracks;
-        }
-
-        @Override
-        public HelpCtx getHelpCtx() {
-            return JmeAnimComposer.this.getHelpCtx();
-        }
-    };
-    */
 }
