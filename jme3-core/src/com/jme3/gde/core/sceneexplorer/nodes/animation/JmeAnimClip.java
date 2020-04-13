@@ -33,7 +33,6 @@ package com.jme3.gde.core.sceneexplorer.nodes.animation;
 
 import com.jme3.anim.AnimClip;
 import com.jme3.anim.AnimComposer;
-import com.jme3.animation.AnimChannel;
 import com.jme3.gde.core.icons.IconList;
 import com.jme3.gde.core.properties.AnimationProperty;
 import com.jme3.gde.core.scene.SceneApplication;
@@ -70,8 +69,6 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
     private Image icon;
     private JmeAnimComposer jmeControl;
     private boolean playing = false;
-    private float animSpeed = 1.0f;
-    private AnimChannel channel = null;
 
     public JmeAnimClip() {
     }
@@ -109,10 +106,8 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
     public void toggleIcon(boolean enabled) {
         if (!playing) {
             icon = IconList.animation.getImage();
-
         } else {
             icon = IconList.animationPlay.getImage();
-
         }
         fireIconChange();
     }
@@ -149,13 +144,12 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
     @Override
     public Action[] getActions(boolean context) {
         return new Action[]{Actions.alwaysEnabled(new PlayAction(), playing ? "Stop" : "Play", "", false),
-                    //Actions.alwaysEnabled(new PlayBackParamsAction(), "Playback parameters", "", false),
-                    SystemAction.get(RenameAction.class),
-                    SystemAction.get(DeleteAction.class),
-                    //Actions.alwaysEnabled(new EffectTrackWizardAction(jmeControl.getLookup().lookup(AnimComposer.class).getSpatial(), this), "Add Effect Track", "", false),
-                    //Actions.alwaysEnabled(new AudioTrackWizardAction(jmeControl.getLookup().lookup(AnimComposer.class).getSpatial(), this), "Add Audio Track", "", false),
-                    // @TODO: not working yet, Actions.alwaysEnabled(new ExtractAnimationAction(), "Extract sub-animation", "", true)
-                };
+            SystemAction.get(RenameAction.class),
+            SystemAction.get(DeleteAction.class),
+            //Actions.alwaysEnabled(new EffectTrackWizardAction(jmeControl.getLookup().lookup(AnimComposer.class).getSpatial(), this), "Add Effect Track", "", false),
+            //Actions.alwaysEnabled(new AudioTrackWizardAction(jmeControl.getLookup().lookup(AnimComposer.class).getSpatial(), this), "Add Audio Track", "", false),
+            // @TODO: not working yet, Actions.alwaysEnabled(new ExtractAnimationAction(), "Extract sub-animation", "", true)
+        };
     }
 
     @Override
@@ -234,36 +228,6 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
             } catch (InterruptedException | ExecutionException ex) {
                 Exceptions.printStackTrace(ex);
             }
-        }
-    }
-
-    /*class PlayBackParamsAction implements ActionListener {
-        ChannelDialog dialog = new ChannelDialog(null, false, JmeAnimClip.this);
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            dialog.setLocationRelativeTo(null);
-            dialog.setVisible(true);
-
-        }
-    }*/
-
-    public float getAnimSpeed() {
-        return animSpeed;
-    }
-
-    public void setAnimSpeed(float speed) {
-        this.animSpeed = speed;
-        try {
-            SceneApplication.getApplication().enqueue(() -> {
-                final AnimComposer composer = jmeControl.getLookup().lookup(AnimComposer.class);
-                if (composer != null) {
-                    composer.setGlobalSpeed(animSpeed);
-                }
-                return null;
-            }).get();
-        } catch (InterruptedException | ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
         }
     }
     

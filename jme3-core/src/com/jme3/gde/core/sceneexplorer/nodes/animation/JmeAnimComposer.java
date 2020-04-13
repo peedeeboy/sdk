@@ -33,16 +33,21 @@ package com.jme3.gde.core.sceneexplorer.nodes.animation;
 
 import com.jme3.anim.AnimComposer;
 import com.jme3.gde.core.icons.IconList;
+import com.jme3.gde.core.properties.AnimationProperty;
+import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeControl;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeTrackChildren;
 import com.jme3.gde.core.sceneexplorer.nodes.SceneExplorerNode;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.ControlsPopup;
+import com.jme3.gde.core.util.PropertyUtils;
 import java.awt.Image;
+import java.util.concurrent.ExecutionException;
 import javax.swing.Action;
 import org.openide.actions.DeleteAction;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Node;
 import org.openide.nodes.Sheet;
+import org.openide.util.Exceptions;
 import org.openide.util.actions.SystemAction;
 
 /**
@@ -93,6 +98,7 @@ public class JmeAnimComposer extends JmeControl {
 
         if (animComposer != null) {
             //set.put(new AnimationProperty(animComposer));
+            set.put(makeProperty(this, JmeAnimComposer.class, "GlobalSpeed", "Global Animation Speed"));
             sheet.put(set);
         } // else: Empty Sheet
         
@@ -109,14 +115,29 @@ public class JmeAnimComposer extends JmeControl {
         }
         playingAnimation = anim;
     }
+    
+    public float getGlobalSpeed() {
+        return animComposer.getGlobalSpeed();
+    }
+
+    public void setGlobalSpeed(final float speed) {
+        try {
+            SceneApplication.getApplication().enqueue(() -> {
+                animComposer.setGlobalSpeed(speed);
+                return null;
+            }).get();
+        } catch (InterruptedException | ExecutionException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }
 
     @Override
     public Action[] getActions(boolean context) {
         return new Action[]{
-                    //new TrackVisibilityPopup(this),
-                    new ControlsPopup(this),
-                    SystemAction.get(DeleteAction.class)
-                };
+            //new TrackVisibilityPopup(this),
+            new ControlsPopup(this),
+            SystemAction.get(DeleteAction.class)
+        };
     }
 
     @Override
