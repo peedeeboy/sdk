@@ -218,7 +218,6 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
                         return null;
                     } else {
                         control.setCurrentAction(animClip.getName());
-                        control.setGlobalSpeed(animSpeed);
                         java.awt.EventQueue.invokeLater(() -> {
                             play();
                         });
