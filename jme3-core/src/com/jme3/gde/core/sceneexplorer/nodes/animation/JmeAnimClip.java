@@ -172,8 +172,7 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
             SceneApplication.getApplication().enqueue(() -> {
                 control.removeAnimClip(this.animClip);
                 return null;
-            }).get();            
-            jmeControl.refreshChildren();
+            }).get();
             setChanged();
         } catch (InterruptedException | ExecutionException ex) {
             Exceptions.printStackTrace(ex);
