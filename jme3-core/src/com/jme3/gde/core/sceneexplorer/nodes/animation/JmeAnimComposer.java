@@ -58,9 +58,6 @@ import org.openide.util.actions.SystemAction;
 public class JmeAnimComposer extends JmeControl {
     private AnimComposer animComposer;
     private JmeAnimClip playingAnimation = null;
-    private boolean displayBoneTracks = false;
-    private boolean displayEffectTracks = true;
-    private boolean displayAudioTracks = true;
     private static Image smallImage = IconList.animControl.getImage();
 
     public JmeAnimComposer() {
@@ -152,40 +149,5 @@ public class JmeAnimComposer extends JmeControl {
     public Node[] createNodes(Object key, DataObject key2, boolean cookie) {
         JmeAnimClipChildren children = new JmeAnimClipChildren(this);
         return new Node[]{ new JmeAnimComposer((AnimComposer)key, children, key2)};
-    }
-
-    public boolean isDisplayAudioTracks() {
-        return displayAudioTracks;
-    }
-
-    public boolean isDisplayBoneTracks() {
-        return displayBoneTracks;
-    }
-
-    public boolean isDisplayEffectTracks() {
-        return displayEffectTracks;
-    }
-
-    public void setDisplayAudioTracks(boolean displayAudioTracks) {
-        this.displayAudioTracks = displayAudioTracks;
-        refreshChildren();
-    }
-
-    public void setDisplayBoneTracks(boolean displayBoneTracks) {
-        this.displayBoneTracks = displayBoneTracks;
-        refreshChildren();
-    }
-
-    public void setDisplayEffectTracks(boolean displayEffectTracks) {
-        this.displayEffectTracks = displayEffectTracks;
-        refreshChildren();
-    }
-
-    public void refreshChildren() {
-        ((JmeAnimChildren)this.jmeChildren).refreshChildren(true);
-        for (Object node : getChildren().getNodes()) {
-            JmeAnimation anim = (JmeAnimation) node;
-            ((JmeTrackChildren) anim.getChildren()).refreshChildren(true);
-        }
     }
 }
