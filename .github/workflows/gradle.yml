@@ -35,7 +35,7 @@ jobs:
         repository: 'jMonkeyEngine/sdk-update-center'
         ref: nightly
         path: nightly
-        token: ${{ secrets.NBM_SIGN_PASS }}
+        token: ${{ secrets. UPDATE_CENTER_PAT }}
       
     - name: Setup Git for the commit
       run: git config user.email MeFisto94@users.noreply.github.com && git config user.name MeFisto94
