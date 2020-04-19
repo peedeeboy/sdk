@@ -35,7 +35,6 @@ import com.jme3.anim.AnimComposer;
 import com.jme3.gde.core.icons.IconList;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeControl;
-import com.jme3.gde.core.sceneexplorer.nodes.JmeTrackChildren;
 import com.jme3.gde.core.sceneexplorer.nodes.SceneExplorerNode;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.ControlsPopup;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.animation.AnimClipProperty;
@@ -94,7 +93,7 @@ public class JmeAnimComposer extends JmeControl {
 
         if (animComposer != null) {
             set.put(new AnimClipProperty(animComposer));
-            set.put(makeProperty(this, JmeAnimComposer.class, "GlobalSpeed", "Global Animation Speed"));
+            set.put(makeEmbedProperty(this, JmeAnimComposer.class, float.class, "getGlobalSpeed", "setGlobalSpeed", "Global Animation Speed"));
             sheet.put(set);
         } // else: Empty Sheet
         

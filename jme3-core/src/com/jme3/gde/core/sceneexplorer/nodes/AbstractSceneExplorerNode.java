@@ -195,8 +195,8 @@ public abstract class AbstractSceneExplorerNode extends AbstractNode implements 
     }
 
     /**
-     * Create a Property to be used in the Properties Sheet. This is actually a helper method for you
-     * See {@link #makeProperty(java.lang.Object, java.lang.Class, java.lang.String, java.lang.String, java.lang.String)  }
+     * Create a Property to be used in the Properties Sheet.
+     * See {@link #makeProperty(java.lang.Object, java.lang.Class, java.lang.String, java.lang.String, java.lang.String)  } for a more simple approach
      * Note: Embed is, when the Property isn't directly derived from obj but a getter.
      * 
      * @param obj The Object which contains this Property
