@@ -210,7 +210,7 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
             try {
                 SceneApplication.getApplication().enqueue(() -> {
                     if (playing) { // Stop Playing
-                        control.setCurrentAction(null);
+                        control.removeCurrentAction(AnimComposer.DEFAULT_LAYER);
                         jmeControl.setAnimClip(null);
                         return null;
                     } else {
