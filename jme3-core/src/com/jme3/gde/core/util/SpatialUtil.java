@@ -286,7 +286,11 @@ public class SpatialUtil {
                             logger.log(Level.INFO, "Control for {0} was added automatically", mySpatial.getName());
                         }
                         if (mySpatial.getControl(SkeletonControl.class) == null) {
-                            mySpatial.addControl(new SkeletonControl(animControl.getSkeleton()));
+                            if (animControl.getSkeleton() == null) {
+                                logger.log(Level.INFO, "Could not add a SkeletonControl for {0}, because animControl.getSkeleton() return null. Broken file? Gltf?", mySpatial.getName());
+                            } else {
+                                mySpatial.addControl(new SkeletonControl(animControl.getSkeleton()));
+                            }
                         } else {
                             logger.log(Level.INFO, "SkeletonControl for {0} was added by AnimControl already", mySpatial.getName());
                         }
