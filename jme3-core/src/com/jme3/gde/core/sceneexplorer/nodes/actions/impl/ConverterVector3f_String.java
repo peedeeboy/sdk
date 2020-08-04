@@ -45,6 +45,8 @@ public class ConverterVector3f_String {
     
     public static void parseInto(String text, Vector3f res) throws IllegalArgumentException {
         text = text.replace('[', ' ');
+        text = text.replace('(', ' ');
+        text = text.replace(')', ' ');
         text = text.replace(']', ' ').trim();
         String[] a = text.split("\\s*(,|\\s)\\s*");
 

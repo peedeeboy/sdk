@@ -51,12 +51,12 @@ public class CreateQuadPanel extends javax.swing.JPanel {
         return abstractNewGeometryPanel1;
     }
 
-    public int getQuadWidth() {
-        return (int) spinnerX.getValue();
+    public float getQuadWidth() {
+        return (float) spinnerX.getValue();
     }
 
-    public int getQuadHeight() {
-        return (int) spinnerY.getValue();
+    public float getQuadHeight() {
+        return (float) spinnerY.getValue();
     }
 
     public boolean isFlipCoords() {
