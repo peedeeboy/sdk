@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009-2010 jMonkeyEngine
+ *  Copyright (c) 2009-2020 jMonkeyEngine
  *  All rights reserved.
  * 
  *  Redistribution and use in source and binary forms, with or without
@@ -34,6 +34,10 @@ package com.jme3.gde.core.options;
 import com.jme3.gde.core.Installer;
 import org.openide.util.NbPreferences;
 
+/**
+ * A Settings Panel to control various openGL Settings (i.e. the used renderer)
+ * @author normenhansen
+ */
 final class OpenGLPanel extends javax.swing.JPanel {
 
     private final OpenGLOptionsPanelController controller;
@@ -52,34 +56,21 @@ final class OpenGLPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        chkHeavyweightCanvas = new javax.swing.JCheckBox();
+        scrollHeavyweight = new javax.swing.JScrollPane();
+        txtHeavyweight = new javax.swing.JTextArea();
 
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.jCheckBox1.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(chkHeavyweightCanvas, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.text")); // NOI18N
+        chkHeavyweightCanvas.setName(""); // NOI18N
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setEditable(false);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setText(org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.jTextArea1.text")); // NOI18N
-        jTextArea1.setWrapStyleWord(true);
-        jTextArea1.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        jScrollPane1.setViewportView(jTextArea1);
-
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox2, org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.jCheckBox2.text")); // NOI18N
-
-        jTextArea2.setColumns(20);
-        jTextArea2.setEditable(false);
-        jTextArea2.setLineWrap(true);
-        jTextArea2.setRows(5);
-        jTextArea2.setText(org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.jTextArea2.text")); // NOI18N
-        jTextArea2.setWrapStyleWord(true);
-        jTextArea2.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        jScrollPane2.setViewportView(jTextArea2);
+        txtHeavyweight.setEditable(false);
+        txtHeavyweight.setColumns(20);
+        txtHeavyweight.setLineWrap(true);
+        txtHeavyweight.setRows(5);
+        txtHeavyweight.setText(org.openide.util.NbBundle.getMessage(OpenGLPanel.class, "OpenGLPanel.txtHeavyweight.text")); // NOI18N
+        txtHeavyweight.setWrapStyleWord(true);
+        txtHeavyweight.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        scrollHeavyweight.setViewportView(txtHeavyweight);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -88,39 +79,28 @@ final class OpenGLPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jCheckBox2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-                    .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(scrollHeavyweight, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(chkHeavyweightCanvas)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jCheckBox1)
+                .addComponent(chkHeavyweightCanvas)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jCheckBox2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addComponent(scrollHeavyweight, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(181, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     void load() {
-        jCheckBox1.setSelected("true".equals(NbPreferences.forModule(Installer.class).get("use_opengl_1", "false")));
-        jCheckBox2.setSelected("true".equals(NbPreferences.forModule(Installer.class).get("use_lwjgl_canvas", "false")));
+        chkHeavyweightCanvas.setSelected("true".equals(NbPreferences.forModule(Installer.class).get("use_lwjgl_canvas", "false")));
     }
 
     void store() {
-        if(jCheckBox1.isSelected()){
-            NbPreferences.forModule(Installer.class).put("use_opengl_1", "true");
-        }else{
-            NbPreferences.forModule(Installer.class).put("use_opengl_1", "false");
-        }
-        if(jCheckBox2.isSelected()){
+        if(chkHeavyweightCanvas.isSelected()){
             NbPreferences.forModule(Installer.class).put("use_lwjgl_canvas", "true");
         }else{
             NbPreferences.forModule(Installer.class).put("use_lwjgl_canvas", "false");
@@ -128,15 +108,12 @@ final class OpenGLPanel extends javax.swing.JPanel {
     }
 
     boolean valid() {
-        // TODO check whether form is consistent and complete
+        // There is nothing here that could be in an invalid state
         return true;
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JCheckBox chkHeavyweightCanvas;
+    private javax.swing.JScrollPane scrollHeavyweight;
+    private javax.swing.JTextArea txtHeavyweight;
     // End of variables declaration//GEN-END:variables
 }
