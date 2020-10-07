@@ -92,7 +92,6 @@ def getReleaseInfo(String tag) {
         prerelease = true;
         mainVersion = parts[0];
         releaseName = parts[1];
-        sdkRev = parts[2];
     } else {
         // error
         println "Warning: getReleaseInfo() found an errorneous tag: \"" + tag + "\". Syntax Error: The Tag didn't contain the expected number of dash-seperated keywords"
