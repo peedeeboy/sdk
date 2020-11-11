@@ -14,7 +14,7 @@ See here for the correct configuration:
 
 ![Icon Export](icon_export_settings.png)
 
-### HOW TO Replace Icons:
+### HOW TO Replace Icons
 When a new Netbeans version is out you might need to redo this process since we override netbeans' launcher files with our version (and this launcher can change with a new Netbeans version).  
 See `harness-override/README.md` for more information on that subject.  
 
@@ -34,9 +34,9 @@ The first one is the plain `.exe` before changing (This is so we can see if ther
 Then issue `shasum -a 256 netbeans/harness/launchers/*.exe` so you have all the hashBefore’s / After’s  
 See `harness-override/README.md` for more information on that subject.
 
-### HOW TO Replace About/Splash Screen:
+### HOW TO Replace About/Splash Screen
 The About Screen is currently just the same as the Splash Screen but downsampled:  
-It's currently 432 × 302 Pixels but that's just something I found on the net.  
+It's currently 432x302 Pixels but that's just something I found on the net.  
 It's simply like this: Once your resolution is too large (like the 500x350px of our Splash Screen), some additional ugly scroll bars will appear and the window won't be enlarged. Since there is no easy (and reasonable) way to use your own About Screen, we will simply stick to this.  
 Just place the `about.png` and the `splash.gif` (though animation doesn't seem to be supported out of the box) inside `branding/core/core.jar/org/netbeans/core/startup/`. There you will also find the `Bundle.properties` which is responsible for the SDK Naming and the Splash Settings (Width, Height, Colors)  
 
