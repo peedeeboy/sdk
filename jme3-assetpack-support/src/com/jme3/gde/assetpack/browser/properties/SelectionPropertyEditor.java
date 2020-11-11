@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009-2010 jMonkeyEngine
+ *  Copyright (c) 2009-2020 jMonkeyEngine
  *  All rights reserved.
  * 
  *  Redistribution and use in source and binary forms, with or without
@@ -46,8 +46,8 @@ import java.util.LinkedList;
  */
 public class SelectionPropertyEditor implements PropertyEditor {
 
-    private LinkedList<PropertyChangeListener> listeners = new LinkedList<PropertyChangeListener>();
-    private String value = new String();
+    private List<PropertyChangeListener> listeners = new ArrayList<>();
+    private String value;
     String[] tags = new String[0];
 
     public SelectionPropertyEditor(String[] tags, String value) {
@@ -78,7 +78,7 @@ public class SelectionPropertyEditor implements PropertyEditor {
     }
 
     public String getAsText() {
-        return value.toString();
+        return value;
     }
 
     public void setAsText(final String text) throws IllegalArgumentException {
@@ -108,9 +108,8 @@ public class SelectionPropertyEditor implements PropertyEditor {
     }
 
     private void notifyListeners(String before, String after) {
-        for (Iterator<PropertyChangeListener> it = listeners.iterator(); it.hasNext();) {
-            PropertyChangeListener propertyChangeListener = it.next();
-            propertyChangeListener.propertyChange(new PropertyChangeEvent(this, null, before, after));
+        for (PropertyChangeListener listener: listeners) {
+            listener.propertyChange(new PropertyChangeEvent(this, null, before, after));
         }
     }
 }
