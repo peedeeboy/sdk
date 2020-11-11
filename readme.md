@@ -5,9 +5,13 @@ This SDK simplifies developing 3D Applications with the jMonkeyEngine. It contai
   
 Our SDK (or jmonkeyplatform) is based on the Netbeans IDE but includes additional features like:
 -  A Scene Editor (SceneExplorer: Preview your scene, adjust all positions, add `Controls` and `AppStates` (WYSIWYG) and then just save the scene)
+
 -  A Material Editor
+
 -  A Filter Editor (combine multiple filters and just load them in-game)
+
 -  Bundled JDK for each platform (so you don't need to install java first)
+
 -  Bundled [Blender](https://www.blender.org) (so you can start 3d modelling and also use it's import capabilities)
 and many more!  
 
