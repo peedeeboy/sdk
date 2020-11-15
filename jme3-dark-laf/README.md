@@ -7,5 +7,5 @@ We wanted a dark theme variant for the jMonkeyEngine 3.1 sdk, so we made one. En
 ![DarkMonkey Screenshot](https://i.imgur.com/PxUJlxZ.png)
 
 ## Features
--  Adds the DarkMonkey LaF to the Netbeans 8 environment under appearance - It's NimROD with a couple of tweaks. We've just adapted Nilo's wonderful project for the look we were going for.
--  Adds the DarkMonkey FaC to the editor profile listing - It's Obsidian with some tweaks. DejaVu Sans Mono brings some sophistication to an otherwise courier world.
+-  Adds the DarkMonkey LaF to the Netbeans 8 environment under appearance: It's NimROD with a couple of tweaks. We've just adapted Nilo's wonderful project for the look we were going for.
+-  Adds the DarkMonkey FaC to the editor profile listing: It's Obsidian with some tweaks. DejaVu Sans Mono brings some sophistication to an otherwise courier world.
