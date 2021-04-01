@@ -42,7 +42,7 @@ jobs:
       working-directory: nightly
       
     - name: Overwrite the target file
-      run: rm -rf nightly/target && echo 'echo "::set-env name=sdk_sha::${{ github.sha }}"' > nightly/target
+      run: rm -rf nightly/target && echo 'echo "sdk_sha=${{ github.sha }}" >> $GITHUB_ENV' > nightly/target
       
     - name: Trigger nightly builds
       working-directory: nightly
