@@ -29,11 +29,11 @@ jobs:
     - name: Build the SDK
       run: ./gradlew buildSdk
     
-    - name: Checkout the nightly-trigger repository
+    - name: Checkout the v3.3-trigger repository
       uses: actions/checkout@v2
       with:
         repository: 'jMonkeyEngine/sdk-update-center'
-        ref: nightly
+        ref: v3.3
         path: nightly
         token: ${{ secrets. UPDATE_CENTER_PAT }}
       
