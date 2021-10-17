@@ -101,11 +101,9 @@ dependencies {
     corelibs dep("org.jmonkeyengine:jme3-terrain", false, false)
 
     optlibs dep("org.jmonkeyengine:jme3-jbullet", false, false)
-    optlibs dep("org.jmonkeyengine:jme3-jogl", false, false)
     optlibs dep("org.jmonkeyengine:jme3-android", false, false)
     optlibs dep("org.jmonkeyengine:jme3-ios", false, false)
     optlibs dep("org.jmonkeyengine:jme3-android-native", false, false)
-    optlibs dep("org.jmonkeyengine:jme3-bullet-native-android", false, false)
     optlibs dep("org.jmonkeyengine:jme3-lwjgl3", false, false)
     optlibs dep("com.github.stephengold:Heart:6.0.0", false, false)
     optlibs dep("com.github.stephengold:Minie:3.0.0", false, false)
@@ -194,18 +192,19 @@ copyBaseLibs.inputs.files configurations.corelibs.resolve()
 copyBaseLibs.outputs.dir "jme3-core-baselibs/release/modules/ext/"
 copyBaseLibs.outputs.dir "jme3-core-libraries/release/modules/ext/"
 
-def isSourceOrJavadoc(dep){
+static def isSourceOrJavadoc(dep){
     return isSource(dep) || isJavadoc(dep)
 }
 
-def isSource(dep){
+static def isSource(dep){
     return dep.endsWith("-sources.jar")
 }
 
-def isJavadoc(dep){
+static def isJavadoc(dep){
     return dep.endsWith("-javadoc.jar")
 }
-def isJmeDep(dep) {
+
+static def isJmeDep(dep) {
     return dep.startsWith("jme3")
 }
 
@@ -231,7 +230,6 @@ task createBaseXml(dependsOn: configurations.corelibs) {
                 externalJarFiles.add(file)
 
             }
-
         }
 
         // collect base packages
@@ -241,9 +239,9 @@ task createBaseXml(dependsOn: configurations.corelibs) {
             file.entries().each { entry ->
                 if(entry.name.endsWith('.class')){
                     // TODO: "/" works on windows?
-                    def pathPart = entry.name.substring(0,entry.name.lastIndexOf('/'))
+                    def pathPart = entry.name.substring(0, Math.max(0, entry.name.lastIndexOf('/')))
                     def classPath = pathPart.replace('/','.');
-                    if(!packages.contains(classPath)){
+                    if(!classPath.empty && !packages.contains(classPath)){
                         packages.add(classPath)
                     }
                 }
@@ -257,9 +255,9 @@ task createBaseXml(dependsOn: configurations.corelibs) {
             file.entries().each { entry ->
                 if(entry.name.endsWith('.class')){
                     // TODO: "/" works on windows?
-                    def pathPart = entry.name.substring(0,entry.name.lastIndexOf('/'))
+                    def pathPart = entry.name.substring(0, Math.max(0, entry.name.lastIndexOf('/')))
                     def classPath = pathPart.replace('/','.');
-                    if(!extPackages.contains(classPath)){
+                    if (!classPath.empty && !extPackages.contains(classPath)){
                         extPackages.add(classPath)
                     }
                 }
@@ -625,18 +623,7 @@ task updateNetbeans(type: Exec, dependsOn: checkPlatformConfig) {
     }
 }
 
-task downloadAvian() {
-    doLast {
-        def avianFile = file("jme3-ios/src/com/jme3/gde/ios/avian-openjdk-mac.zip")
-
-        if (!avianFile.exists())
-        {
-            new URL("https://bintray.com/mefisto94/jme-sdk-storage/download_file?file_path=avian-openjdk-mac.zip").withInputStream{ i -> avianFile.withOutputStream{ it << i }}
-        }
-    }
-}
-
-task buildSdk(dependsOn: [copyBaseLibs, copyProjectLibs, createProjectXml, createBaseXml, copyTestSources, downloadAvian]) {
+task buildSdk(dependsOn: [copyBaseLibs, copyProjectLibs, createProjectXml, createBaseXml, copyTestSources]) {
     doLast {
         ant.propertyfile(file: "nbproject/project.properties") {
             entry( key: "plugins.version", value: "${jmeVersion}")
