@@ -37,14 +37,26 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.swing.JComponent;
 import javax.swing.event.ChangeListener;
 import org.netbeans.api.project.ProjectManager;
@@ -68,6 +80,9 @@ public class GradleDesktopGameWizardIterator implements WizardDescriptor./*Progr
     private WizardDescriptor.Panel[] panels;
     private WizardDescriptor wiz;
 
+    private static final String TEMPLATE_SETTINGS = "com/jme3/gde/templates/files/freemarker/settings.gradle.ftl";
+    private static final String TEMPLATE_BUILDFILE = "com/jme3/gde/templates/files/freemarker/build.gradle.ftl";
+    
     public GradleDesktopGameWizardIterator() {
     }
 
@@ -77,12 +92,19 @@ public class GradleDesktopGameWizardIterator implements WizardDescriptor./*Progr
 
     private WizardDescriptor.Panel[] createPanels() {
         return new WizardDescriptor.Panel[]{
-                    new GradleDesktopGameWizardPanel(),};
+                    new GradleDesktopGameWizardPanel(),
+                    new GradleDesktopGameJMEVersionPanel(),
+                    new GradleDesktopGameGuiPanel(),
+                    new GradleDesktopGameAdditionalLibrariesPanel()
+        };
     }
 
     private String[] createSteps() {
         return new String[]{
-                    NbBundle.getMessage(GradleDesktopGameWizardIterator.class, "LBL_CreateProjectStep")
+                    NbBundle.getMessage(GradleDesktopGameWizardIterator.class, "LBL_CreateProjectStep"),
+                    NbBundle.getMessage(GradleDesktopGameWizardIterator.class, "LBL_ChooseEngineStep"),
+                    NbBundle.getMessage(GradleDesktopGameWizardIterator.class, "LBL_ChooseGuiStep"),
+                    NbBundle.getMessage(GradleDesktopGameWizardIterator.class, "LBL_ChooseAdditionalLibrariesStep")
                 };
     }
 
@@ -95,7 +117,24 @@ public class GradleDesktopGameWizardIterator implements WizardDescriptor./*Progr
         FileObject template = Templates.getTemplate(wiz);
         FileObject dir = FileUtil.toFileObject(dirF);
         unZipFile(template.getInputStream(), dir);
-
+        
+        // Create settings.gradle from template
+        File gradleSettingsFile = new File(dirF, "settings.gradle");
+        createFileFromTemplate(gradleSettingsFile, TEMPLATE_SETTINGS,
+                Collections.singletonMap("name", wiz.getProperty("name")));
+        
+        // Create build.gradle from template
+        File gradleBuildFile = new File(dirF, "build.gradle");
+        Map<String, Object> buildFileBindings = new HashMap<>();
+        buildFileBindings.put("jmeVersion", wiz.getProperty("jmeVersion"));
+        buildFileBindings.put("lwjglArtifact", wiz.getProperty("lwjglArtifact"));
+        buildFileBindings.put("guiLibrary", wiz.getProperty("guiLibrary"));
+        buildFileBindings.put("physicsLibrary", wiz.getProperty("physicsLibrary"));
+        buildFileBindings.put("networkingLibrary", wiz.getProperty("networkingLibrary"));
+        buildFileBindings.put("additionalLibraries", wiz.getProperty("additionalLibraries"));
+        
+        createFileFromTemplate(gradleBuildFile, TEMPLATE_BUILDFILE, buildFileBindings);
+        
         // Always open top dir as a project:
         resultSet.add(dir);
         // Look for nested projects to open as well:
@@ -195,6 +234,29 @@ public class GradleDesktopGameWizardIterator implements WizardDescriptor./*Progr
     public final void removeChangeListener(ChangeListener l) {
     }
 
+    private void createFileFromTemplate(File target, String templateResourcePath, Map<String, Object> tokens) throws IOException {
+        
+        // Create FreeMarker script engine
+        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+        ScriptEngine engine = scriptEngineManager.getEngineByName("freemarker");
+        Map<String, Object> bindings = engine.getContext().getBindings(ScriptContext.ENGINE_SCOPE);
+        bindings.putAll(tokens);
+        
+        // Process template           
+        try {
+            FileObject targetFO = FileUtil.toFileObject(target);
+            Writer os = new OutputStreamWriter(targetFO.getOutputStream(), Charset.forName("UTF-8"));
+            engine.getContext().setWriter(os);
+            Reader is = new InputStreamReader(GradleDesktopGameWizardIterator.class.getResourceAsStream("/" + templateResourcePath));
+            engine.eval(is);
+            
+            os.close();
+            is.close();
+        } catch (IOException | ScriptException ex) {
+                throw new IOException(ex.getMessage(), ex);
+        }
+    }
+    
     private static void unZipFile(InputStream source, FileObject projectRoot) throws IOException {
         try (source) {
             ZipInputStream str = new ZipInputStream(source);
