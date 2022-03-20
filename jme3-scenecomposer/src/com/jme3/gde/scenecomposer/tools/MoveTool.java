@@ -147,7 +147,7 @@ public class MoveTool extends SceneEditTool {
             }
 
             if(toolController.isSnapToScene()){
-                snapToScene(position);
+                position = snapToScene(position);
             }
             if(toolController.isSnapToGrid()){
                 position = new Vector3f(FastMath.floor(position.x), FastMath.floor(position.y), FastMath.floor(position.z));
@@ -176,7 +176,7 @@ public class MoveTool extends SceneEditTool {
         }
     }
 
-    private void snapToScene(Vector3f position){
+    private Vector3f snapToScene(Vector3f position){
         Ray ray = new Ray(position, Vector3f.UNIT_Y.negate());
         CollisionResults collisionResults = new CollisionResults();
         Node root = toolController.getRootNode().getLookup().lookup(Node.class);
@@ -187,6 +187,7 @@ public class MoveTool extends SceneEditTool {
                 break;
             }
         }
+        return position;
     }
 
     protected class MoveUndo extends AbstractUndoableSceneEdit {
