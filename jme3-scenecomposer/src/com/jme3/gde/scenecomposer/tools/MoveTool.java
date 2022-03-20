@@ -18,6 +18,10 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import org.openide.loaders.DataObject;
 import org.openide.util.Lookup;
+import com.jme3.math.Ray;
+import com.jme3.math.FastMath;
+import com.jme3.collision.CollisionResults;
+import com.jme3.collision.CollisionResult;
 
 /**
  * Move an object. When created, it generates a quad that will lie along a plane
@@ -141,6 +145,13 @@ public class MoveTool extends SceneEditTool {
             } else {
                 position = startPosition.add(diff);
             }
+
+            if(toolController.isSnapToScene()){
+                snapToScene(position);
+            }
+            if(toolController.isSnapToGrid()){
+                position = new Vector3f(FastMath.floor(position.x), FastMath.floor(position.y), FastMath.floor(position.z));
+            }
             lastPosition = position;
             toolController.getSelectedSpatial().setLocalTranslation(position);
             updateToolsTransformation();
@@ -162,6 +173,19 @@ public class MoveTool extends SceneEditTool {
             pickedMarker = null; // mouse released, reset selection
             constraintAxis = Vector3f.UNIT_XYZ; // no constraint
             pickManager.reset();
+        }
+    }
+
+    private void snapToScene(Vector3f position){
+        Ray ray = new Ray(position, Vector3f.UNIT_Y.negate());
+        CollisionResults collisionResults = new CollisionResults();
+        Node root = toolController.getRootNode().getLookup().lookup(Node.class);
+        root.collideWith(ray, collisionResults);
+        for(CollisionResult r : collisionResults){
+            if(r.getGeometry() != toolController.getSelectedSpatial()){
+                position.y = r.getContactPoint().y;
+                break;
+            }
         }
     }
 
@@ -210,4 +234,5 @@ public class MoveTool extends SceneEditTool {
             this.after.set(after);
         }
     }
+
 }
