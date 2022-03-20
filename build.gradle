@@ -14,62 +14,16 @@ if (!hasProperty('mainClass')) {
 }
 
 repositories {
-    mavenLocal()
-    jcenter {
-        url "https://jcenter.bintray.com/"
-    }
-    mavenCentral()
-    maven {
-        url "http://updates.jmonkeyengine.org/maven/"
-    }
     maven {
         url "http://nifty-gui.sourceforge.net/nifty-maven-repo/"
     }
     maven { url "https://jitpack.io" }
-
-    // See Engine Commit caf91c47df2e5687b3e9ecf2009ee22014bf4ac1
-    flatDir {
-        dirs rootProject.file('lib')
+    maven {
+        url "https://maven.google.com/"
     }
+    mavenCentral()
+    jcenter() // because of 'com.simsilica:sim-math:1.4.1'
 }
-
-/*if (System.getenv('TRAVIS') != null) {
-    if (System.env.TRAVIS_TAG != null && System.env.TRAVIS_TAG != "") { // Strangely it has to be both, because it's sometimes set as TRAVIS_TAG="" when we're in travis but no tag is set
-        // v3.3.0-stable-sdk1 becomes 3.3.0-stable
-        // Intentionally not using lastIndexOf here, we want the second "-".
-        ext.jmeEngineVersion = System.env.TRAVIS_TAG.substring(1, System.env.TRAVIS_TAG.indexOf("-", System.env.TRAVIS_TAG.indexOf("-") + 1));
-    } else {
-        if (System.env.TRAVIS_PULL_REQUEST == null || System.env.TRAVIS_PULL_REQUEST == "" || System.env.TRAVIS_PULL_REQUEST == "false") {
-			if (System.env.TRAVIS_BRANCH == "master") {
-				ext.jmeEngineVersion = "3.3.0-SNAPSHOT" // Manually update
-			} else {
-				ext.jmeEngineVersion = "3.3.0-" + System.env.TRAVIS_BRANCH + "-SNAPSHOT" // Manually update
-			}
-        } else {
-            ext.jmeEngineVersion = "3.3.0-" + System.env.TRAVIS_PULL_REQUEST_BRANCH + "-pr-" + System.env.TRAVIS_PULL_REQUEST + "-SNAPSHOT"
-        }
-    }
-} else {
-	new ByteArrayOutputStream().withStream { os ->
-		def result = exec {
-			executable = 'git'
-			args = ['rev-parse', '--abbrev-ref', 'HEAD'];
-			standardOutput = os
-		}
-		ext.branch = os.toString().trim()
-	}
-	
-	// If the Branch isn't master, specify the branch name.
-	// @TODO: One could use the same technique like the engine (grgit?)
-	if (ext.branch == "master") {
-		ext.branchSpec = ""
-	} else {
-		ext.branchSpec = "-" + ext.branch;
-	}
-	
-	// This is the engine version that will be used per default on every regular commit
-	ext.jmeEngineVersion = "3.3.0" + ext.branchSpec + "-SNAPSHOT"
-}*/
 
 configurations {
     corelibs
@@ -84,49 +38,37 @@ dependencies {
     corelibs dep("com.badlogicgames.gdx:gdx-ai:1.8.1", true, true)
     corelibs dep("javax.help:javahelp:2.0.05", false, false)
 
-    corelibs dep("org.jmonkeyengine:jme3-core", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-desktop", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-lwjgl", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-effects", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-blender", false, false)
-
-    corelibs dep("org.jmonkeyengine:jme3-bullet", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-bullet-native", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-core:3.4.0-stable", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-desktop:3.4.0-stable", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-lwjgl:3.4.0-stable", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-effects:3.4.0-stable", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-blender:3.3.2-stable", false, false) // Pin Pointed until jme3-blender has a dedicated release or support is phased out.
+    optlibs dep("com.github.stephengold:Minie:4.6.0", false, false) // replacement for bullet-native
     corelibs dep(fileTree("lib"), false, false)
-    corelibs dep("org.jmonkeyengine:jme3-jogg", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-jogg:3.4.0-stable", true, true)
 
-    corelibs dep("org.jmonkeyengine:jme3-networking", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-niftygui", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-plugins", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-terrain", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-networking:3.4.0-stable", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-niftygui:3.4.0-stable", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-plugins:3.4.0-stable", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-terrain:3.4.0-stable", false, false)
 
-    optlibs dep("org.jmonkeyengine:jme3-jbullet", false, false)
-    optlibs dep("org.jmonkeyengine:jme3-android", false, false)
-    optlibs dep("org.jmonkeyengine:jme3-ios", false, false)
-    optlibs dep("org.jmonkeyengine:jme3-android-native", false, false)
-    optlibs dep("org.jmonkeyengine:jme3-lwjgl3", false, false)
-    optlibs dep("com.github.stephengold:Heart:6.0.0", false, false)
-    optlibs dep("com.github.stephengold:Minie:3.0.0", false, false)
-    optlibs dep("com.github.stephengold:Wes:0.6.0", false, false)
-    testdatalibs dep("org.jmonkeyengine:jme3-testdata", false, false)
-
-    examplelibs dep("org.jmonkeyengine:jme3-examples", false, false)
-
+    optlibs dep("org.jmonkeyengine:jme3-jbullet:3.4.0-stable", false, false)
+    optlibs dep("org.jmonkeyengine:jme3-android:3.4.0-stable", false, false)
+    optlibs dep("org.jmonkeyengine:jme3-ios:3.4.0-stable", false, false)
+    optlibs dep("org.jmonkeyengine:jme3-android-native:3.4.0-stable", false, false)
+    optlibs dep("org.jmonkeyengine:jme3-lwjgl3:3.4.0-stable", false, false)
+    optlibs dep("com.github.stephengold:Heart:7.1.0", false, false)
+    optlibs dep("com.github.stephengold:Wes:0.6.7", false, false)
+    testdatalibs dep("org.jmonkeyengine:jme3-testdata:3.4.0-stable", false, false)
+    examplelibs dep("org.jmonkeyengine:jme3-examples:3.4.0-stable", false, false)
 }
 
 def dep(coords, javadoc = false, sources = false) {
-
     def result = [dependencies.create(coords)]
-
     if (javadoc) result << dependencies.create("$coords:javadoc")
-
     if (sources) result << dependencies.create("$coords:sources")
-
     result
-
 }
-
-
 
 artifacts {
     //    jar null
