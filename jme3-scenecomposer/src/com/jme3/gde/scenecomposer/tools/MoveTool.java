@@ -47,7 +47,7 @@ public class MoveTool extends SceneEditTool {
     }
 
     @Override
-    public void activate(AssetManager manager, Node toolNode,
+    public void activate(final AssetManager manager, Node toolNode,
                          Node onTopToolNode, Spatial selectedSpatial,
                          SceneComposerToolController toolController) {
         super.activate(manager, toolNode, onTopToolNode, selectedSpatial,
@@ -136,7 +136,7 @@ public class MoveTool extends SceneEditTool {
                 wasDragging = false;
             }
             pickManager.reset();
-        } else if (wasDragging == true) {
+        } else if (wasDragging) {
             if (!pickManager.updatePick(camera, screenCoord)) {
                 return;
             }
@@ -207,7 +207,8 @@ public class MoveTool extends SceneEditTool {
     protected class MoveUndo extends AbstractUndoableSceneEdit {
 
         private Spatial spatial;
-        private Vector3f before = new Vector3f(), after = new Vector3f();
+        private Vector3f before = new Vector3f();
+        private Vector3f after = new Vector3f();
 
         MoveUndo(Spatial spatial, Vector3f before, Vector3f after) {
             this.spatial = spatial;
