@@ -61,7 +61,7 @@ import org.openide.util.Lookup;
 public class SceneEditorController implements NodeListener {
 
     private final JmeSpatial jmeRootNode;
-    private Spatial selectedSpatial;
+    private Spatial selectedSpat;
     private AbstractSceneExplorerNode selectedExplorerNode;
 
     private DataObject currentFileObject;
@@ -83,7 +83,7 @@ public class SceneEditorController implements NodeListener {
     }
 
     public Spatial getSelectedSpat() {
-        return selectedSpatial;
+        return selectedSpat;
     }
 
     public void setSelectedExplorerNode(AbstractSceneExplorerNode node) {
@@ -102,7 +102,7 @@ public class SceneEditorController implements NodeListener {
     }
 
     public void setSelectedSpat(Spatial selectedSpat) {
-        this.selectedSpatial = selectedSpat;
+        this.selectedSpat = selectedSpat;
 
     }
 
@@ -149,11 +149,11 @@ public class SceneEditorController implements NodeListener {
     }
 
     public void moveSelectedSpatial(final Vector3f point) {
-        if (selectedSpatial == null) {
+        if (selectedSpat == null) {
             return;
         }
         try {
-            final Spatial node = selectedSpatial;
+            final Spatial node = selectedSpat;
             if (node != null) {
                 setNeedsSave(true);
                 SceneApplication.getApplication().enqueue(new Callable() {
@@ -209,11 +209,11 @@ public class SceneEditorController implements NodeListener {
     }
 
     public void nudgeSelectedSpatial(final Vector3f amount) {
-        if (selectedSpatial == null) {
+        if (selectedSpat == null) {
             return;
         }
         try {
-            final Spatial node = selectedSpatial;
+            final Spatial node = selectedSpat;
             if (node != null) {
                 setNeedsSave(true);
                 SceneApplication.getApplication().enqueue(new Callable() {
@@ -259,11 +259,11 @@ public class SceneEditorController implements NodeListener {
     }
 
     public void rotateSelectedSpatial(final Quaternion amount) {
-        if (selectedSpatial == null) {
+        if (selectedSpat == null) {
             return;
         }
         try {
-            final Spatial node = selectedSpatial;
+            final Spatial node = selectedSpat;
             if (node != null) {
                 setNeedsSave(true);
                 SceneApplication.getApplication().enqueue(new Callable() {
@@ -309,11 +309,11 @@ public class SceneEditorController implements NodeListener {
     }
 
     public void createTangentsForSelectedSpatial() {
-        if (selectedSpatial == null) {
+        if (selectedSpat == null) {
             return;
         }
         try {
-            final Spatial node = selectedSpatial;
+            final Spatial node = selectedSpat;
             if (node != null) {
                 setNeedsSave(true);
                 SceneApplication.getApplication().enqueue(new Callable() {
@@ -361,11 +361,11 @@ public class SceneEditorController implements NodeListener {
     }
 
     public void createPhysicsMeshForSelectedSpatial() {
-        if (selectedSpatial == null) {
+        if (selectedSpat == null) {
             return;
         }
         try {
-            final Spatial node = selectedSpatial;
+            final Spatial node = selectedSpat;
             setNeedsSave(true);
             if (node != null) {
                 SceneApplication.getApplication().enqueue(new Callable() {
@@ -401,11 +401,11 @@ public class SceneEditorController implements NodeListener {
     }
 
     public void createDynamicPhysicsMeshForSelectedSpatial(final float weight) {
-        if (selectedSpatial == null) {
+        if (selectedSpat == null) {
             return;
         }
         try {
-            final Spatial node = selectedSpatial;
+            final Spatial node = selectedSpat;
             setNeedsSave(true);
             if (node != null) {
                 SceneApplication.getApplication().enqueue(new Callable() {
@@ -441,11 +441,11 @@ public class SceneEditorController implements NodeListener {
     }
 
     public void createCharacterControlForSelectedSpatial(final boolean auto, final float radius, final float height) {
-        if (selectedSpatial == null) {
+        if (selectedSpat == null) {
             return;
         }
         try {
-            final Spatial node = selectedSpatial;
+            final Spatial node = selectedSpat;
             setNeedsSave(true);
             if (node != null) {
                 SceneApplication.getApplication().enqueue(new Callable() {
@@ -519,11 +519,11 @@ public class SceneEditorController implements NodeListener {
     }
 
     public void addModel(final SpatialAssetDataObject file, final Vector3f location) {
-        if (selectedSpatial == null) {
+        if (selectedSpat == null) {
             return;
         }
-        if (selectedSpatial instanceof Node) {
-            final Node selected = (Node) selectedSpatial;
+        if (selectedSpat instanceof Node) {
+            final Node selected = (Node) selectedSpat;
             ProjectAssetManager manager = file.getLookup().lookup(ProjectAssetManager.class);
             if (manager != null) {
                 manager.clearCache();
@@ -569,11 +569,11 @@ public class SceneEditorController implements NodeListener {
     }
 
     public void linkModel(final AssetManager manager, final String assetName, final Vector3f location) {
-        if (selectedSpatial == null) {
+        if (selectedSpat == null) {
             return;
         }
-        if (selectedSpatial instanceof Node) {
-            final Node selected = (Node) ((selectedSpatial instanceof AssetLinkNode) ? selectedSpatial.getParent() : selectedSpatial);
+        if (selectedSpat instanceof Node) {
+            final Node selected = (Node) ((selectedSpat instanceof AssetLinkNode) ? selectedSpat.getParent() : selectedSpat);
             setNeedsSave(true);
             SceneApplication.getApplication().enqueue(new Callable<Object>() {
 
@@ -624,11 +624,11 @@ public class SceneEditorController implements NodeListener {
     }
 
     public void addModel(final Spatial file, final Vector3f location) {
-        if (selectedSpatial == null) {
+        if (selectedSpat == null) {
             return;
         }
-        if (selectedSpatial instanceof Node) {
-            final Node selected = (Node) selectedSpatial;
+        if (selectedSpat instanceof Node) {
+            final Node selected = (Node) selectedSpat;
             setNeedsSave(true);
             SceneApplication.getApplication().enqueue(new Callable<Object>() {
 
