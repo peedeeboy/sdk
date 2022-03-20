@@ -17,8 +17,8 @@ jobs:
       with:
         java-version: 11
 
-    - name: Grant execute permission for the scripts
-      run: chmod +x gradlew *.sh
+    - name: Grant execute permission for gradle
+      run: chmod +x gradlew
       
     - name: Download and build the Engine
       run: ./build_engine.sh
