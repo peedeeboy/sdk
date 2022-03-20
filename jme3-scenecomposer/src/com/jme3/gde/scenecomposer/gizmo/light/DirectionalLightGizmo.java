@@ -76,7 +76,7 @@ public class DirectionalLightGizmo extends NodeCallback implements DirectionalLi
 
     @Override
     public void onRotation(Quaternion oldRotation, Quaternion newRotation) {
-        light.setDirection(newRotation.mult(initialDirection));
+        light.setDirection(newRotation.mult(Vector3f.UNIT_Y, initialDirection));
         jmeLight.setValue("direction", light.getDirection());
     }
     
