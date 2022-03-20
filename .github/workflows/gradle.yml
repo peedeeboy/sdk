@@ -20,12 +20,6 @@ jobs:
     - name: Grant execute permission for gradle
       run: chmod +x gradlew
       
-    - name: Download and build the Engine
-      run: ./build_engine.sh
-      
-    - name: Fix the Engine
-      run: ./fix_engine.sh
-      
     - name: Build the SDK
       run: ./gradlew buildSdk
     
