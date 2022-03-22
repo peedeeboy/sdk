@@ -178,10 +178,11 @@ public class MoveTool extends SceneEditTool {
         }
     }
 
-    private Vector3f snapToScene(final Vector3f position){
+    private Vector3f snapToScene(final Vector3f position) {
         final Ray ray = new Ray(position, Vector3f.UNIT_Y.negate());
         final CollisionResults collisionResults = new CollisionResults();
-        final Node root = toolController.getRootNode().getLookup().lookup(Node.class);
+        final Node root = toolController.getRootNode().getLookup()
+                .lookup(Node.class);
         root.collideWith(ray, collisionResults);
         for (CollisionResult r : collisionResults) {
             if (r.getGeometry() != toolController.getSelectedSpatial()) {
