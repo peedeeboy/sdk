@@ -146,10 +146,10 @@ public class MoveTool extends SceneEditTool {
                 position = startPosition.add(diff);
             }
 
-            if (toolController.isSnapToScene()){
+            if (toolController.isSnapToScene()) {
                 position = snapToScene(position);
             }
-            if (toolController.isSnapToGrid()){
+            if (toolController.isSnapToGrid()) {
                 position.set(
                         (int) position.x,
                         (int) position.y,
@@ -179,13 +179,13 @@ public class MoveTool extends SceneEditTool {
         }
     }
 
-    private Vector3f snapToScene(Vector3f position){
-        Ray ray = new Ray(position, Vector3f.UNIT_Y.negate());
-        CollisionResults collisionResults = new CollisionResults();
-        Node root = toolController.getRootNode().getLookup().lookup(Node.class);
+    private Vector3f snapToScene(final Vector3f position){
+        final Ray ray = new Ray(position, Vector3f.UNIT_Y.negate());
+        final CollisionResults collisionResults = new CollisionResults();
+        final Node root = toolController.getRootNode().getLookup().lookup(Node.class);
         root.collideWith(ray, collisionResults);
-        for(CollisionResult r : collisionResults){
-            if(r.getGeometry() != toolController.getSelectedSpatial()){
+        for (CollisionResult r : collisionResults) {
+            if (r.getGeometry() != toolController.getSelectedSpatial()) {
                 position.y = r.getContactPoint().y;
                 break;
             }
