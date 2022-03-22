@@ -146,11 +146,14 @@ public class MoveTool extends SceneEditTool {
                 position = startPosition.add(diff);
             }
 
-            if(toolController.isSnapToScene()){
+            if (toolController.isSnapToScene()){
                 position = snapToScene(position);
             }
-            if(toolController.isSnapToGrid()){
-                position.set((int) position.x, (int) position.y, (int) position.z);
+            if (toolController.isSnapToGrid()){
+                position.set(
+                        (int) position.x,
+                        (int) position.y,
+                        (int) position.z);
             }
             lastPosition = position;
             toolController.getSelectedSpatial().setLocalTranslation(position);
