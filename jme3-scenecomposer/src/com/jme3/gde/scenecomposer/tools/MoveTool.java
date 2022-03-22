@@ -47,19 +47,15 @@ public class MoveTool extends SceneEditTool {
     }
 
     @Override
-    public void activate(final AssetManager manager, Node toolNode,
-                         Node onTopToolNode, Spatial selectedSpatial,
-                         SceneComposerToolController toolController) {
-        super.activate(manager, toolNode, onTopToolNode, selectedSpatial,
-                toolController);
+    public void activate(AssetManager manager, Node toolNode, Node onTopToolNode, Spatial selectedSpatial, SceneComposerToolController toolController) {
+        super.activate(manager, toolNode, onTopToolNode, selectedSpatial, toolController);
         pickManager = Lookup.getDefault().lookup(PickManager.class);
         displayPlanes();
         displayCones();
     }
 
     @Override
-    public void actionPrimary(Vector2f screenCoord, boolean pressed,
-                              JmeNode rootNode, DataObject dataObject) {
+    public void actionPrimary(Vector2f screenCoord, boolean pressed, JmeNode rootNode, DataObject dataObject) {
         if (!pressed) {
             setDefaultAxisMarkerColors();
             pickedMarker = null; // mouse released, reset selection
@@ -75,8 +71,7 @@ public class MoveTool extends SceneEditTool {
             }
 
             if (pickedMarker == null) {
-                pickedMarker = pickAxisMarker(camera, screenCoord,
-                        axisPickType);
+                pickedMarker = pickAxisMarker(camera, screenCoord, axisPickType);
                 if (pickedMarker == null) {
                     return;
                 }
@@ -97,24 +92,21 @@ public class MoveTool extends SceneEditTool {
                     pickManager.initiatePick(toolController.getSelectedSpatial(), PickManager.PLANE_XZ, getTransformType(), camera, screenCoord);
                     constraintAxis = Vector3f.UNIT_Z; // move only Z
                 }
-                startPosition =
-                        toolController.getSelectedSpatial().getLocalTranslation().clone();
+                startPosition = toolController.getSelectedSpatial().getLocalTranslation().clone();
                 wasDragging = true;
             }
         }
     }
 
     @Override
-    public void actionSecondary(Vector2f screenCoord, boolean pressed,
-                                JmeNode rootNode, DataObject dataObject) {
+    public void actionSecondary(Vector2f screenCoord, boolean pressed, JmeNode rootNode, DataObject dataObject) {
         if (pressed) {
             cancel();
         }
     }
 
     @Override
-    public void mouseMoved(Vector2f screenCoord, JmeNode rootNode,
-                           DataObject currentDataObject) {
+    public void mouseMoved(Vector2f screenCoord, JmeNode rootNode, DataObject currentDataObject) {
 
         if (pickedMarker == null) {
             highlightAxisMarker(camera, screenCoord, axisPickType);
@@ -125,8 +117,7 @@ public class MoveTool extends SceneEditTool {
     }
 
     @Override
-    public void draggedPrimary(Vector2f screenCoord, boolean pressed,
-                               JmeNode rootNode, DataObject currentDataObject) {
+    public void draggedPrimary(Vector2f screenCoord, boolean pressed, JmeNode rootNode, DataObject currentDataObject) {
         if (!pressed) {
             setDefaultAxisMarkerColors();
             pickedMarker = null; // mouse released, reset selection
@@ -136,7 +127,7 @@ public class MoveTool extends SceneEditTool {
                 wasDragging = false;
             }
             pickManager.reset();
-        } else if (wasDragging) {
+        } else if (wasDragging == true) {
             if (!pickManager.updatePick(camera, screenCoord)) {
                 return;
             }
@@ -150,18 +141,16 @@ public class MoveTool extends SceneEditTool {
             Vector3f position;
             Spatial parent = toolController.getSelectedSpatial().getParent();
             if (parent != null) {
-                position =
-                        startPosition.add(parent.getWorldRotation().inverse().mult(diff));
+                position = startPosition.add(parent.getWorldRotation().inverse().mult(diff));
             } else {
                 position = startPosition.add(diff);
             }
 
-            if (toolController.isSnapToScene()) {
+            if(toolController.isSnapToScene()){
                 position = snapToScene(position);
             }
-            if (toolController.isSnapToGrid()) {
-                position = new Vector3f(FastMath.floor(position.x),
-                        FastMath.floor(position.y), FastMath.floor(position.z));
+            if(toolController.isSnapToGrid()){
+                position.set((int) position.x, (int) position.y, (int) position.z);
             }
             lastPosition = position;
             toolController.getSelectedSpatial().setLocalTranslation(position);
@@ -170,9 +159,7 @@ public class MoveTool extends SceneEditTool {
     }
 
     @Override
-    public void draggedSecondary(Vector2f screenCoord, boolean pressed,
-                                 JmeNode rootNode,
-                                 DataObject currentDataObject) {
+    public void draggedSecondary(Vector2f screenCoord, boolean pressed, JmeNode rootNode, DataObject currentDataObject) {
         if (pressed) {
             cancel();
         }
@@ -189,14 +176,13 @@ public class MoveTool extends SceneEditTool {
         }
     }
 
-    private Vector3f snapToScene(final Vector3f position) {
-        final Ray ray = new Ray(position, Vector3f.UNIT_Y.negate());
-        final CollisionResults collisionResults = new CollisionResults();
-        final Node root =
-                toolController.getRootNode().getLookup().lookup(Node.class);
+    private Vector3f snapToScene(Vector3f position){
+        Ray ray = new Ray(position, Vector3f.UNIT_Y.negate());
+        CollisionResults collisionResults = new CollisionResults();
+        Node root = toolController.getRootNode().getLookup().lookup(Node.class);
         root.collideWith(ray, collisionResults);
-        for (CollisionResult r : collisionResults) {
-            if (r.getGeometry() != toolController.getSelectedSpatial()) {
+        for(CollisionResult r : collisionResults){
+            if(r.getGeometry() != toolController.getSelectedSpatial()){
                 position.y = r.getContactPoint().y;
                 break;
             }
@@ -207,8 +193,7 @@ public class MoveTool extends SceneEditTool {
     protected class MoveUndo extends AbstractUndoableSceneEdit {
 
         private Spatial spatial;
-        private Vector3f before = new Vector3f();
-        private Vector3f after = new Vector3f();
+        private Vector3f before = new Vector3f(), after = new Vector3f();
 
         MoveUndo(Spatial spatial, Vector3f before, Vector3f after) {
             this.spatial = spatial;
@@ -221,13 +206,11 @@ public class MoveTool extends SceneEditTool {
         @Override
         public void sceneUndo() {
             spatial.setLocalTranslation(before);
-            RigidBodyControl control =
-                    spatial.getControl(RigidBodyControl.class);
+            RigidBodyControl control = spatial.getControl(RigidBodyControl.class);
             if (control != null) {
                 control.setPhysicsLocation(spatial.getWorldTranslation());
             }
-            CharacterControl character =
-                    spatial.getControl(CharacterControl.class);
+            CharacterControl character = spatial.getControl(CharacterControl.class);
             if (character != null) {
                 character.setPhysicsLocation(spatial.getWorldTranslation());
             }
@@ -237,13 +220,11 @@ public class MoveTool extends SceneEditTool {
         @Override
         public void sceneRedo() {
             spatial.setLocalTranslation(after);
-            RigidBodyControl control =
-                    spatial.getControl(RigidBodyControl.class);
+            RigidBodyControl control = spatial.getControl(RigidBodyControl.class);
             if (control != null) {
                 control.setPhysicsLocation(spatial.getWorldTranslation());
             }
-            CharacterControl character =
-                    spatial.getControl(CharacterControl.class);
+            CharacterControl character = spatial.getControl(CharacterControl.class);
             if (character != null) {
                 character.setPhysicsLocation(spatial.getWorldTranslation());
             }
