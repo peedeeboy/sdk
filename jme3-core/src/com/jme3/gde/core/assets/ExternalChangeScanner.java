@@ -128,7 +128,9 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener, F
         try {
             Spatial original = loadOriginalSpatial();
             Spatial spat = (Spatial) assetDataObject.loadAsset();
+
             SpatialUtil.updateMeshDataFromOriginal(spat, original);
+            SpatialUtil.updateMaterialDataFromOriginal(spat, original);
             if (SpatialUtil.hasAnimations(original)) {
                 NotifyDescriptor.Confirmation mesg = new NotifyDescriptor.Confirmation("Model appears to have animations, try to import as well?\nCurrently this will unlink attachment Nodes and clear\nadded effects tracks.",
                         "Animations Available",
