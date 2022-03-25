@@ -1,22 +1,22 @@
 /*
  * Copyright (c) 2003-2012 jMonkeyEngine
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright
  *   notice, this list of conditions and the following disclaimer.
- * 
+ *
  * * Redistributions in binary form must reproduce the above copyright
  *   notice, this list of conditions and the following disclaimer in the
  *   documentation and/or other materials provided with the distribution.
- * 
+ *
  * * Neither the name of 'jMonkeyEngine' nor the names of its contributors
  *   may be used to endorse or promote products derived from this software
  *   without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
  * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -35,6 +35,10 @@ import com.jme3.export.Savable;
 import com.jme3.gde.core.scene.ApplicationLogHandler;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.util.SpatialUtil;
+import com.jme3.gde.core.util.TaggedSpatialFinder;
+import com.jme3.gde.core.util.datatransfer.AnimationDataFromOriginal;
+import com.jme3.gde.core.util.datatransfer.MaterialDataFromOriginal;
+import com.jme3.gde.core.util.datatransfer.MeshDataFromOriginal;
 import com.jme3.scene.Spatial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -69,6 +73,7 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener, F
 
     public ExternalChangeScanner(AssetDataObject assetDataObject) {
         this.assetDataObject = assetDataObject;
+
         assetData = assetDataObject.getLookup().lookup(AssetData.class);
         if (assetData != null) {
             String path = assetData.getProperty("ORIGINAL_PATH");
@@ -128,16 +133,17 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener, F
         try {
             Spatial original = loadOriginalSpatial();
             Spatial spat = (Spatial) assetDataObject.loadAsset();
+            TaggedSpatialFinder finder = new TaggedSpatialFinder();
 
-            SpatialUtil.updateMeshDataFromOriginal(spat, original);
-            SpatialUtil.updateMaterialDataFromOriginal(spat, original);
+            new MeshDataFromOriginal(finder).update(spat, original);
+            new MaterialDataFromOriginal(finder).update(spat, original);
             if (SpatialUtil.hasAnimations(original)) {
                 NotifyDescriptor.Confirmation mesg = new NotifyDescriptor.Confirmation("Model appears to have animations, try to import as well?\nCurrently this will unlink attachment Nodes and clear\nadded effects tracks.",
                         "Animations Available",
                         NotifyDescriptor.YES_NO_OPTION, NotifyDescriptor.QUESTION_MESSAGE);
                 DialogDisplayer.getDefault().notify(mesg);
                 if (mesg.getValue() == NotifyDescriptor.Confirmation.YES_OPTION) {
-                    SpatialUtil.updateAnimControlDataFromOriginal(spat, original);
+                    new AnimationDataFromOriginal(finder).update(spat, original);
                 }
             }
             closeOriginalSpatial();
