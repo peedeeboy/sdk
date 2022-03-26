@@ -9,7 +9,7 @@ import com.jme3.scene.Spatial;
 import java.util.logging.Logger;
 
 /**
- * Copies material data from an updated model to the original
+ * Copies material data from an updated model to the original.
  */
 public final class MaterialDataFromOriginal implements SpatialDataTransferInterface {
 
@@ -30,7 +30,7 @@ public final class MaterialDataFromOriginal implements SpatialDataTransferInterf
             public void visit(Geometry geom) {
                 //will always return same class type as 2nd param, so casting
                 // is safe
-                Geometry spat = (Geometry) finder.find(root, geom);
+                final Geometry spat = (Geometry) finder.find(root, geom);
                 if (spat != null && spat.getMaterial() != null && geom.getMaterial() != null) {
                     spat.setMaterial(geom.getMaterial());
                     logger.log(ApplicationLogHandler.LogLevel.FINE,

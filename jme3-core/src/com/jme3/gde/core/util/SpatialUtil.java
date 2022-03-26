@@ -93,7 +93,7 @@ public class SpatialUtil {
                     LOGGER.log(Level.WARNING, "Null Spatial name!");
                     geomName = "null";
                 }
-                geom.setUserData("ORIGINAL_NAME", geomName);
+                geom.setUserData((SpatialUtil.ORIGINAL_NAME, geomName);
                 LOGGER.log(Level.FINE, "Set ORIGINAL_NAME for {0}",
                         geomName);
                 String id = SpatialUtil.getSpatialPath(curSpat);
@@ -102,7 +102,7 @@ public class SpatialUtil {
                             + "for Spatial {0}: {1}", new Object[]{geom, id});
                 }
                 geomMap.add(id);
-                geom.setUserData("ORIGINAL_PATH", id);
+                geom.setUserData((SpatialUtil.ORIGINAL_PATH, id);
                 LOGGER.log(Level.FINE, "Set ORIGINAL_PATH for {0}", id);
             });
         } else {

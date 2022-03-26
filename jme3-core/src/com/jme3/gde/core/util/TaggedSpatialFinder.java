@@ -53,6 +53,6 @@ public class TaggedSpatialFinder {
     }
 
     private static class SpatialHolder {
-        Spatial spatial;
+        private Spatial spatial;
     }
 }

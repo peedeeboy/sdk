@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Copies AnimComposer and AnimClips from an updated spatial to the original
+ * Copies AnimComposer and AnimClips from an updated spatial to the original.
  */
 public final class AnimationDataFromOriginal implements SpatialDataTransferInterface {
 
