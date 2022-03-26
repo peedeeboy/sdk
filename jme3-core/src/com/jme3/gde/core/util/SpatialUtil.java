@@ -50,7 +50,7 @@ public class SpatialUtil {
 
     public static final String ORIGINAL_NAME = "ORIGINAL_NAME";
     public static final String ORIGINAL_PATH = "ORIGINAL_PATH";
-    private static final Logger logger =
+    private static final Logger LOGGER =
             Logger.getLogger(SpatialUtil.class.getName());
 
     /**
@@ -66,7 +66,7 @@ public class SpatialUtil {
         while (spat != null) {
             String name = spat.getName();
             if (name == null) {
-                logger.log(Level.WARNING, "Null spatial name!");
+                LOGGER.log(Level.WARNING, "Null spatial name!");
                 name = "null";
             }
             geometryIdentifier.insert(0, name);
@@ -90,24 +90,23 @@ public class SpatialUtil {
                 Spatial curSpat = geom;
                 String geomName = geom.getName();
                 if (geomName == null) {
-                    logger.log(Level.WARNING, "Null Spatial name!");
+                    LOGGER.log(Level.WARNING, "Null Spatial name!");
                     geomName = "null";
                 }
                 geom.setUserData("ORIGINAL_NAME", geomName);
-                logger.log(Level.FINE, "Set ORIGINAL_NAME for {0}",
+                LOGGER.log(Level.FINE, "Set ORIGINAL_NAME for {0}",
                         geomName);
                 String id = SpatialUtil.getSpatialPath(curSpat);
                 if (geomMap.contains(id)) {
-                    logger.log(Level.WARNING, "Cannot create unique name "
-                            + "for Spatial {0}: {1}", new Object[]{geom,
-                            id});
+                    LOGGER.log(Level.WARNING, "Cannot create unique name "
+                            + "for Spatial {0}: {1}", new Object[]{geom, id});
                 }
                 geomMap.add(id);
                 geom.setUserData("ORIGINAL_PATH", id);
-                logger.log(Level.FINE, "Set ORIGINAL_PATH for {0}", id);
+                LOGGER.log(Level.FINE, "Set ORIGINAL_PATH for {0}", id);
             });
         } else {
-            logger.log(Level.SEVERE, "No Spatial available when trying to add"
+            LOGGER.log(Level.SEVERE, "No Spatial available when trying to add"
                     + " Spatial paths.");
         }
     }

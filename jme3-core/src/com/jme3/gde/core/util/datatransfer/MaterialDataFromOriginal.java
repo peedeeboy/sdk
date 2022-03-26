@@ -18,7 +18,7 @@ public final class MaterialDataFromOriginal implements SpatialDataTransferInterf
 
     private final TaggedSpatialFinder finder;
 
-    public MaterialDataFromOriginal(TaggedSpatialFinder finder) {
+    public MaterialDataFromOriginal(final TaggedSpatialFinder finder) {
         this.finder = finder;
     }
 

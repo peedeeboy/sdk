@@ -140,9 +140,9 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener
                 + "data");
         handle.start();
         try {
-            Spatial original = loadOriginalSpatial();
-            Spatial spat = (Spatial) assetDataObject.loadAsset();
-            TaggedSpatialFinder finder = new TaggedSpatialFinder();
+            final Spatial original = loadOriginalSpatial();
+            final Spatial spat = (Spatial) assetDataObject.loadAsset();
+            final TaggedSpatialFinder finder = new TaggedSpatialFinder();
 
             new MeshDataFromOriginal(finder).update(spat, original);
             new TransformDataFromOriginal(finder).update(spat, original);

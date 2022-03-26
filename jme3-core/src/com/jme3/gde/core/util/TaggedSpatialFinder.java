@@ -1,7 +1,6 @@
 package com.jme3.gde.core.util;
 
 import com.jme3.scene.Spatial;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,7 +10,7 @@ import java.util.logging.Logger;
  */
 public class TaggedSpatialFinder {
 
-    private static final Logger logger =
+    private static final Logger LOGGER =
             Logger.getLogger(TaggedSpatialFinder.class.getName());
 
     public TaggedSpatialFinder() {
@@ -20,15 +19,15 @@ public class TaggedSpatialFinder {
 
     public Spatial find(final Spatial root, final Spatial needle) {
         if (needle == null) {
-            logger.log(Level.WARNING, "Trying to find null needle for {0}",
+            LOGGER.log(Level.WARNING, "Trying to find null needle for {0}",
                     root);
             return null;
         }
         final String name = needle.getName();
         final String path = SpatialUtil.getSpatialPath(needle);
         if (name == null) {
-            logger.log(Level.WARNING, "Trying to find tagged Spatial with " +
-                    "null name spatial for {0}.", root);
+            LOGGER.log(Level.WARNING, "Trying to find tagged Spatial with "
+                    + "null name spatial for {0}.", root);
             return null;
         }
         final Class<? extends Spatial> clazz = needle.getClass();
@@ -45,8 +44,8 @@ public class TaggedSpatialFinder {
                 if (holder.spatial == null) {
                     holder.spatial = spatial;
                 } else {
-                    logger.log(Level.WARNING, "Found Spatial {0} twice in" +
-                            " {1}", new Object[]{path, root});
+                    LOGGER.log(Level.WARNING, "Found Spatial {0} twice in"
+                            + " {1}", new Object[]{path, root});
                 }
             }
         });
@@ -54,7 +53,6 @@ public class TaggedSpatialFinder {
     }
 
     private static class SpatialHolder {
-
         Spatial spatial;
     }
 }

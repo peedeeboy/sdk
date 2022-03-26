@@ -10,42 +10,40 @@ import java.util.logging.Logger;
 
 /**
  * Copies Transform data (translation, rotation, scale) from an updated
- * spatial to the original
+ * spatial to the original.
  */
 public class TransformDataFromOriginal implements SpatialDataTransferInterface {
 
-    private static final Logger logger =
+    private static final Logger LOGGER =
             Logger.getLogger(AnimationDataFromOriginal.class.getName());
 
     private final TaggedSpatialFinder finder;
 
-    public TransformDataFromOriginal(TaggedSpatialFinder finder) {
+    public TransformDataFromOriginal(final TaggedSpatialFinder finder) {
         this.finder = finder;
     }
 
     @Override
-    public void update(Spatial root, Spatial original) {
+    public void update(final Spatial root, final Spatial original) {
         original.depthFirstTraversal(new com.jme3.scene.SceneGraphVisitorAdapter() {
 
             @Override
-            public void visit(com.jme3.scene.Geometry geom) {
-                Geometry spat =
-                        (Geometry) finder.find(root, geom);
+            public void visit(final Geometry geom) {
+                final Geometry spat = (Geometry) finder.find(root, geom);
                 if (spat != null) {
                     spat.setLocalTransform(geom.getLocalTransform());
-                    logger.log(ApplicationLogHandler.LogLevel.FINE,
+                    LOGGER.log(ApplicationLogHandler.LogLevel.FINE,
                             "Updated transform for Geometry {0}",
                             geom.getName());
                 }
             }
 
             @Override
-            public void visit(com.jme3.scene.Node node) {
-                Node spat =
-                        (Node) finder.find(root, node);
+            public void visit(final Node node) {
+                final Node spat = (Node) finder.find(root, node);
                 if (spat != null) {
                     spat.setLocalTransform(node.getLocalTransform());
-                    logger.log(ApplicationLogHandler.LogLevel.FINE,
+                    LOGGER.log(ApplicationLogHandler.LogLevel.FINE,
                             "Updated transform for Node {0}", node.getName());
                 }
             }

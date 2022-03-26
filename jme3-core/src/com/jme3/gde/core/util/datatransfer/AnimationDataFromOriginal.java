@@ -6,7 +6,6 @@ import com.jme3.gde.core.scene.ApplicationLogHandler;
 import com.jme3.gde.core.util.TaggedSpatialFinder;
 import com.jme3.scene.Spatial;
 import com.jme3.util.clone.Cloner;
-
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,12 +15,12 @@ import java.util.logging.Logger;
  */
 public final class AnimationDataFromOriginal implements SpatialDataTransferInterface {
 
-    private static final Logger logger =
+    private static final Logger LOGGER =
             Logger.getLogger(AnimationDataFromOriginal.class.getName());
 
     private final TaggedSpatialFinder finder;
 
-    public AnimationDataFromOriginal(TaggedSpatialFinder finder) {
+    public AnimationDataFromOriginal(final TaggedSpatialFinder finder) {
         this.finder = finder;
     }
 
@@ -51,19 +50,19 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
                             animComposer.jmeClone());
                     copyAnimClips(myAnimControl, animComposer);
                     if (mySpatial.getControl(AnimComposer.class) == null) {
-                        logger.log(Level.FINE, "Adding control for {0}",
+                        LOGGER.log(Level.FINE, "Adding control for {0}",
                                 mySpatial.getName());
                         mySpatial.addControl(myAnimControl);
                     } else {
-                        logger.log(Level.FINE, "Control for {0} was added"
+                        LOGGER.log(Level.FINE, "Control for {0} was added"
                                 + " automatically", mySpatial.getName());
                     }
 
-                    logger.log(ApplicationLogHandler.LogLevel.FINE,
+                    LOGGER.log(ApplicationLogHandler.LogLevel.FINE,
                             "Updated animation for {0}",
                             mySpatial.getName());
                 } else {
-                    logger.log(Level.WARNING, "Could not find sibling for"
+                    LOGGER.log(Level.WARNING, "Could not find sibling for"
                             + " {0} in root {1} when trying to apply "
                             + "AnimControl data", new Object[]{spatial, root});
                 }
@@ -71,7 +70,7 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
         });
     }
 
-    private void copyAnimClips(AnimComposer control, AnimComposer original) {
+    private void copyAnimClips(final AnimComposer control, final AnimComposer original) {
         final Collection<AnimClip> clips = original.getAnimClips();
         for (AnimClip c : clips) {
             control.addAnimClip(c);
@@ -79,12 +78,11 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
     }
 
 
-    private void removeAnimData(Spatial root) {
+    private void removeAnimData(final Spatial root) {
         root.depthFirstTraversal(spatial -> {
             AnimComposer animControl = spatial.getControl(AnimComposer.class);
             if (animControl != null) {
                 spatial.removeControl(animControl);
-
             }
         });
     }
