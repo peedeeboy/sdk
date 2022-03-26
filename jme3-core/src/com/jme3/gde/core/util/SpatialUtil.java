@@ -32,7 +32,6 @@
 package com.jme3.gde.core.util;
 
 import com.jme3.anim.AnimComposer;
-import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.Spatial;
 
 import java.util.ArrayList;
@@ -47,20 +46,20 @@ import java.util.logging.Logger;
  *
  * @author normenhansen
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
 public class SpatialUtil {
 
+    public static final String ORIGINAL_NAME = "ORIGINAL_NAME";
+    public static final String ORIGINAL_PATH = "ORIGINAL_PATH";
     private static final Logger logger =
             Logger.getLogger(SpatialUtil.class.getName());
-
 
     /**
      * Gets a "pathname" for the given Spatial, combines the Spatials and
      * parents names to make a long name. This "path" is stored in geometry
      * after the first import for example.
      *
-     * @param spat
-     * @return
+     * @param spat Spatial
+     * @return id of spatial
      */
     public static String getSpatialPath(Spatial spat) {
         StringBuilder geometryIdentifier = new StringBuilder();
@@ -74,66 +73,60 @@ public class SpatialUtil {
             geometryIdentifier.insert(0, '/');
             spat = spat.getParent();
         }
-        String id = geometryIdentifier.toString();
-        return id;
+        return geometryIdentifier.toString();
     }
 
     /**
      * Stores ORIGINAL_NAME and ORIGINAL_PATH UserData to given Spatial and all
      * sub-Spatials.
      *
-     * @param spat
+     * @param spat spatial
      */
     public static void storeOriginalPathUserData(Spatial spat) {
         //TODO: only stores for geometry atm
-        final ArrayList<String> geomMap = new ArrayList<String>();
+        final ArrayList<String> geomMap = new ArrayList<>();
         if (spat != null) {
-            spat.depthFirstTraversal(new SceneGraphVisitor() {
-                @Override
-                public void visit(Spatial geom) {
-                    Spatial curSpat = geom;
-                    String geomName = curSpat.getName();
-                    if (geomName == null) {
-                        logger.log(Level.WARNING, "Null Spatial name!");
-                        geomName = "null";
-                    }
-                    geom.setUserData("ORIGINAL_NAME", geomName);
-                    logger.log(Level.FINE, "Set ORIGINAL_NAME for {0}",
-                            geomName);
-                    String id = SpatialUtil.getSpatialPath(curSpat);
-                    if (geomMap.contains(id)) {
-                        logger.log(Level.WARNING, "Cannot create unique name " +
-                                "for Spatial {0}: {1}", new Object[]{geom, id});
-                    }
-                    geomMap.add(id);
-                    geom.setUserData("ORIGINAL_PATH", id);
-                    logger.log(Level.FINE, "Set ORIGINAL_PATH for {0}", id);
+            spat.depthFirstTraversal(geom -> {
+                Spatial curSpat = geom;
+                String geomName = geom.getName();
+                if (geomName == null) {
+                    logger.log(Level.WARNING, "Null Spatial name!");
+                    geomName = "null";
                 }
+                geom.setUserData("ORIGINAL_NAME", geomName);
+                logger.log(Level.FINE, "Set ORIGINAL_NAME for {0}",
+                        geomName);
+                String id = SpatialUtil.getSpatialPath(curSpat);
+                if (geomMap.contains(id)) {
+                    logger.log(Level.WARNING, "Cannot create unique name "
+                            + "for Spatial {0}: {1}", new Object[]{geom,
+                            id});
+                }
+                geomMap.add(id);
+                geom.setUserData("ORIGINAL_PATH", id);
+                logger.log(Level.FINE, "Set ORIGINAL_PATH for {0}", id);
             });
         } else {
-            logger.log(Level.SEVERE, "No Spatial available when trying to add" +
-                    " Spatial paths.");
+            logger.log(Level.SEVERE, "No Spatial available when trying to add"
+                    + " Spatial paths.");
         }
     }
 
     public static void clearRemovedOriginals(final Spatial root,
                                              final Spatial original) {
         //TODO: Clear old stuff at all?
-        return;
     }
 
     /**
      * Finds out if a spatial has animations.
      *
-     * @param root
+     * @param root root spatial
      */
     public static boolean hasAnimations(final Spatial root) {
         final AtomicBoolean animFound = new AtomicBoolean(false);
-        root.depthFirstTraversal(new SceneGraphVisitor() {
-            public void visit(Spatial spatial) {
-                if (spatial.getControl(AnimComposer.class) != null) {
-                    animFound.set(true);
-                }
+        root.depthFirstTraversal(spatial -> {
+            if (spatial.getControl(AnimComposer.class) != null) {
+                animFound.set(true);
             }
         });
         return animFound.get();

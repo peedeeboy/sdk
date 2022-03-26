@@ -39,23 +39,19 @@ import com.jme3.gde.core.util.TaggedSpatialFinder;
 import com.jme3.gde.core.util.datatransfer.AnimationDataFromOriginal;
 import com.jme3.gde.core.util.datatransfer.MaterialDataFromOriginal;
 import com.jme3.gde.core.util.datatransfer.MeshDataFromOriginal;
+import com.jme3.gde.core.util.datatransfer.TransformDataFromOriginal;
 import com.jme3.scene.Spatial;
+import org.netbeans.api.progress.ProgressHandle;
+import org.openide.DialogDisplayer;
+import org.openide.NotifyDescriptor;
+import org.openide.loaders.DataObject;
+import org.openide.loaders.DataObjectNotFoundException;
+import org.openide.util.Exceptions;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.netbeans.api.progress.ProgressHandle;
-import org.openide.DialogDisplayer;
-import org.openide.NotifyDescriptor;
-import org.openide.filesystems.FileAttributeEvent;
-import org.openide.filesystems.FileChangeAdapter;
-import org.openide.filesystems.FileChangeListener;
-import org.openide.filesystems.FileEvent;
-import org.openide.filesystems.FileObject;
-import org.openide.filesystems.FileRenameEvent;
-import org.openide.loaders.DataObject;
-import org.openide.loaders.DataObjectNotFoundException;
-import org.openide.util.Exceptions;
 
 /**
  * This class scans for external changes of a j3o models original file and tries
@@ -63,9 +59,11 @@ import org.openide.util.Exceptions;
  *
  * @author normenhansen
  */
-public class ExternalChangeScanner implements AssetDataPropertyChangeListener, FileChangeListener {
+public class ExternalChangeScanner implements AssetDataPropertyChangeListener
+        , FileChangeListener {
 
-    private static final Logger logger = Logger.getLogger(ExternalChangeScanner.class.getName());
+    private static final Logger logger =
+            Logger.getLogger(ExternalChangeScanner.class.getName());
     private static final AtomicBoolean userNotified = new AtomicBoolean(false);
     protected final AssetDataObject assetDataObject;
     protected final AssetData assetData;
@@ -85,50 +83,61 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener, F
             assetDataObject.getPrimaryFile().addFileChangeListener(new FileChangeAdapter() {
                 @Override
                 public void fileDeleted(FileEvent fe) {
-                    logger.log(Level.INFO, "File {0} deleted, remove!", new Object[]{fe.getFile()});
+                    logger.log(Level.INFO, "File {0} deleted, remove!",
+                            new Object[]{fe.getFile()});
                     assetData.removePropertyChangeListener(main);
                     fe.getFile().removeFileChangeListener(this);
                     if (originalObject != null) {
-                        logger.log(Level.INFO, "Remove file change listener for {0}", originalObject);
+                        logger.log(Level.INFO, "Remove file change listener "
+                                + "for {0}", originalObject);
                         originalObject.removeFileChangeListener(main);
                         originalObject = null;
                     }
                 }
             });
         } else {
-            logger.log(Level.WARNING, "Trying to observer changes for asset {0} which has no AssetData in Lookup.", assetDataObject.getName());
+            logger.log(Level.WARNING, "Trying to observer changes for asset "
+                            + "{0} which has no AssetData in Lookup.",
+                    assetDataObject.getName());
         }
     }
 
     private void notifyUser() {
         if (!userNotified.getAndSet(true)) {
             //TODO: execute on separate thread?
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    NotifyDescriptor.Confirmation mesg = new NotifyDescriptor.Confirmation("Original file for " + assetDataObject.getName() + " changed\nTry and reapply mesh data to j3o file?",
-                            "Original file changed",
-                            NotifyDescriptor.YES_NO_OPTION, NotifyDescriptor.QUESTION_MESSAGE);
-                    DialogDisplayer.getDefault().notify(mesg);
-                    if (mesg.getValue() != NotifyDescriptor.Confirmation.YES_OPTION) {
-                        userNotified.set(false);
-                        return;
-                    }
-                    SceneApplication.getApplication().enqueue(new Callable<Void>() {
-                        public Void call() throws Exception {
-                            applyExternalData();
-                            return null;
-                        }
-                    });
+            java.awt.EventQueue.invokeLater(() -> {
+                final String NO_OPTION = "No";
+                final String ALL_OPTION = "All";
+                final String MESH_OPTION = "Only mesh data";
+                NotifyDescriptor.Confirmation mesg =
+                        new NotifyDescriptor.Confirmation("Original file for "
+                                + assetDataObject.getName() + " changed\nTry " +
+                                "and reapply data to j3o file?",
+                                "Original file changed",
+                                NotifyDescriptor.YES_NO_CANCEL_OPTION,
+                                NotifyDescriptor.QUESTION_MESSAGE);
+                mesg.setOptions(new Object[]{ALL_OPTION, MESH_OPTION,
+                        NO_OPTION});
+                DialogDisplayer.getDefault().notify(mesg);
+                if (mesg.getValue().equals(NO_OPTION)) {
                     userNotified.set(false);
+                    return;
                 }
+                SceneApplication.getApplication().enqueue((Callable<Void>) () -> {
+                    applyExternalData(mesg.getValue().equals(MESH_OPTION));
+                    return null;
+                });
+                userNotified.set(false);
             });
         } else {
-            logger.log(Level.INFO, "User already notified about change in {0}", assetDataObject.getName());
+            logger.log(Level.INFO, "User already notified about change in "
+                    + "{0}", assetDataObject.getName());
         }
     }
 
-    private void applyExternalData() {
-        ProgressHandle handle = ProgressHandle.createHandle("Updating file data");
+    private void applyExternalData(boolean onlyMeshData) {
+        ProgressHandle handle = ProgressHandle.createHandle("Updating file "
+                + "data");
         handle.start();
         try {
             Spatial original = loadOriginalSpatial();
@@ -136,20 +145,20 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener, F
             TaggedSpatialFinder finder = new TaggedSpatialFinder();
 
             new MeshDataFromOriginal(finder).update(spat, original);
-            new MaterialDataFromOriginal(finder).update(spat, original);
-            if (SpatialUtil.hasAnimations(original)) {
-                NotifyDescriptor.Confirmation mesg = new NotifyDescriptor.Confirmation("Model appears to have animations, try to import as well?\nCurrently this will unlink attachment Nodes and clear\nadded effects tracks.",
-                        "Animations Available",
-                        NotifyDescriptor.YES_NO_OPTION, NotifyDescriptor.QUESTION_MESSAGE);
-                DialogDisplayer.getDefault().notify(mesg);
-                if (mesg.getValue() == NotifyDescriptor.Confirmation.YES_OPTION) {
-                    new AnimationDataFromOriginal(finder).update(spat, original);
+            new TransformDataFromOriginal(finder).update(spat, original);
+            if (!onlyMeshData) {
+                new MaterialDataFromOriginal(finder).update(spat, original);
+                if (SpatialUtil.hasAnimations(original)) {
+                    new AnimationDataFromOriginal(finder).update(spat,
+                            original);
                 }
             }
+
             closeOriginalSpatial();
             assetDataObject.saveAsset();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Exception when trying to update external data.", e);
+            logger.log(Level.SEVERE, "Exception when trying to update "
+                    + "external data.", e);
         } finally {
             handle.finish();
         }
@@ -158,16 +167,23 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener, F
     private Spatial loadOriginalSpatial() {
         try {
             DataObject dobj = DataObject.find(originalObject);
-            AssetData originalAssetData = dobj.getLookup().lookup(AssetData.class);
+            AssetData originalAssetData =
+                    dobj.getLookup().lookup(AssetData.class);
             if (originalAssetData != null) {
                 Savable sav = originalAssetData.loadAsset();
                 if (sav instanceof Spatial) {
                     return (Spatial) sav;
                 } else {
-                    logger.log(Level.SEVERE, "Trying to load original for {0} but it is not a Spatial: {1}", new Object[]{assetDataObject.getName(), originalObject});
+                    logger.log(Level.SEVERE, "Trying to load original for {0}"
+                                    + " but it is not a Spatial: {1}",
+                            new Object[]{assetDataObject.getName(),
+                                    originalObject});
                 }
             } else {
-                logger.log(Level.WARNING, "Could not get AssetData for {0}, original file {1}", new Object[]{assetDataObject.getName(), originalObject});
+                logger.log(Level.WARNING, "Could not get AssetData for {0}, "
+                                + "original file {1}",
+                        new Object[]{assetDataObject.getName(),
+                                originalObject});
             }
         } catch (DataObjectNotFoundException ex) {
             Exceptions.printStackTrace(ex);
@@ -178,11 +194,15 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener, F
     private Spatial closeOriginalSpatial() {
         try {
             DataObject dobj = DataObject.find(originalObject);
-            AssetData originalAssetData = dobj.getLookup().lookup(AssetData.class);
+            AssetData originalAssetData =
+                    dobj.getLookup().lookup(AssetData.class);
             if (originalAssetData != null) {
                 originalAssetData.closeAsset();
             } else {
-                logger.log(Level.WARNING, "Could not get AssetData for {0}, original file {1}", new Object[]{assetDataObject.getName(), originalObject});
+                logger.log(Level.WARNING, "Could not get AssetData for {0}, "
+                                + "original file {1}",
+                        new Object[]{assetDataObject.getName(),
+                                originalObject});
             }
         } catch (DataObjectNotFoundException ex) {
             Exceptions.printStackTrace(ex);
@@ -191,9 +211,11 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener, F
     }
 
     private void setObservedFilePath(String assetName) {
-        ProjectAssetManager mgr = assetDataObject.getLookup().lookup(ProjectAssetManager.class);
+        ProjectAssetManager mgr =
+                assetDataObject.getLookup().lookup(ProjectAssetManager.class);
         if (mgr == null) {
-            logger.log(Level.WARNING, "File is not part of a jME project but tries to find original model...");
+            logger.log(Level.WARNING, "File is not part of a jME project but "
+                    + "tries to find original model...");
             return;
         }
         FileObject fileObject = mgr.getAssetFileObject(assetName);
@@ -202,24 +224,34 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener, F
             if (!fileObject.equals(assetDataObject.getPrimaryFile())) {
                 if (originalObject != null) {
                     originalObject.removeFileChangeListener(this);
-                    logger.log(Level.INFO, "{0} stops listening for external changes on {1}", new Object[]{assetDataObject.getName(), originalObject});
+                    logger.log(Level.INFO, "{0} stops listening for external "
+                                    + "changes on {1}",
+                            new Object[]{assetDataObject.getName(),
+                                    originalObject});
                 }
                 fileObject.addFileChangeListener(this);
-                logger.log(Level.INFO, "{0} listening for external changes on {1}", new Object[]{assetDataObject.getName(), fileObject});
+                logger.log(Level.INFO, "{0} listening for external changes on"
+                        + " {1}", new Object[]{assetDataObject.getName(),
+                        fileObject});
                 originalObject = fileObject;
             } else {
-                logger.log(Level.FINE, "Ignoring old reference to self for {0}", assetDataObject.getName());
+                logger.log(Level.FINE, "Ignoring old reference to self for "
+                        + "{0}", assetDataObject.getName());
             }
         } else {
-            logger.log(Level.INFO, "Could not get FileObject for {0} when trying to update original data for {1}. Possibly deleted.", new Object[]{assetName, assetDataObject.getName()});
+            logger.log(Level.INFO, "Could not get FileObject for {0} when "
+                    + "trying to update original data for {1}. Possibly deleted"
+                    + ".", new Object[]{assetName, assetDataObject.getName()});
             //TODO: add folder listener for when recreated
         }
     }
 
     @Override
-    public void assetDataPropertyChanged(String property, String before, String after) {
+    public void assetDataPropertyChanged(String property, String before,
+                                         String after) {
         if ("ORIGINAL_PATH".equals(property)) {
-            logger.log(Level.INFO, "Notified about change in AssetData properties for {0}", assetDataObject.getName());
+            logger.log(Level.INFO, "Notified about change in AssetData "
+                    + "properties for {0}", assetDataObject.getName());
             setObservedFilePath(after);
         }
     }
@@ -231,14 +263,18 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener, F
     }
 
     public void fileChanged(FileEvent fe) {
-        logger.log(Level.INFO, "External file {0} for {1} changed!", new Object[]{fe.getFile(), assetDataObject.getName()});
+        logger.log(Level.INFO, "External file {0} for {1} changed!",
+                new Object[]{fe.getFile(), assetDataObject.getName()});
         notifyUser();
     }
 
     public void fileDeleted(FileEvent fe) {
-        logger.log(Level.INFO, "External file {0} for {1} deleted!", new Object[]{fe.getFile(), assetDataObject.getName()});
+        logger.log(Level.INFO, "External file {0} for {1} deleted!",
+                new Object[]{fe.getFile(), assetDataObject.getName()});
         if (originalObject != null) {
-            logger.log(ApplicationLogHandler.LogLevel.INFO, "Remove file change listener for deleted object on {0}", assetDataObject.getName());
+            logger.log(ApplicationLogHandler.LogLevel.INFO, "Remove file "
+                            + "change listener for deleted object on {0}",
+                    assetDataObject.getName());
             originalObject.removeFileChangeListener(this);
             originalObject = null;
         }
@@ -246,9 +282,11 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener, F
     }
 
     public void fileRenamed(FileRenameEvent fe) {
-        logger.log(Level.INFO, "External file {0} for {1} renamed!", new Object[]{fe.getFile(), assetDataObject.getName()});
+        logger.log(Level.INFO, "External file {0} for {1} renamed!",
+                new Object[]{fe.getFile(), assetDataObject.getName()});
         if (originalObject != null) {
-            logger.log(Level.INFO, "Remove file change listener for renamed object on {0}", assetDataObject.getName());
+            logger.log(Level.INFO, "Remove file change listener for renamed "
+                    + "object on {0}", assetDataObject.getName());
             originalObject.removeFileChangeListener(this);
             originalObject = null;
         }

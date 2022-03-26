@@ -4,7 +4,6 @@ import com.jme3.anim.AnimClip;
 import com.jme3.anim.AnimComposer;
 import com.jme3.gde.core.scene.ApplicationLogHandler;
 import com.jme3.gde.core.util.TaggedSpatialFinder;
-import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.Spatial;
 import com.jme3.util.clone.Cloner;
 
@@ -12,7 +11,10 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class AnimationDataFromOriginal implements SpatialDataTransferInterface {
+/**
+ * Copies AnimComposer and AnimClips from an updated spatial to the original
+ */
+public final class AnimationDataFromOriginal implements SpatialDataTransferInterface {
 
     private static final Logger logger =
             Logger.getLogger(AnimationDataFromOriginal.class.getName());
@@ -27,56 +29,50 @@ public class AnimationDataFromOriginal implements SpatialDataTransferInterface {
     public void update(final Spatial root, final Spatial original) {
         //loop through original to also find new AnimControls, we expect all 
         // nodes etc. to exist
-        //TODO: can (blender) AnimControls end up in other nodes that are not
-        // a parent of the geometry they modify?
         removeAnimData(root);
-        original.depthFirstTraversal(new SceneGraphVisitor() {
-            @Override
-            public void visit(Spatial spat) {
-                AnimComposer animComposer = spat.getControl(AnimComposer.class);
-                if (animComposer != null) {
-                    Spatial mySpatial = finder.find(root, spat);
-                    if (mySpatial != null) {
-                        //TODO: move attachments: have to scan through all 
-                        // nodes and find the ones
-                        //where UserData "AttachedBone" == Bone and move it 
-                        // to new Bone
-                        AnimComposer myAnimControl =
-                                mySpatial.getControl(AnimComposer.class);
+        original.depthFirstTraversal(spatial -> {
+            final AnimComposer animComposer =
+                    spatial.getControl(AnimComposer.class);
+            if (animComposer != null) {
+                Spatial mySpatial = finder.find(root, spatial);
+                if (mySpatial != null) {
+                    //TODO: move attachments: have to scan through all
+                    // nodes and find the ones
+                    //where UserData "AttachedBone" == Bone and move it
+                    // to new Bone
+                    final AnimComposer myAnimControl =
+                            mySpatial.getControl(AnimComposer.class);
 
-                        if (myAnimControl != null) {
-                            mySpatial.removeControl(myAnimControl);
-                        }
-
-                        AnimComposer newControl = new AnimComposer();
-                        newControl.cloneFields(new Cloner(),
-                                animComposer.jmeClone());
-                        copyAnimClips(newControl, animComposer);
-                        if (mySpatial.getControl(AnimComposer.class) == null) {
-                            logger.log(Level.INFO, "Adding control for {0}",
-                                    mySpatial.getName());
-                            mySpatial.addControl(newControl);
-                        } else {
-                            logger.log(Level.INFO, "Control for {0} was added" +
-                                    " automatically", mySpatial.getName());
-                        }
-
-                        logger.log(ApplicationLogHandler.LogLevel.USERINFO,
-                                "Updated animation for {0}",
-                                mySpatial.getName());
-                    } else {
-                        logger.log(Level.WARNING, "Could not find sibling for" +
-                                " {0} in root {1} when trying to apply " +
-                                "AnimControl data", new Object[]{spat, root});
+                    if (myAnimControl != null) {
+                        mySpatial.removeControl(myAnimControl);
                     }
+
+                    myAnimControl.cloneFields(new Cloner(),
+                            animComposer.jmeClone());
+                    copyAnimClips(myAnimControl, animComposer);
+                    if (mySpatial.getControl(AnimComposer.class) == null) {
+                        logger.log(Level.FINE, "Adding control for {0}",
+                                mySpatial.getName());
+                        mySpatial.addControl(myAnimControl);
+                    } else {
+                        logger.log(Level.FINE, "Control for {0} was added"
+                                + " automatically", mySpatial.getName());
+                    }
+
+                    logger.log(ApplicationLogHandler.LogLevel.FINE,
+                            "Updated animation for {0}",
+                            mySpatial.getName());
+                } else {
+                    logger.log(Level.WARNING, "Could not find sibling for"
+                            + " {0} in root {1} when trying to apply "
+                            + "AnimControl data", new Object[]{spatial, root});
                 }
             }
         });
-        //TODO: remove old AnimControls?
     }
 
     private void copyAnimClips(AnimComposer control, AnimComposer original) {
-        Collection<AnimClip> clips = original.getAnimClips();
+        final Collection<AnimClip> clips = original.getAnimClips();
         for (AnimClip c : clips) {
             control.addAnimClip(c);
         }
@@ -84,14 +80,11 @@ public class AnimationDataFromOriginal implements SpatialDataTransferInterface {
 
 
     private void removeAnimData(Spatial root) {
-        root.depthFirstTraversal(new SceneGraphVisitor() {
-            @Override
-            public void visit(Spatial spat) {
-                AnimComposer animControl = spat.getControl(AnimComposer.class);
-                if (animControl != null) {
-                    spat.removeControl(animControl);
+        root.depthFirstTraversal(spatial -> {
+            AnimComposer animControl = spatial.getControl(AnimComposer.class);
+            if (animControl != null) {
+                spatial.removeControl(animControl);
 
-                }
             }
         });
     }
