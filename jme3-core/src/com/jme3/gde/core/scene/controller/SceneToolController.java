@@ -67,11 +67,19 @@ public class SceneToolController extends AbstractAppState {
     protected AssetManager manager;
     protected Material blueMat;
     protected AbstractCameraController camController;
+    
     private SceneToolControllerListener toolListener;
     
-    public interface SceneToolControllerListener{
+    /**
+     * Expandable interface to send callbacks to (primarily) gui. 
+     */
+    public interface SceneToolControllerListener {
         
-        void onSetCursorLocation(Vector3f location);
+        /**
+         * Called when cursor's location changes.
+         * @param location 
+         */
+        abstract void onSetCursorLocation(Vector3f location);
     }
     
 
@@ -200,7 +208,7 @@ public class SceneToolController extends AbstractAppState {
         if (camController != null) {
             camController.doSetCamFocus(location);
         }
-        if(toolListener != null){
+        if (toolListener != null) {
             toolListener.onSetCursorLocation(location);
         }
     }
@@ -439,7 +447,11 @@ public class SceneToolController extends AbstractAppState {
         return selectionShape;
     }
     
-    public void setToolListener(SceneToolControllerListener listener){
+    /**
+     * Set the listener to receive callbacks from this class.
+     * @param listener 
+     */
+    public void setToolListener(final SceneToolControllerListener listener) {
         this.toolListener = listener;
     }
 }
