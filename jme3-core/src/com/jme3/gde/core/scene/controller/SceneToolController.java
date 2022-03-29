@@ -67,12 +67,13 @@ public class SceneToolController extends AbstractAppState {
     protected AssetManager manager;
     protected Material blueMat;
     protected AbstractCameraController camController;
+    private SceneToolControllerListener toolListener;
     
     public interface SceneToolControllerListener{
         
         void onSetCursorLocation(Vector3f location);
     }
-    private SceneToolControllerListener toolListener;
+    
 
     @SuppressWarnings("LeakingThisInConstructor")
     public SceneToolController(AssetManager manager) {
