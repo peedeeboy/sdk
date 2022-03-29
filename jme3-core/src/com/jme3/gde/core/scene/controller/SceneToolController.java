@@ -67,6 +67,12 @@ public class SceneToolController extends AbstractAppState {
     protected AssetManager manager;
     protected Material blueMat;
     protected AbstractCameraController camController;
+    
+    public interface SceneToolControllerListener{
+        
+        void onSetCursorLocation(Vector3f location);
+    }
+    private SceneToolControllerListener toolListener;
 
     @SuppressWarnings("LeakingThisInConstructor")
     public SceneToolController(AssetManager manager) {
@@ -192,6 +198,9 @@ public class SceneToolController extends AbstractAppState {
         cursor.setLocalTranslation(location);
         if (camController != null) {
             camController.doSetCamFocus(location);
+        }
+        if(toolListener != null){
+            toolListener.onSetCursorLocation(location);
         }
     }
 
@@ -427,5 +436,9 @@ public class SceneToolController extends AbstractAppState {
 
     public Spatial getSelectionShape() {
         return selectionShape;
+    }
+    
+    public void setToolListener(SceneToolControllerListener listener){
+        this.toolListener = listener;
     }
 }
