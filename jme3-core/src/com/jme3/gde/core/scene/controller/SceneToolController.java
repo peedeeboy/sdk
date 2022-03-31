@@ -80,7 +80,7 @@ public class SceneToolController extends AbstractAppState {
          *
          * @param location location for cursor
          */
-        abstract void onSetCursorLocation(Vector3f location);
+        public void onSetCursorLocation(Vector3f location);
     }
     
 
@@ -450,7 +450,8 @@ public class SceneToolController extends AbstractAppState {
     
     /**
      * Set the listener to receive callbacks from this class.
-     * @param listener 
+     * 
+     * @param listener listener
      */
     public void setToolListener(final SceneToolControllerListener listener) {
         this.toolListener = listener;

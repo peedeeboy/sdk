@@ -29,8 +29,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.Callable;
@@ -66,7 +64,9 @@ import org.openide.windows.WindowManager;
 @ConvertAsProperties(dtd = "-//com.jme3.gde.scenecomposer//SceneComposer//EN",
         autostore = false)
 @SuppressWarnings("unchecked")
-public final class SceneComposerTopComponent extends TopComponent implements SceneListener, LookupListener, SceneToolController.SceneToolControllerListener {
+public final class SceneComposerTopComponent extends TopComponent implements
+        SceneListener, LookupListener, 
+        SceneToolController.SceneToolControllerListener {
 
     private static SceneComposerTopComponent instance;
     /**
@@ -1327,7 +1327,7 @@ private void jToggleSelectGeomActionPerformed(java.awt.event.ActionEvent evt) {/
     }
 
     @Override
-    public void onSetCursorLocation(Vector3f location) {
+    public void onSetCursorLocation(final Vector3f location) {
         SwingUtilities.invokeLater(() -> {
             cursorPositionLabel.setText(location.toString());
         });
