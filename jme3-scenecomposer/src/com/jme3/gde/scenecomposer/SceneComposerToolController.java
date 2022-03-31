@@ -5,6 +5,8 @@
 package com.jme3.gde.scenecomposer;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.scene.controller.SceneToolController;
 import com.jme3.gde.core.sceneexplorer.nodes.AbstractSceneExplorerNode;
@@ -12,7 +14,10 @@ import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
 import com.jme3.gde.scenecomposer.gizmo.GizmoFactory;
 import com.jme3.gde.scenecomposer.tools.shortcuts.ShortcutManager;
 import com.jme3.input.event.KeyInputEvent;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -383,6 +388,49 @@ public class SceneComposerToolController extends SceneToolController {
      
     public JmeNode getRootNode() {
         return rootNode;
+    }
+    
+    
+    public void updateSelectedTranslation(Vector3f translation) {
+        if (isSnapToScene()) {
+            translation = snapToScene(translation);
+        }
+        if (isSnapToGrid()) {
+            translation.set(
+                    (int) translation.x,
+                    (int) translation.y,
+                    (int) translation.z);
+        }
+        selected.setLocalTranslation(translation);
+    }
+    
+    public void updateSelectedRotation(Quaternion rotation) {
+        selected.setLocalRotation(rotation);
+    }
+    
+    public void updateSelectedScale(Vector3f scale) {
+        if (isSnapToGrid()) {
+            scale.set(
+                    (int) Math.max(scale.x, 1),
+                    (int) Math.max(scale.y, 1),
+                    (int) Math.max(scale.z, 1));
+        }
+        selected.setLocalScale(scale);
+    }
+
+    private Vector3f snapToScene(final Vector3f position) {
+        final Ray ray = new Ray(position, Vector3f.UNIT_Y.negate());
+        final CollisionResults collisionResults = new CollisionResults();
+        final Node root = getRootNode().getLookup()
+                .lookup(Node.class);
+        root.collideWith(ray, collisionResults);
+        for (CollisionResult r : collisionResults) {
+            if (r.getGeometry() != selected) {
+                position.y = r.getContactPoint().y;
+                break;
+            }
+        }
+        return position;
     }
 
 }

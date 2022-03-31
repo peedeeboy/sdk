@@ -14,6 +14,7 @@ import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.undoredo.AbstractUndoableSceneEdit;
 import com.jme3.gde.scenecomposer.SceneComposerToolController;
 import com.jme3.gde.scenecomposer.SceneEditTool;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -144,18 +145,8 @@ public class MoveTool extends SceneEditTool {
             } else {
                 position = startPosition.add(diff);
             }
-
-            if (toolController.isSnapToScene()) {
-                position = snapToScene(position);
-            }
-            if (toolController.isSnapToGrid()) {
-                position.set(
-                        (int) position.x,
-                        (int) position.y,
-                        (int) position.z);
-            }
             lastPosition = position;
-            toolController.getSelectedSpatial().setLocalTranslation(position);
+            toolController.updateSelectedTranslation(position);
             updateToolsTransformation();
         }
     }
@@ -176,21 +167,6 @@ public class MoveTool extends SceneEditTool {
             constraintAxis = Vector3f.UNIT_XYZ; // no constraint
             pickManager.reset();
         }
-    }
-
-    private Vector3f snapToScene(final Vector3f position) {
-        final Ray ray = new Ray(position, Vector3f.UNIT_Y.negate());
-        final CollisionResults collisionResults = new CollisionResults();
-        final Node root = toolController.getRootNode().getLookup()
-                .lookup(Node.class);
-        root.collideWith(ray, collisionResults);
-        for (CollisionResult r : collisionResults) {
-            if (r.getGeometry() != toolController.getSelectedSpatial()) {
-                position.y = r.getContactPoint().y;
-                break;
-            }
-        }
-        return position;
     }
 
     protected class MoveUndo extends AbstractUndoableSceneEdit {
