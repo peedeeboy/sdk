@@ -58,7 +58,7 @@ import org.openide.util.NbBundle.Messages;
 )
 @DataObject.Registration(
     mimeType = "model/gltf+json", 
-    iconBase = "com/jme3/gde/blender/blender.png",
+    iconBase = "com/jme3/gde/blender/glTF.png",
     //iconBase = "com/jme3/gde/blender/glTF_100px_June16.png",
     displayName="#LBL_GLTF_LOADER",
     position=300
