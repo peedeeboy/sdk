@@ -115,7 +115,7 @@ public final class SceneComposerTopComponent extends TopComponent implements Sce
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        cursorPositionHeader = new javax.swing.JLabel();
         cursorPositionLabel = new javax.swing.JLabel();
         jToolBar1 = new javax.swing.JToolBar();
         transformationTypeComboBox = new javax.swing.JComboBox<>();
@@ -213,7 +213,7 @@ public final class SceneComposerTopComponent extends TopComponent implements Sce
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel12, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jLabel12.text")); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jLabel13.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(cursorPositionHeader, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.cursorPositionHeader.text")); // NOI18N
 
         org.openide.awt.Mnemonics.setLocalizedText(cursorPositionLabel, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.cursorPositionLabel.text")); // NOI18N
 
@@ -239,7 +239,7 @@ public final class SceneComposerTopComponent extends TopComponent implements Sce
                 .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(jLabel10)
-                    .addComponent(jLabel13))
+                    .addComponent(cursorPositionHeader))
                 .addGap(34, 34, 34)
                 .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cursorPositionLabel)
@@ -276,7 +276,7 @@ public final class SceneComposerTopComponent extends TopComponent implements Sce
                     .addComponent(jLabel12))
                 .addGap(8, 8, 8)
                 .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
+                    .addComponent(cursorPositionHeader)
                     .addComponent(cursorPositionLabel)))
         );
 
@@ -834,6 +834,7 @@ private void jToggleSelectGeomActionPerformed(java.awt.event.ActionEvent evt) {/
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton camToCursorSelectionButton;
     private javax.swing.JButton createPhysicsMeshButton;
+    private javax.swing.JLabel cursorPositionHeader;
     private javax.swing.JLabel cursorPositionLabel;
     private javax.swing.JButton cursorToSelectionButton;
     private javax.swing.JButton emitButton;
@@ -847,7 +848,6 @@ private void jToggleSelectGeomActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1301,11 +1301,8 @@ private void jToggleSelectGeomActionPerformed(java.awt.event.ActionEvent evt) {/
     public void sceneClosed(SceneRequest request) {
         if (request.equals(currentRequest)) {
             setActivatedNodes(new org.openide.nodes.Node[]{});
-            if(request.getManager() != null){
-//                request.getManager().clearCache();
-                if (listener != null) {
-                    listener = null;
-                }
+            if(request.getManager() != null && listener != null) {
+                listener = null;
             }
 
             SceneApplication.getApplication().removeSceneListener(this);

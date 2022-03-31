@@ -77,7 +77,8 @@ public class SceneToolController extends AbstractAppState {
         
         /**
          * Called when cursor's location changes.
-         * @param location 
+         *
+         * @param location location for cursor
          */
         abstract void onSetCursorLocation(Vector3f location);
     }
