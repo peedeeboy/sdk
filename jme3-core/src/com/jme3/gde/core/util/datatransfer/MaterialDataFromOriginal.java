@@ -5,7 +5,6 @@ import com.jme3.gde.core.util.TaggedSpatialFinder;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.SceneGraphVisitorAdapter;
 import com.jme3.scene.Spatial;
-
 import java.util.logging.Logger;
 
 /**
@@ -13,7 +12,7 @@ import java.util.logging.Logger;
  */
 public final class MaterialDataFromOriginal implements SpatialDataTransferInterface {
 
-    private static final Logger logger =
+    private static final Logger LOGGER =
             Logger.getLogger(MaterialDataFromOriginal.class.getName());
 
     private final TaggedSpatialFinder finder;
@@ -33,7 +32,7 @@ public final class MaterialDataFromOriginal implements SpatialDataTransferInterf
                 final Geometry spat = (Geometry) finder.find(root, geom);
                 if (spat != null && spat.getMaterial() != null && geom.getMaterial() != null) {
                     spat.setMaterial(geom.getMaterial());
-                    logger.log(ApplicationLogHandler.LogLevel.FINE,
+                    LOGGER.log(ApplicationLogHandler.LogLevel.FINE,
                             "Updated material for Geometry {0}",
                             geom.getName());
                 }

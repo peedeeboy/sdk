@@ -1,7 +1,6 @@
 package com.jme3.gde.core.util;
 
 import com.jme3.scene.Spatial;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,7 +18,7 @@ public class TaggedSpatialFinder {
      * the name and path to be looked for from the given needle Spatial.
      *
      * @param root   supplied root Spatial
-     * @param needle
+     * @param needle spatial to look for
      * @return found spatial
      */
     public Spatial find(final Spatial root, final Spatial needle) {

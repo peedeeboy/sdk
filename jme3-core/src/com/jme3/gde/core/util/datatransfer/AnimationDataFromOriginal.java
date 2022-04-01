@@ -57,7 +57,7 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
         });
     }
 
-    private AnimComposer getAndRemoveControl(Spatial spatial) {
+    private AnimComposer getAndRemoveControl(final Spatial mySpatial) {
         final AnimComposer myAnimControl =
                 mySpatial.getControl(AnimComposer.class);
         if (myAnimControl != null) {
@@ -66,11 +66,11 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
         return myAnimControl;
     }
 
-    private void updateAndAddControl(Spatial spatial, AnimComposer newControl
-            , AnimComposer originalCOntrol) {
+    private void updateAndAddControl(final Spatial spatial, final AnimComposer newControl
+            , final AnimComposer originalControl) {
         newControl.cloneFields(new Cloner(),
-                originalCOntrol.jmeClone());
-        copyAnimClips(newControl, originalCOntrol);
+                originalControl.jmeClone());
+        copyAnimClips(newControl, originalControl);
         if (spatial.getControl(AnimComposer.class) == null) {
             LOGGER.log(Level.FINE, "Adding control for {0}",
                     spatial.getName());

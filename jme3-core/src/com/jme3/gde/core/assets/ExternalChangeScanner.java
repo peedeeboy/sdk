@@ -66,9 +66,9 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
     private static final Logger LOGGER =
             Logger.getLogger(ExternalChangeScanner.class.getName());
     private static final AtomicBoolean userNotified = new AtomicBoolean(false);
-    protected final AssetDataObject assetDataObject;
-    protected final AssetData assetData;
-    protected final FileObject originalObject;
+    private final AssetDataObject assetDataObject;
+    private final AssetData assetData;
+    private final FileObject originalObject;
 
     public ExternalChangeScanner(AssetDataObject assetDataObject) {
         this.assetDataObject = assetDataObject;
