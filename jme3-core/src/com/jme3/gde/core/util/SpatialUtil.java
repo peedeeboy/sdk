@@ -87,8 +87,8 @@ public class SpatialUtil {
         final ArrayList<String> geomMap = new ArrayList<>();
         if (spat != null) {
             spat.depthFirstTraversal(geom -> {
-                Spatial curSpat = geom;
-                String geomName = geom.getName();
+
+                final String geomName = geom.getName();
                 if (geomName == null) {
                     LOGGER.log(Level.WARNING, "Null Spatial name!");
                     geomName = "null";
@@ -96,6 +96,7 @@ public class SpatialUtil {
                 geom.setUserData((SpatialUtil.ORIGINAL_NAME, geomName);
                 LOGGER.log(Level.FINE, "Set ORIGINAL_NAME for {0}",
                         geomName);
+                final Spatial curSpat = geom;
                 String id = SpatialUtil.getSpatialPath(curSpat);
                 if (geomMap.contains(id)) {
                     LOGGER.log(Level.WARNING, "Cannot create unique name "

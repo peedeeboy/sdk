@@ -33,7 +33,7 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
             final AnimComposer animComposer =
                     spatial.getControl(AnimComposer.class);
             if (animComposer != null) {
-                Spatial mySpatial = finder.find(root, spatial);
+                final Spatial mySpatial = finder.find(root, spatial);
                 if (mySpatial != null) {
                     //TODO: move attachments: have to scan through all
                     // nodes and find the ones

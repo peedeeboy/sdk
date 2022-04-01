@@ -13,10 +13,6 @@ public class TaggedSpatialFinder {
     private static final Logger LOGGER =
             Logger.getLogger(TaggedSpatialFinder.class.getName());
 
-    public TaggedSpatialFinder() {
-
-    }
-
     public Spatial find(final Spatial root, final Spatial needle) {
         if (needle == null) {
             LOGGER.log(Level.WARNING, "Trying to find null needle for {0}",
@@ -31,8 +27,8 @@ public class TaggedSpatialFinder {
             return null;
         }
         final Class<? extends Spatial> clazz = needle.getClass();
-        String rootName = root.getUserData(SpatialUtil.ORIGINAL_NAME);
-        String rootPath = root.getUserData(SpatialUtil.ORIGINAL_PATH);
+        final String rootName = root.getUserData(SpatialUtil.ORIGINAL_NAME);
+        final String rootPath = root.getUserData(SpatialUtil.ORIGINAL_PATH);
         if (name.equals(rootName) && path.equals(rootPath)) {
             return root;
         }

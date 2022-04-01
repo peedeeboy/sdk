@@ -67,7 +67,7 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
     private static final AtomicBoolean userNotified = new AtomicBoolean(false);
     protected final AssetDataObject assetDataObject;
     protected final AssetData assetData;
-    protected FileObject originalObject;
+    protected final FileObject originalObject;
 
     public ExternalChangeScanner(AssetDataObject assetDataObject) {
         this.assetDataObject = assetDataObject;
