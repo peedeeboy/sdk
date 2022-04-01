@@ -428,4 +428,5 @@ public class SceneToolController extends AbstractAppState {
     public Spatial getSelectionShape() {
         return selectionShape;
     }
+
 }
