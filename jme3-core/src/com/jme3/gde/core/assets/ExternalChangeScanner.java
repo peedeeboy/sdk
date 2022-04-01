@@ -41,17 +41,18 @@ import com.jme3.gde.core.util.datatransfer.MaterialDataFromOriginal;
 import com.jme3.gde.core.util.datatransfer.MeshDataFromOriginal;
 import com.jme3.gde.core.util.datatransfer.TransformDataFromOriginal;
 import com.jme3.scene.Spatial;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.netbeans.api.progress.ProgressHandle;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.util.Exceptions;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class scans for external changes of a j3o models original file and tries
@@ -106,25 +107,25 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
         if (!userNotified.getAndSet(true)) {
             //TODO: execute on separate thread?
             java.awt.EventQueue.invokeLater(() -> {
-                final String NO_OPTION = "No";
-                final String ALL_OPTION = "All";
-                final String MESH_OPTION = "Only mesh data";
-                NotifyDescriptor.Confirmation mesg =
+                final String noOption = "No";
+                final String allOption = "All";
+                final String meshOption = "Only mesh data";
+                final NotifyDescriptor.Confirmation message =
                         new NotifyDescriptor.Confirmation("Original file for "
                                 + assetDataObject.getName() + " changed\nTry "
                                 + "and reapply data to j3o file?",
                                 "Original file changed",
                                 NotifyDescriptor.YES_NO_CANCEL_OPTION,
                                 NotifyDescriptor.QUESTION_MESSAGE);
-                mesg.setOptions(new Object[]{ALL_OPTION, MESH_OPTION,
-                        NO_OPTION});
-                DialogDisplayer.getDefault().notify(mesg);
-                if (mesg.getValue().equals(NO_OPTION)) {
+                message.setOptions(new Object[]{allOption, meshOption,
+                        noOption});
+                DialogDisplayer.getDefault().notify(message);
+                if (message.getValue().equals(noOption)) {
                     userNotified.set(false);
                     return;
                 }
                 SceneApplication.getApplication().enqueue((Callable<Void>) () -> {
-                    applyExternalData(mesg.getValue().equals(MESH_OPTION));
+                    applyExternalData(message.getValue().equals(meshOption));
                     return null;
                 });
                 userNotified.set(false);
@@ -135,8 +136,9 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
         }
     }
 
-    private void applyExternalData(boolean onlyMeshData) {
-        ProgressHandle handle = ProgressHandle.createHandle("Updating file "
+    private void applyExternalData(final boolean onlyMeshData) {
+        final ProgressHandle handle = ProgressHandle.createHandle("Updating "
+                + "file "
                 + "data");
         handle.start();
         try {
@@ -247,8 +249,9 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
     }
 
     @Override
-    public void assetDataPropertyChanged(String property, String before,
-                                         String after) {
+    public void assetDataPropertyChanged(final String property,
+                                         final String before,
+                                         final String after) {
         if (SpatialUtil.ORIGINAL_PATH.equals(property)) {
             LOGGER.log(Level.INFO, "Notified about change in AssetData "
                     + "properties for {0}", assetDataObject.getName());

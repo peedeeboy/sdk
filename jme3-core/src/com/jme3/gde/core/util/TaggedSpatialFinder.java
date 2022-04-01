@@ -1,6 +1,7 @@
 package com.jme3.gde.core.util;
 
 import com.jme3.scene.Spatial;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,6 +14,14 @@ public class TaggedSpatialFinder {
     private static final Logger LOGGER =
             Logger.getLogger(TaggedSpatialFinder.class.getName());
 
+    /**
+     * Finds a previously marked spatial in the supplied root Spatial, creates
+     * the name and path to be looked for from the given needle Spatial.
+     *
+     * @param root   supplied root Spatial
+     * @param needle
+     * @return found spatial
+     */
     public Spatial find(final Spatial root, final Spatial needle) {
         if (needle == null) {
             LOGGER.log(Level.WARNING, "Trying to find null needle for {0}",
@@ -34,9 +43,11 @@ public class TaggedSpatialFinder {
         }
         final SpatialHolder holder = new SpatialHolder();
         root.depthFirstTraversal(spatial -> {
-            String spName = spatial.getUserData(SpatialUtil.ORIGINAL_NAME);
-            String spPath = spatial.getUserData(SpatialUtil.ORIGINAL_PATH);
-            if (name.equals(spName) && path.equals(spPath) && clazz.isInstance(spatial)) {
+            final String spatialName =
+                    spatial.getUserData(SpatialUtil.ORIGINAL_NAME);
+            final String spPath =
+                    spatial.getUserData(SpatialUtil.ORIGINAL_PATH);
+            if (name.equals(spatialName) && path.equals(spPath) && clazz.isInstance(spatial)) {
                 if (holder.spatial == null) {
                     holder.spatial = spatial;
                 } else {

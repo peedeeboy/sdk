@@ -6,6 +6,7 @@ import com.jme3.gde.core.scene.ApplicationLogHandler;
 import com.jme3.gde.core.util.TaggedSpatialFinder;
 import com.jme3.scene.Spatial;
 import com.jme3.util.clone.Cloner;
+
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,23 +41,9 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
                     //where UserData "AttachedBone" == Bone and move it
                     // to new Bone
                     final AnimComposer myAnimControl =
-                            mySpatial.getControl(AnimComposer.class);
+                            getAndRemoveControl(mySpatial);
 
-                    if (myAnimControl != null) {
-                        mySpatial.removeControl(myAnimControl);
-                    }
-
-                    myAnimControl.cloneFields(new Cloner(),
-                            animComposer.jmeClone());
-                    copyAnimClips(myAnimControl, animComposer);
-                    if (mySpatial.getControl(AnimComposer.class) == null) {
-                        LOGGER.log(Level.FINE, "Adding control for {0}",
-                                mySpatial.getName());
-                        mySpatial.addControl(myAnimControl);
-                    } else {
-                        LOGGER.log(Level.FINE, "Control for {0} was added"
-                                + " automatically", mySpatial.getName());
-                    }
+                    updateAndAddControl(mySpatial, myAnimControl, animComposer);
 
                     LOGGER.log(ApplicationLogHandler.LogLevel.FINE,
                             "Updated animation for {0}",
@@ -70,7 +57,32 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
         });
     }
 
-    private void copyAnimClips(final AnimComposer control, final AnimComposer original) {
+    private AnimComposer getAndRemoveControl(Spatial spatial) {
+        final AnimComposer myAnimControl =
+                mySpatial.getControl(AnimComposer.class);
+        if (myAnimControl != null) {
+            mySpatial.removeControl(myAnimControl);
+        }
+        return myAnimControl;
+    }
+
+    private void updateAndAddControl(Spatial spatial, AnimComposer newControl
+            , AnimComposer originalCOntrol) {
+        newControl.cloneFields(new Cloner(),
+                originalCOntrol.jmeClone());
+        copyAnimClips(newControl, originalCOntrol);
+        if (spatial.getControl(AnimComposer.class) == null) {
+            LOGGER.log(Level.FINE, "Adding control for {0}",
+                    spatial.getName());
+            spatial.addControl(newControl);
+        } else {
+            LOGGER.log(Level.FINE, "Control for {0} was added"
+                    + " automatically", spatial.getName());
+        }
+    }
+
+    private void copyAnimClips(final AnimComposer control,
+                               final AnimComposer original) {
         final Collection<AnimClip> clips = original.getAnimClips();
         for (AnimClip c : clips) {
             control.addAnimClip(c);

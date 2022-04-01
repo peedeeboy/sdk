@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * Copies Transform data (translation, rotation, scale) from an updated
  * spatial to the original.
  */
-public class TransformDataFromOriginal implements SpatialDataTransferInterface {
+public final class TransformDataFromOriginal implements SpatialDataTransferInterface {
 
     private static final Logger LOGGER =
             Logger.getLogger(AnimationDataFromOriginal.class.getName());
