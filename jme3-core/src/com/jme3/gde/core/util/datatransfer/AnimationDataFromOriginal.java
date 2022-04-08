@@ -4,6 +4,7 @@ import com.jme3.anim.AnimClip;
 import com.jme3.anim.AnimComposer;
 import com.jme3.gde.core.scene.ApplicationLogHandler;
 import com.jme3.gde.core.util.TaggedSpatialFinder;
+import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.Spatial;
 import com.jme3.util.clone.Cloner;
 
@@ -30,28 +31,34 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
         //loop through original to also find new AnimControls, we expect all 
         // nodes etc. to exist
         removeAnimData(root);
-        original.depthFirstTraversal(spatial -> {
-            final AnimComposer animComposer =
-                    spatial.getControl(AnimComposer.class);
-            if (animComposer != null) {
-                final Spatial mySpatial = finder.find(root, spatial);
-                if (mySpatial != null) {
-                    //TODO: move attachments: have to scan through all
-                    // nodes and find the ones
-                    //where UserData "AttachedBone" == Bone and move it
-                    // to new Bone
-                    final AnimComposer myAnimControl =
-                            getAndRemoveControl(mySpatial);
+        original.depthFirstTraversal(new SceneGraphVisitor() {
 
-                    updateAndAddControl(mySpatial, myAnimControl, animComposer);
+            @Override
+            public void visit(final Spatial spatial) {
+                final AnimComposer animComposer =
+                        spatial.getControl(AnimComposer.class);
+                if (animComposer != null) {
+                    final Spatial mySpatial = finder.find(root, spatial);
+                    if (mySpatial != null) {
+                        //TODO: move attachments: have to scan through all
+                        // nodes and find the ones
+                        //where UserData "AttachedBone" == Bone and move it
+                        // to new Bone
+                        final AnimComposer myAnimControl =
+                                getAndRemoveControl(mySpatial);
 
-                    LOGGER.log(ApplicationLogHandler.LogLevel.FINE,
-                            "Updated animation for {0}",
-                            mySpatial.getName());
-                } else {
-                    LOGGER.log(Level.WARNING, "Could not find sibling for"
-                            + " {0} in root {1} when trying to apply "
-                            + "AnimControl data", new Object[]{spatial, root});
+                        updateAndAddControl(mySpatial, myAnimControl,
+                                animComposer);
+
+                        LOGGER.log(ApplicationLogHandler.LogLevel.FINE,
+                                "Updated animation for {0}",
+                                mySpatial.getName());
+                    } else {
+                        LOGGER.log(Level.WARNING, "Could not find sibling for"
+                                + " {0} in root {1} when trying to apply "
+                                + "AnimControl data", new Object[]{spatial,
+                                root});
+                    }
                 }
             }
         });
@@ -66,8 +73,9 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
         return myAnimControl;
     }
 
-    private void updateAndAddControl(final Spatial spatial, final AnimComposer newControl
-            , final AnimComposer originalControl) {
+    private void updateAndAddControl(final Spatial spatial,
+                                     final AnimComposer newControl, 
+                                     final AnimComposer originalControl) {
         newControl.cloneFields(new Cloner(),
                 originalControl.jmeClone());
         copyAnimClips(newControl, originalControl);
@@ -84,7 +92,7 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
     private void copyAnimClips(final AnimComposer control,
                                final AnimComposer original) {
         final Collection<AnimClip> clips = original.getAnimClips();
-        for (AnimClip c : clips) {
+        for (final AnimClip c : clips) {
             control.addAnimClip(c);
         }
     }

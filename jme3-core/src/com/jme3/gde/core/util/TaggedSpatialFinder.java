@@ -9,6 +9,10 @@ import java.util.logging.Logger;
  * the name and path to be looked for from the given needle Spatial.
  */
 public class TaggedSpatialFinder {
+    
+    public TaggedSpatialFinder(){
+        
+    }
 
     private static final Logger LOGGER =
             Logger.getLogger(TaggedSpatialFinder.class.getName());

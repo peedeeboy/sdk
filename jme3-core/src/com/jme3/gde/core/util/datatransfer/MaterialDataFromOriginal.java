@@ -3,8 +3,10 @@ package com.jme3.gde.core.util.datatransfer;
 import com.jme3.gde.core.scene.ApplicationLogHandler;
 import com.jme3.gde.core.util.TaggedSpatialFinder;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.SceneGraphVisitorAdapter;
 import com.jme3.scene.Spatial;
+
 import java.util.logging.Logger;
 
 /**

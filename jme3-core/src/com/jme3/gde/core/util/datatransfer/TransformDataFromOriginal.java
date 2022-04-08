@@ -4,7 +4,9 @@ import com.jme3.gde.core.scene.ApplicationLogHandler;
 import com.jme3.gde.core.util.TaggedSpatialFinder;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.SceneGraphVisitorAdapter;
 import com.jme3.scene.Spatial;
+
 import java.util.logging.Logger;
 
 /**
@@ -24,7 +26,7 @@ public final class TransformDataFromOriginal implements SpatialDataTransferInter
 
     @Override
     public void update(final Spatial root, final Spatial original) {
-        original.depthFirstTraversal(new com.jme3.scene.SceneGraphVisitorAdapter() {
+        original.depthFirstTraversal(new SceneGraphVisitorAdapter() {
 
             @Override
             public void visit(final Geometry geom) {
@@ -48,4 +50,5 @@ public final class TransformDataFromOriginal implements SpatialDataTransferInter
             }
         });
     }
+    
 }
