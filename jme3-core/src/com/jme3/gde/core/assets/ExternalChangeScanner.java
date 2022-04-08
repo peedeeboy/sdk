@@ -50,6 +50,12 @@ import java.util.logging.Logger;
 import org.netbeans.api.progress.ProgressHandle;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
+import org.openide.filesystems.FileAttributeEvent;
+import org.openide.filesystems.FileChangeAdapter;
+import org.openide.filesystems.FileChangeListener;
+import org.openide.filesystems.FileEvent;
+import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileRenameEvent;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
 import org.openide.util.Exceptions;
@@ -68,7 +74,7 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
     private static final AtomicBoolean userNotified = new AtomicBoolean(false);
     private final AssetDataObject assetDataObject;
     private final AssetData assetData;
-    private final FileObject originalObject;
+    private FileObject originalObject;
 
     public ExternalChangeScanner(AssetDataObject assetDataObject) {
         this.assetDataObject = assetDataObject;

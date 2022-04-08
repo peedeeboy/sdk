@@ -88,12 +88,12 @@ public class SpatialUtil {
         if (spat != null) {
             spat.depthFirstTraversal(geom -> {
 
-                final String geomName = geom.getName();
+                String geomName = geom.getName();
                 if (geomName == null) {
                     LOGGER.log(Level.WARNING, "Null Spatial name!");
                     geomName = "null";
                 }
-                geom.setUserData((SpatialUtil.ORIGINAL_NAME, geomName);
+                geom.setUserData(SpatialUtil.ORIGINAL_NAME, geomName);
                 LOGGER.log(Level.FINE, "Set ORIGINAL_NAME for {0}",
                         geomName);
                 final Spatial curSpat = geom;
@@ -103,7 +103,7 @@ public class SpatialUtil {
                             + "for Spatial {0}: {1}", new Object[]{geom, id});
                 }
                 geomMap.add(id);
-                geom.setUserData((SpatialUtil.ORIGINAL_PATH, id);
+                geom.setUserData(SpatialUtil.ORIGINAL_PATH, id);
                 LOGGER.log(Level.FINE, "Set ORIGINAL_PATH for {0}", id);
             });
         } else {
