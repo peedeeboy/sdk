@@ -394,9 +394,8 @@ public class SceneComposerToolController extends SceneToolController {
     
     /**
      * Update the selected spatial with translation from user input
-     * 
+      
      * @param translation absolute translation
-     * 
      * @param constraints axes affected
      */
     public void updateSelectedTranslation(final Vector3f translation, 
@@ -420,9 +419,8 @@ public class SceneComposerToolController extends SceneToolController {
     
     /**
      * Update the selected spatial with rotation from user input
-     * 
+      
      * @param rotation absolute rotation
-     * 
      * @param constraints axes affected
      */
     public void updateSelectedRotation(final Quaternion rotation, 
@@ -450,9 +448,8 @@ public class SceneComposerToolController extends SceneToolController {
     
     /**
      * Update the selected spatial with scale from user input
-     * 
+      
      * @param scale absolute scale
-     * 
      * @param constraints axes affected 
      */
     public void updateSelectedScale(final Vector3f scale, 
