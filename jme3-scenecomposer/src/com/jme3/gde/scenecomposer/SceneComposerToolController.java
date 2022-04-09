@@ -50,7 +50,7 @@ public class SceneComposerToolController extends SceneToolController {
     private boolean selectTerrain = false;
     private boolean selectGeometries = false;
     private TransformationType transformationType = TransformationType.local;
-    private final static float FIFTEEN_DEGS = FastMath.HALF_PI / 6f;
+    private final float fifteenDegs = FastMath.HALF_PI / 6f;
 
     public enum TransformationType {
         local, global, camera
@@ -396,6 +396,7 @@ public class SceneComposerToolController extends SceneToolController {
      * Update the selected spatial with translation from user input
      * 
      * @param translation absolute translation
+     * 
      * @param constraints axes affected
      */
     public void updateSelectedTranslation(final Vector3f translation, 
@@ -421,6 +422,7 @@ public class SceneComposerToolController extends SceneToolController {
      * Update the selected spatial with rotation from user input
      * 
      * @param rotation absolute rotation
+     * 
      * @param constraints axes affected
      */
     public void updateSelectedRotation(final Quaternion rotation, 
@@ -431,15 +433,15 @@ public class SceneComposerToolController extends SceneToolController {
             
             if (constraints.y != 0f) {
                 angles[1] = Math.round(angles[1] / FastMath.HALF_PI) 
-                        * FIFTEEN_DEGS;
+                        * fifteenDegs;
             }
             if (constraints.x != 0f) {
                 angles[0] = Math.round(angles[0] / FastMath.HALF_PI) 
-                        * FIFTEEN_DEGS;
+                        * fifteenDegs;
             }
             if (constraints.z != 0f) {
                 angles[2] = Math.round(angles[2] / FastMath.HALF_PI) 
-                        * FIFTEEN_DEGS;
+                        * fifteenDegs;
             }
             rotation.fromAngles(angles);
         }
@@ -450,6 +452,7 @@ public class SceneComposerToolController extends SceneToolController {
      * Update the selected spatial with scale from user input
      * 
      * @param scale absolute scale
+     * 
      * @param constraints axes affected 
      */
     public void updateSelectedScale(final Vector3f scale, 
