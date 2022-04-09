@@ -50,6 +50,7 @@ public class SceneComposerToolController extends SceneToolController {
     private boolean selectTerrain = false;
     private boolean selectGeometries = false;
     private TransformationType transformationType = TransformationType.local;
+    private final static float FIFTEEN_DEGS = FastMath.HALF_PI / 6f;
 
     public enum TransformationType {
         local, global, camera
@@ -396,15 +397,21 @@ public class SceneComposerToolController extends SceneToolController {
      * @param translation absolute translation
      * @param constraints axes affected
      */
-    public void updateSelectedTranslation(Vector3f translation, Vector3f constraints) {
+    public void updateSelectedTranslation(final Vector3f translation, 
+            final Vector3f constraints) {
         if (isSnapToScene()) {
             translation.set(snapToScene(translation));
         }
         if (isSnapToGrid()) {
-            translation.set(
-                   constraints.x != 0f ? (int) translation.x : translation.x,
-                   constraints.y != 0f ? (int) translation.y : translation.y,
-                   constraints.z != 0f ? (int) translation.z : translation.z);
+            if(constraints.x != 0f) {
+                translation.setX((int) translation.x);
+            }
+            if(constraints.y != 0f) {
+                translation.setY((int) translation.y);
+            }
+            if(constraints.z != 0f) {
+                translation.setZ((int) translation.z);
+            }
         }
         selected.setLocalTranslation(translation);
     }
@@ -414,19 +421,23 @@ public class SceneComposerToolController extends SceneToolController {
      * @param rotation absolute rotation
      * @param constraints axes affected
      */
-    public void updateSelectedRotation(Quaternion rotation, Vector3f constraints) {
-        if(isSnapToGrid()){
-            float[] angles = new float[3];
+    public void updateSelectedRotation(final Quaternion rotation, 
+            final Vector3f constraints) {
+        if(isSnapToGrid()) {
+            final float[] angles = new float[3];
             rotation.toAngles(angles);
-            float fifteenDegs = FastMath.HALF_PI / 6f;
-            if(constraints.y != 0f){
-                angles[1] = Math.round(angles[1] / FastMath.HALF_PI) * fifteenDegs;
+            
+            if(constraints.y != 0f) {
+                angles[1] = Math.round(angles[1] / FastMath.HALF_PI) 
+                        * FIFTEEN_DEGS;
             }
-            if(constraints.x != 0f){
-                angles[0] = Math.round(angles[0] / FastMath.HALF_PI) * fifteenDegs;
+            if(constraints.x != 0f) {
+                angles[0] = Math.round(angles[0] / FastMath.HALF_PI) 
+                        * FIFTEEN_DEGS;
             }
-            if(constraints.z != 0f){
-                angles[2] = Math.round(angles[2] / FastMath.HALF_PI) * fifteenDegs;
+            if(constraints.z != 0f) {
+                angles[2] = Math.round(angles[2] / FastMath.HALF_PI) 
+                        * FIFTEEN_DEGS;
             }
             rotation.fromAngles(angles);
         }
@@ -438,12 +449,18 @@ public class SceneComposerToolController extends SceneToolController {
      * @param scale absolute scale
      * @param constraints axes affected 
      */
-    public void updateSelectedScale(Vector3f scale, Vector3f constraints) {
+    public void updateSelectedScale(final Vector3f scale, 
+            final Vector3f constraints) {
         if (isSnapToGrid()) {
-            scale.set(
-                    constraints.x != 0 ? (int) Math.max(scale.x, 1) : scale.x,
-                    constraints.y != 0 ? (int) Math.max(scale.y, 1) : scale.y,
-                    constraints.z != 0 ? (int) Math.max(scale.z, 1) : scale.z);
+            if(constraints.x != 0f) {
+                scale.setX((int) Math.max(scale.x, 1));
+            }
+            if(constraints.y != 0f) {
+                scale.setY((int) Math.max(scale.y, 1));
+            }
+            if(constraints.z != 0f) {
+                scale.setZ((int) Math.max(scale.z, 1));
+            }
         }
         selected.setLocalScale(scale);
     }
