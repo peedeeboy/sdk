@@ -398,7 +398,7 @@ public class SceneComposerToolController extends SceneToolController {
      */
     public void updateSelectedTranslation(Vector3f translation, Vector3f constraints) {
         if (isSnapToScene()) {
-            translation = snapToScene(translation);
+            translation.set(snapToScene(translation));
         }
         if (isSnapToGrid()) {
             translation.set(
@@ -451,8 +451,7 @@ public class SceneComposerToolController extends SceneToolController {
     private Vector3f snapToScene(final Vector3f position) {
         final Ray ray = new Ray(position, Vector3f.UNIT_Y.negate());
         final CollisionResults collisionResults = new CollisionResults();
-        final Node root = getRootNode().getLookup()
-                .lookup(Node.class);
+        final Node root = getRootNode().getLookup().lookup(Node.class);
         root.collideWith(ray, collisionResults);
         for (CollisionResult r : collisionResults) {
             if (r.getGeometry() != selected) {
