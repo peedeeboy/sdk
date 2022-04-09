@@ -112,7 +112,7 @@ public class RotateTool extends SceneEditTool {
 
             if (pickedMarker.equals(QUAD_XY) || pickedMarker.equals(QUAD_XZ) || pickedMarker.equals(QUAD_YZ)) {
                 Quaternion rotation = startRotate.mult(pickManager.getRotation(startWorldRotate.inverse()));
-                toolController.updateSelectedRotation(rotation);
+                toolController.updateSelectedRotation(rotation, pickedMarker);
                 lastRotate = rotation;
             }
             updateToolsTransformation();

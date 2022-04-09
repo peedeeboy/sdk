@@ -14,6 +14,7 @@ import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
 import com.jme3.gde.scenecomposer.gizmo.GizmoFactory;
 import com.jme3.gde.scenecomposer.tools.shortcuts.ShortcutManager;
 import com.jme3.input.event.KeyInputEvent;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
@@ -390,30 +391,59 @@ public class SceneComposerToolController extends SceneToolController {
         return rootNode;
     }
     
-    
-    public void updateSelectedTranslation(Vector3f translation) {
+    /**
+     * Update the selected spatial with translation from user input
+     * @param translation absolute translation
+     * @param constraints axes affected
+     */
+    public void updateSelectedTranslation(Vector3f translation, Vector3f constraints) {
         if (isSnapToScene()) {
             translation = snapToScene(translation);
         }
         if (isSnapToGrid()) {
             translation.set(
-                    (int) translation.x,
-                    (int) translation.y,
-                    (int) translation.z);
+                   constraints.x != 0f ? (int) translation.x : translation.x,
+                   constraints.y != 0f ? (int) translation.y : translation.y,
+                   constraints.z != 0f ? (int) translation.z : translation.z);
         }
         selected.setLocalTranslation(translation);
     }
     
-    public void updateSelectedRotation(Quaternion rotation) {
+    /**
+     * Update the selected spatial with rotation from user input
+     * @param rotation absolute rotation
+     * @param constraints axes affected
+     */
+    public void updateSelectedRotation(Quaternion rotation, Vector3f constraints) {
+        if(isSnapToGrid()){
+            float[] angles = new float[3];
+            rotation.toAngles(angles);
+            float fifteenDegs = FastMath.HALF_PI / 6f;
+            if(constraints.y != 0f){
+                angles[1] = Math.round(angles[1] / FastMath.HALF_PI) * fifteenDegs;
+            }
+            if(constraints.x != 0f){
+                angles[0] = Math.round(angles[0] / FastMath.HALF_PI) * fifteenDegs;
+            }
+            if(constraints.z != 0f){
+                angles[2] = Math.round(angles[2] / FastMath.HALF_PI) * fifteenDegs;
+            }
+            rotation.fromAngles(angles);
+        }
         selected.setLocalRotation(rotation);
     }
     
-    public void updateSelectedScale(Vector3f scale) {
+    /**
+     * Update the selected spatial with scale from user input
+     * @param scale absolute scale
+     * @param constraints axes affected 
+     */
+    public void updateSelectedScale(Vector3f scale, Vector3f constraints) {
         if (isSnapToGrid()) {
             scale.set(
-                    (int) Math.max(scale.x, 1),
-                    (int) Math.max(scale.y, 1),
-                    (int) Math.max(scale.z, 1));
+                    constraints.x != 0 ? (int) Math.max(scale.x, 1) : scale.x,
+                    constraints.y != 0 ? (int) Math.max(scale.y, 1) : scale.y,
+                    constraints.z != 0 ? (int) Math.max(scale.z, 1) : scale.z);
         }
         selected.setLocalScale(scale);
     }

@@ -141,7 +141,7 @@ public class MoveTool extends SceneEditTool {
                 position = startPosition.add(diff);
             }
             lastPosition = position;
-            toolController.updateSelectedTranslation(position);
+            toolController.updateSelectedTranslation(position, pickedMarker);
             updateToolsTransformation();
         }
     }
