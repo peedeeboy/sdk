@@ -394,6 +394,7 @@ public class SceneComposerToolController extends SceneToolController {
     
     /**
      * Update the selected spatial with translation from user input
+     * 
      * @param translation absolute translation
      * @param constraints axes affected
      */
@@ -403,13 +404,13 @@ public class SceneComposerToolController extends SceneToolController {
             translation.set(snapToScene(translation));
         }
         if (isSnapToGrid()) {
-            if(constraints.x != 0f) {
+            if (constraints.x != 0f) {
                 translation.setX((int) translation.x);
             }
-            if(constraints.y != 0f) {
+            if (constraints.y != 0f) {
                 translation.setY((int) translation.y);
             }
-            if(constraints.z != 0f) {
+            if (constraints.z != 0f) {
                 translation.setZ((int) translation.z);
             }
         }
@@ -418,24 +419,25 @@ public class SceneComposerToolController extends SceneToolController {
     
     /**
      * Update the selected spatial with rotation from user input
+     * 
      * @param rotation absolute rotation
      * @param constraints axes affected
      */
     public void updateSelectedRotation(final Quaternion rotation, 
             final Vector3f constraints) {
-        if(isSnapToGrid()) {
+        if (isSnapToGrid()) {
             final float[] angles = new float[3];
             rotation.toAngles(angles);
             
-            if(constraints.y != 0f) {
+            if (constraints.y != 0f) {
                 angles[1] = Math.round(angles[1] / FastMath.HALF_PI) 
                         * FIFTEEN_DEGS;
             }
-            if(constraints.x != 0f) {
+            if (constraints.x != 0f) {
                 angles[0] = Math.round(angles[0] / FastMath.HALF_PI) 
                         * FIFTEEN_DEGS;
             }
-            if(constraints.z != 0f) {
+            if (constraints.z != 0f) {
                 angles[2] = Math.round(angles[2] / FastMath.HALF_PI) 
                         * FIFTEEN_DEGS;
             }
@@ -446,19 +448,20 @@ public class SceneComposerToolController extends SceneToolController {
     
     /**
      * Update the selected spatial with scale from user input
+     * 
      * @param scale absolute scale
      * @param constraints axes affected 
      */
     public void updateSelectedScale(final Vector3f scale, 
             final Vector3f constraints) {
         if (isSnapToGrid()) {
-            if(constraints.x != 0f) {
+            if (constraints.x != 0f) {
                 scale.setX((int) Math.max(scale.x, 1));
             }
-            if(constraints.y != 0f) {
+            if (constraints.y != 0f) {
                 scale.setY((int) Math.max(scale.y, 1));
             }
-            if(constraints.z != 0f) {
+            if (constraints.z != 0f) {
                 scale.setZ((int) Math.max(scale.z, 1));
             }
         }
