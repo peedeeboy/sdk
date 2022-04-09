@@ -50,6 +50,7 @@ public class SceneComposerToolController extends SceneToolController {
     private boolean selectTerrain = false;
     private boolean selectGeometries = false;
     private TransformationType transformationType = TransformationType.local;
+    
     private final float fifteenDegs = FastMath.HALF_PI / 6f;
 
     public enum TransformationType {
@@ -394,7 +395,7 @@ public class SceneComposerToolController extends SceneToolController {
     
     /**
      * Update the selected spatial with translation from user input
-      
+     * 
      * @param translation absolute translation
      * @param constraints axes affected
      */
@@ -419,7 +420,7 @@ public class SceneComposerToolController extends SceneToolController {
     
     /**
      * Update the selected spatial with rotation from user input
-      
+     * 
      * @param rotation absolute rotation
      * @param constraints axes affected
      */
@@ -448,7 +449,7 @@ public class SceneComposerToolController extends SceneToolController {
     
     /**
      * Update the selected spatial with scale from user input
-      
+     * 
      * @param scale absolute scale
      * @param constraints axes affected 
      */
