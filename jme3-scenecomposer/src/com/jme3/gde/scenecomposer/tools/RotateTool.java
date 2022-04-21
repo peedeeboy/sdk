@@ -6,7 +6,6 @@ package com.jme3.gde.scenecomposer.tools;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
-import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.undoredo.AbstractUndoableSceneEdit;
 import com.jme3.gde.scenecomposer.SceneComposerToolController;
 import com.jme3.gde.scenecomposer.SceneEditTool;
@@ -113,7 +112,7 @@ public class RotateTool extends SceneEditTool {
 
             if (pickedMarker.equals(QUAD_XY) || pickedMarker.equals(QUAD_XZ) || pickedMarker.equals(QUAD_YZ)) {
                 Quaternion rotation = startRotate.mult(pickManager.getRotation(startWorldRotate.inverse()));
-                toolController.getSelectedSpatial().setLocalRotation(rotation);
+                toolController.updateSelectedRotation(rotation, pickedMarker);
                 lastRotate = rotation;
             }
             updateToolsTransformation();
