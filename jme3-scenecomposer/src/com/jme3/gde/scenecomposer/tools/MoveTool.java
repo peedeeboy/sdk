@@ -8,7 +8,6 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
-import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.undoredo.AbstractUndoableSceneEdit;
 import com.jme3.gde.scenecomposer.SceneComposerToolController;
 import com.jme3.gde.scenecomposer.SceneEditTool;
@@ -142,7 +141,7 @@ public class MoveTool extends SceneEditTool {
                 position = startPosition.add(diff);
             }
             lastPosition = position;
-            toolController.getSelectedSpatial().setLocalTranslation(position);
+            toolController.updateSelectedTranslation(position, pickedMarker);
             updateToolsTransformation();
         }
     }
@@ -210,4 +209,5 @@ public class MoveTool extends SceneEditTool {
             this.after.set(after);
         }
     }
+
 }

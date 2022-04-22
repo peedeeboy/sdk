@@ -5,6 +5,8 @@
 package com.jme3.gde.scenecomposer;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.scene.controller.SceneToolController;
 import com.jme3.gde.core.sceneexplorer.nodes.AbstractSceneExplorerNode;
@@ -12,7 +14,11 @@ import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
 import com.jme3.gde.scenecomposer.gizmo.GizmoFactory;
 import com.jme3.gde.scenecomposer.tools.shortcuts.ShortcutManager;
 import com.jme3.input.event.KeyInputEvent;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -44,6 +50,8 @@ public class SceneComposerToolController extends SceneToolController {
     private boolean selectTerrain = false;
     private boolean selectGeometries = false;
     private TransformationType transformationType = TransformationType.local;
+    
+    private final float fifteenDegs = FastMath.HALF_PI / 6f;
 
     public enum TransformationType {
         local, global, camera
@@ -383,6 +391,96 @@ public class SceneComposerToolController extends SceneToolController {
      
     public JmeNode getRootNode() {
         return rootNode;
+    }
+    
+    /**
+     * Update the selected spatial with translation from user input
+     * 
+     * @param translation absolute translation
+     * @param constraints axes affected
+     */
+    public void updateSelectedTranslation(final Vector3f translation, 
+            final Vector3f constraints) {
+        if (isSnapToScene()) {
+            translation.set(snapToScene(translation));
+        }
+        if (isSnapToGrid()) {
+            if (constraints.x != 0f) {
+                translation.setX((int) translation.x);
+            }
+            if (constraints.y != 0f) {
+                translation.setY((int) translation.y);
+            }
+            if (constraints.z != 0f) {
+                translation.setZ((int) translation.z);
+            }
+        }
+        selected.setLocalTranslation(translation);
+    }
+    
+    /**
+     * Update the selected spatial with rotation from user input
+     * 
+     * @param rotation absolute rotation
+     * @param constraints axes affected
+     */
+    public void updateSelectedRotation(final Quaternion rotation, 
+            final Vector3f constraints) {
+        if (isSnapToGrid()) {
+            final float[] angles = new float[3];
+            rotation.toAngles(angles);
+            
+            if (constraints.y != 0f) {
+                angles[1] = Math.round(angles[1] / FastMath.HALF_PI) 
+                        * fifteenDegs;
+            }
+            if (constraints.x != 0f) {
+                angles[0] = Math.round(angles[0] / FastMath.HALF_PI) 
+                        * fifteenDegs;
+            }
+            if (constraints.z != 0f) {
+                angles[2] = Math.round(angles[2] / FastMath.HALF_PI) 
+                        * fifteenDegs;
+            }
+            rotation.fromAngles(angles);
+        }
+        selected.setLocalRotation(rotation);
+    }
+    
+    /**
+     * Update the selected spatial with scale from user input
+     * 
+     * @param scale absolute scale
+     * @param constraints axes affected 
+     */
+    public void updateSelectedScale(final Vector3f scale, 
+            final Vector3f constraints) {
+        if (isSnapToGrid()) {
+            if (constraints.x != 0f) {
+                scale.setX((int) Math.max(scale.x, 1));
+            }
+            if (constraints.y != 0f) {
+                scale.setY((int) Math.max(scale.y, 1));
+            }
+            if (constraints.z != 0f) {
+                scale.setZ((int) Math.max(scale.z, 1));
+            }
+        }
+        selected.setLocalScale(scale);
+    }
+
+    private Vector3f snapToScene(final Vector3f position) {
+        final Ray ray = new Ray(position, Vector3f.UNIT_Y.negate());
+        final CollisionResults collisionResults = new CollisionResults();
+        final Node root = getRootNode().getLookup().lookup(Node.class);
+        root.collideWith(ray, collisionResults);
+        for (CollisionResult r : collisionResults) {
+            if (r.getGeometry() != selected) {
+                position.y = r.getContactPoint().y;
+                break;
+            }
+        }
+        return position;
     }
 
 }

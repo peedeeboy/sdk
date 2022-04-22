@@ -9,7 +9,6 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
-import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.undoredo.AbstractUndoableSceneEdit;
 import com.jme3.gde.scenecomposer.SceneComposerToolController;
 import com.jme3.gde.scenecomposer.tools.PickManager;
@@ -167,7 +166,7 @@ public class MoveShortcut extends ShortcutTool {
                 position = startPosition.add(diff);
             }
             finalPosition = position;
-            toolController.getSelectedSpatial().setLocalTranslation(position);
+            toolController.updateSelectedTranslation(position, Vector3f.UNIT_XYZ);
             updateToolsTransformation();
         }
     }
