@@ -2,6 +2,10 @@ package com.jme3.gde.core.util.datatransfer;
 
 import com.jme3.anim.AnimClip;
 import com.jme3.anim.AnimComposer;
+import com.jme3.anim.Armature;
+import com.jme3.anim.Joint;
+import com.jme3.anim.SkinningControl;
+import com.jme3.anim.util.AnimMigrationUtils;
 import com.jme3.gde.core.scene.ApplicationLogHandler;
 import com.jme3.gde.core.util.TaggedSpatialFinder;
 import com.jme3.scene.SceneGraphVisitor;
@@ -17,8 +21,8 @@ import java.util.logging.Logger;
  */
 public final class AnimationDataFromOriginal implements SpatialDataTransferInterface {
 
-    private static final Logger LOGGER =
-            Logger.getLogger(AnimationDataFromOriginal.class.getName());
+    private static final Logger LOGGER
+            = Logger.getLogger(AnimationDataFromOriginal.class.getName());
 
     private final TaggedSpatialFinder finder;
 
@@ -35,8 +39,8 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
 
             @Override
             public void visit(final Spatial spatial) {
-                final AnimComposer animComposer =
-                        spatial.getControl(AnimComposer.class);
+                final AnimComposer animComposer
+                        = spatial.getControl(AnimComposer.class);
                 if (animComposer != null) {
                     final Spatial mySpatial = finder.find(root, spatial);
                     if (mySpatial != null) {
@@ -44,11 +48,10 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
                         // nodes and find the ones
                         //where UserData "AttachedBone" == Bone and move it
                         // to new Bone
-                        final AnimComposer myAnimControl =
-                                getAndRemoveControl(mySpatial);
+                        getAndRemoveControl(mySpatial);
 
-                        updateAndAddControl(mySpatial, myAnimControl,
-                                animComposer);
+                        updateAndAddControl(mySpatial,
+                                animComposer, spatial.getControl(SkinningControl.class));
 
                         LOGGER.log(ApplicationLogHandler.LogLevel.FINE,
                                 "Updated animation for {0}",
@@ -57,7 +60,7 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
                         LOGGER.log(Level.WARNING, "Could not find sibling for"
                                 + " {0} in root {1} when trying to apply "
                                 + "AnimControl data", new Object[]{spatial,
-                                root});
+                                    root});
                     }
                 }
             }
@@ -65,8 +68,8 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
     }
 
     private AnimComposer getAndRemoveControl(final Spatial mySpatial) {
-        final AnimComposer myAnimControl =
-                mySpatial.getControl(AnimComposer.class);
+        final AnimComposer myAnimControl
+                = mySpatial.getControl(AnimComposer.class);
         if (myAnimControl != null) {
             mySpatial.removeControl(myAnimControl);
         }
@@ -74,35 +77,62 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
     }
 
     private void updateAndAddControl(final Spatial spatial,
-                                     final AnimComposer newControl, 
-                                     final AnimComposer originalControl) {
-        newControl.cloneFields(new Cloner(),
-                originalControl.jmeClone());
-        copyAnimClips(newControl, originalControl);
+            final AnimComposer originalAnimComposer,
+            final SkinningControl originalSkinningControl) {
+        Cloner cloner = new Cloner();
+        AnimComposer newControl = new AnimComposer();
+        newControl.cloneFields(cloner,
+                originalAnimComposer);
+
+        copyAnimClips(newControl, originalAnimComposer);
         if (spatial.getControl(AnimComposer.class) == null) {
-            LOGGER.log(Level.FINE, "Adding control for {0}",
+            LOGGER.log(Level.FINE, "Adding AnimComposer for {0}",
                     spatial.getName());
             spatial.addControl(newControl);
         } else {
             LOGGER.log(Level.FINE, "Control for {0} was added"
                     + " automatically", spatial.getName());
         }
-    }
-
-    private void copyAnimClips(final AnimComposer control,
-                               final AnimComposer original) {
-        final Collection<AnimClip> clips = original.getAnimClips();
-        for (final AnimClip c : clips) {
-            control.addAnimClip(c);
+        if (spatial.getControl(SkinningControl.class) == null) {
+            if (originalSkinningControl == null) {
+                LOGGER.log(Level.INFO, "Could not add a SkinningControl. Broken file?");
+            } else {
+                // Armature only used to initialize SkinningControl
+                SkinningControl skinningControl = new SkinningControl(originalSkinningControl.getArmature());
+                skinningControl.cloneFields(cloner,
+                        originalSkinningControl);
+                spatial.addControl(skinningControl);
+                LOGGER.log(Level.FINE, "Adding SkinningControl for {0}",
+                        spatial.getName());
+            }
         }
     }
 
+    private void copyAnimClips(final AnimComposer control,
+            final AnimComposer original) {
+        final Collection<AnimClip> clips2 = control.getAnimClips();
+        for (final AnimClip c : clips2) {
+            control.removeAnimClip(c);
+        }
+
+        final Collection<AnimClip> clips = original.getAnimClips();
+        for (final AnimClip c : clips) {
+            control.addAnimClip((AnimClip) c.jmeClone());
+            control.makeAction(c.getName());
+            LOGGER.log(Level.INFO, "Copied clip {0}",
+                    c.getName());
+        }
+    }
 
     private void removeAnimData(final Spatial root) {
         root.depthFirstTraversal(spatial -> {
             AnimComposer animControl = spatial.getControl(AnimComposer.class);
             if (animControl != null) {
                 spatial.removeControl(animControl);
+            }
+            SkinningControl skinningControl = spatial.getControl(SkinningControl.class);
+            if (skinningControl != null) {
+                spatial.removeControl(skinningControl);
             }
         });
     }

@@ -41,6 +41,7 @@ import com.jme3.gde.core.util.datatransfer.MaterialDataFromOriginal;
 import com.jme3.gde.core.util.datatransfer.MeshDataFromOriginal;
 import com.jme3.gde.core.util.datatransfer.TransformDataFromOriginal;
 import com.jme3.scene.Spatial;
+import java.io.IOException;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -116,6 +117,7 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
                 final String noOption = "No";
                 final String allOption = "All";
                 final String meshOption = "Only mesh data";
+                final String animOption = "Only animation data";
                 final NotifyDescriptor.Confirmation message =
                         new NotifyDescriptor.Confirmation("Original file for "
                                 + assetDataObject.getName() + " changed\nTry "
@@ -123,7 +125,7 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
                                 "Original file changed",
                                 NotifyDescriptor.YES_NO_CANCEL_OPTION,
                                 NotifyDescriptor.QUESTION_MESSAGE);
-                message.setOptions(new Object[]{allOption, meshOption,
+                message.setOptions(new Object[]{allOption, meshOption, animOption,
                         noOption});
                 DialogDisplayer.getDefault().notify(message);
                 if (message.getValue().equals(noOption)) {
@@ -131,7 +133,8 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
                     return;
                 }
                 SceneApplication.getApplication().enqueue((Callable<Void>) () -> {
-                    applyExternalData(message.getValue().equals(meshOption));
+                    applyExternalData(message.getValue().equals(meshOption), 
+                            message.getValue().equals(animOption));
                     return null;
                 });
                 userNotified.set(false);
@@ -142,7 +145,8 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
         }
     }
 
-    private void applyExternalData(final boolean onlyMeshData) {
+    private void applyExternalData(final boolean onlyMeshData, 
+            final boolean onlyAnimData) {
         final ProgressHandle handle = ProgressHandle.createHandle("Updating "
                 + "file "
                 + "data");
@@ -152,19 +156,21 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
             final Spatial spat = (Spatial) assetDataObject.loadAsset();
             final TaggedSpatialFinder finder = new TaggedSpatialFinder();
 
-            new MeshDataFromOriginal(finder).update(spat, original);
-            new TransformDataFromOriginal(finder).update(spat, original);
-            if (!onlyMeshData) {
-                new MaterialDataFromOriginal(finder).update(spat, original);
-                if (SpatialUtil.hasAnimations(original)) {
-                    new AnimationDataFromOriginal(finder).update(spat,
+            if(!onlyMeshData && SpatialUtil.hasAnimations(original)) {
+                new AnimationDataFromOriginal(finder).update(spat,
                             original);
-                }
+            }
+            if(!onlyAnimData){
+                new MeshDataFromOriginal(finder).update(spat, original);
+            }
+            if (!onlyMeshData && !onlyAnimData) {
+                new TransformDataFromOriginal(finder).update(spat, original);
+                new MaterialDataFromOriginal(finder).update(spat, original);
             }
 
             closeOriginalSpatial();
             assetDataObject.saveAsset();
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Exception when trying to update "
                     + "external data.", e);
         } finally {
