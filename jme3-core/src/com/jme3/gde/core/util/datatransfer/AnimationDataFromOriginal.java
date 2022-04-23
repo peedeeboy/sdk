@@ -51,7 +51,8 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
                         getAndRemoveControl(mySpatial);
 
                         updateAndAddControl(mySpatial,
-                                animComposer, spatial.getControl(SkinningControl.class));
+                                animComposer,
+                                spatial.getControl(SkinningControl.class));
 
                         LOGGER.log(ApplicationLogHandler.LogLevel.FINE,
                                 "Updated animation for {0}",
@@ -60,7 +61,7 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
                         LOGGER.log(Level.WARNING, "Could not find sibling for"
                                 + " {0} in root {1} when trying to apply "
                                 + "AnimControl data", new Object[]{spatial,
-                                    root});
+                                root});
                     }
                 }
             }
@@ -77,39 +78,38 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
     }
 
     private void updateAndAddControl(final Spatial spatial,
-            final AnimComposer originalAnimComposer,
-            final SkinningControl originalSkinningControl) {
-        Cloner cloner = new Cloner();
-        AnimComposer newControl = new AnimComposer();
-        newControl.cloneFields(cloner,
-                originalAnimComposer);
+                                     final AnimComposer originalAnimComposer,
+                                     final SkinningControl originalSkinningControl) {
+        spatial.removeControl(spatial.getControl(AnimComposer.class));
+        spatial.removeControl(spatial.getControl(SkinningControl.class));
 
+        AnimComposer newControl = new AnimComposer();
         copyAnimClips(newControl, originalAnimComposer);
         if (spatial.getControl(AnimComposer.class) == null) {
-            LOGGER.log(Level.FINE, "Adding AnimComposer for {0}",
+            LOGGER.log(Level.INFO, "Adding AnimComposer for {0}",
                     spatial.getName());
             spatial.addControl(newControl);
         } else {
-            LOGGER.log(Level.FINE, "Control for {0} was added"
+            LOGGER.log(Level.INFO, "Control for {0} was added"
                     + " automatically", spatial.getName());
         }
         if (spatial.getControl(SkinningControl.class) == null) {
             if (originalSkinningControl == null) {
-                LOGGER.log(Level.INFO, "Could not add a SkinningControl. Broken file?");
+                LOGGER.log(Level.INFO, "Could not add a SkinningControl. "
+                        + "Broken file?");
             } else {
-                // Armature only used to initialize SkinningControl
-                SkinningControl skinningControl = new SkinningControl(originalSkinningControl.getArmature());
-                skinningControl.cloneFields(cloner,
-                        originalSkinningControl);
+                SkinningControl skinningControl =
+                        new SkinningControl((Armature) originalSkinningControl.getArmature().jmeClone());
                 spatial.addControl(skinningControl);
-                LOGGER.log(Level.FINE, "Adding SkinningControl for {0}",
+                LOGGER.log(Level.INFO, "Adding SkinningControl for {0}",
                         spatial.getName());
             }
         }
+
     }
 
     private void copyAnimClips(final AnimComposer control,
-            final AnimComposer original) {
+                               final AnimComposer original) {
         final Collection<AnimClip> clips2 = control.getAnimClips();
         for (final AnimClip c : clips2) {
             control.removeAnimClip(c);
@@ -130,7 +130,8 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
             if (animControl != null) {
                 spatial.removeControl(animControl);
             }
-            SkinningControl skinningControl = spatial.getControl(SkinningControl.class);
+            SkinningControl skinningControl =
+                    spatial.getControl(SkinningControl.class);
             if (skinningControl != null) {
                 spatial.removeControl(skinningControl);
             }
