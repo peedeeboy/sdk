@@ -6,7 +6,6 @@ package com.jme3.gde.scenecomposer.tools;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
-import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.undoredo.AbstractUndoableSceneEdit;
 import com.jme3.gde.scenecomposer.SceneComposerToolController;
 import com.jme3.gde.scenecomposer.SceneEditTool;
@@ -122,15 +121,15 @@ public class ScaleTool extends SceneEditTool {
                 diff += 1f;
                 Vector3f scale = startScale.mult(diff);
                 lastScale = scale;
-                toolController.getSelectedSpatial().setLocalScale(scale);
+                toolController.updateSelectedScale(scale, pickedMarker);
             } else if (pickedMarker.equals(ARROW_X) || pickedMarker.equals(ARROW_Y) || pickedMarker.equals(ARROW_Z)) {
                 // Get the translation in the spatial Space
                 Quaternion worldToSpatial = toolController.getSelectedSpatial().getWorldRotation().inverse();
                 Vector3f diff = worldToSpatial.mult(pickManager.getTranslation(constraintAxis));
                 diff.multLocal(0.5f);
                 Vector3f scale = startScale.add(diff);
+                toolController.updateSelectedScale(scale, pickedMarker);
                 lastScale = scale;
-                toolController.getSelectedSpatial().setLocalScale(scale);
             }
             updateToolsTransformation();
         }

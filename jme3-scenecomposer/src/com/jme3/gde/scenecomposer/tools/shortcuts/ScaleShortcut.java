@@ -7,7 +7,6 @@ package com.jme3.gde.scenecomposer.tools.shortcuts;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
-import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.undoredo.AbstractUndoableSceneEdit;
 import com.jme3.gde.scenecomposer.SceneComposerToolController;
 import com.jme3.gde.scenecomposer.tools.PickManager;
@@ -157,7 +156,7 @@ public class ScaleShortcut extends ShortcutTool {
                 scale = startScale.add(diff);
             }
             finalScale = scale;
-            toolController.getSelectedSpatial().setLocalScale(scale);
+            toolController.updateSelectedScale(scale, Vector3f.UNIT_XYZ);
             updateToolsTransformation();
         }
     }

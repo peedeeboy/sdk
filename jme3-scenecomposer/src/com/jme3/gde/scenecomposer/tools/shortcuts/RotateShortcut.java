@@ -7,7 +7,6 @@ package com.jme3.gde.scenecomposer.tools.shortcuts;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
-import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.undoredo.AbstractUndoableSceneEdit;
 import com.jme3.gde.scenecomposer.SceneComposerToolController;
 import com.jme3.gde.scenecomposer.tools.PickManager;
@@ -147,7 +146,7 @@ public class RotateShortcut extends ShortcutTool {
         if (pickManager.updatePick(camera, screenCoord)) {
 
             Quaternion rotation = startRotation.mult(pickManager.getRotation(startWorldRotate.inverse()));
-            toolController.getSelectedSpatial().setLocalRotation(rotation);
+            toolController.updateSelectedRotation(rotation, Vector3f.UNIT_XYZ);
             finalRotation = rotation;
             updateToolsTransformation();
         }
