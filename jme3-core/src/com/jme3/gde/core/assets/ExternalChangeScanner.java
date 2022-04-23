@@ -144,7 +144,7 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
                     + "{0}", assetDataObject.getName());
         }
     }
-
+    
     private void applyExternalData(final boolean onlyMeshData, 
             final boolean onlyAnimData) {
         final ProgressHandle handle = ProgressHandle.createHandle("Updating "
