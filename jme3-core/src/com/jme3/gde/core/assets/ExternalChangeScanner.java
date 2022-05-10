@@ -34,6 +34,9 @@ package com.jme3.gde.core.assets;
 import com.jme3.export.Savable;
 import com.jme3.gde.core.scene.ApplicationLogHandler;
 import com.jme3.gde.core.scene.SceneApplication;
+import com.jme3.gde.core.sceneexplorer.SceneExplorerTopComponent;
+import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
+import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.util.SpatialUtil;
 import com.jme3.gde.core.util.TaggedSpatialFinder;
 import com.jme3.gde.core.util.datatransfer.AnimationDataFromOriginal;
@@ -59,6 +62,7 @@ import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileRenameEvent;
 import org.openide.loaders.DataObject;
 import org.openide.loaders.DataObjectNotFoundException;
+import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 
 /**
@@ -159,6 +163,7 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
             if(!onlyMeshData && SpatialUtil.hasAnimations(original)) {
                 new AnimationDataFromOriginal(finder).update(spat,
                             original);
+                
             }
             if(!onlyAnimData){
                 new MeshDataFromOriginal(finder).update(spat, original);
@@ -167,7 +172,13 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
                 new TransformDataFromOriginal(finder).update(spat, original);
                 new MaterialDataFromOriginal(finder).update(spat, original);
             }
-
+            // Do a complicated recurse refresh since AbstractSceneExplorerNode:refresh() isn't working
+            SceneApplication.getApplication().enqueue((Runnable) () -> {
+                Node rootNode = SceneExplorerTopComponent.findInstance().getExplorerManager().getRootContext();
+                if (rootNode instanceof JmeNode) {
+                    refreshNamedSpatial((JmeNode) rootNode, spat.getName());
+                }
+            });
             closeOriginalSpatial();
             assetDataObject.saveAsset();
         } catch (IOException e) {
@@ -175,6 +186,37 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
                     + "external data.", e);
         } finally {
             handle.finish();
+        }
+    }
+    
+    /**
+     * Look for the spatial to update using the name of the asset
+     * @param spatial
+     * @param name 
+     */
+    private void refreshNamedSpatial(JmeSpatial spatial, String name){
+        if(spatial.getName().equals(name)){
+            recurseRefresh(spatial);
+        } else {
+            for(Node s: spatial.getChildren().getNodes()){
+                if(s instanceof JmeSpatial){
+                    refreshNamedSpatial((JmeSpatial) s, name);
+                }
+                
+            }
+        }
+    }
+    
+    /**
+     * Refreshes the spatial and all children
+     * @param spatial 
+     */
+    private void recurseRefresh(JmeSpatial spatial){
+        spatial.refresh(false);
+        for(Node s: spatial.getChildren().getNodes()){
+            if(s instanceof JmeSpatial){
+                recurseRefresh((JmeSpatial) s);
+            }
         }
     }
 

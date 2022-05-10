@@ -10,13 +10,14 @@ import com.jme3.scene.Spatial;
 import java.util.logging.Logger;
 
 /**
- * Copies Transform data (translation, rotation, scale) from an updated
- * spatial to the original.
+ * Copies Transform data (translation, rotation, scale) from an updated spatial
+ * to the original.
  */
-public final class TransformDataFromOriginal implements SpatialDataTransferInterface {
+public final class TransformDataFromOriginal implements 
+        SpatialDataTransferInterface {
 
-    private static final Logger LOGGER =
-            Logger.getLogger(AnimationDataFromOriginal.class.getName());
+    private static final Logger LOGGER
+            = Logger.getLogger(AnimationDataFromOriginal.class.getName());
 
     private final TaggedSpatialFinder finder;
 
@@ -50,5 +51,5 @@ public final class TransformDataFromOriginal implements SpatialDataTransferInter
             }
         });
     }
-    
+
 }

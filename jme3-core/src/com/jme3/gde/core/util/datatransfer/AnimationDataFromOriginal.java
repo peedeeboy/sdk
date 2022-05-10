@@ -8,7 +8,6 @@ import com.jme3.gde.core.scene.ApplicationLogHandler;
 import com.jme3.gde.core.util.TaggedSpatialFinder;
 import com.jme3.scene.SceneGraphVisitor;
 import com.jme3.scene.Spatial;
-import com.jme3.util.clone.Cloner;
 
 import java.util.Collection;
 import java.util.logging.Level;
@@ -69,8 +68,7 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
                                      final AnimComposer originalAnimComposer,
                                      final SkinningControl originalSkinningControl) {
 
-        final AnimComposer newControl =spatial.getControl(AnimComposer.class);
-        newControl.cloneFields(new Cloner(), originalAnimComposer);
+        final AnimComposer newControl = new AnimComposer();
         copyAnimClips(newControl, originalAnimComposer);
         if (spatial.getControl(AnimComposer.class) == null) {
             LOGGER.log(Level.INFO, "Adding AnimComposer for {0}",
@@ -108,10 +106,10 @@ public final class AnimationDataFromOriginal implements SpatialDataTransferInter
 
     private void removeAnimData(final Spatial root) {
         root.depthFirstTraversal(spatial -> {
-//            final AnimComposer animControl = spatial.getControl(AnimComposer.class);
-//            if (animControl != null) {
-//                spatial.removeControl(animControl);
-//            }
+            final AnimComposer animControl = spatial.getControl(AnimComposer.class);
+            if (animControl != null) {
+                spatial.removeControl(animControl);
+            }
             final SkinningControl skinningControl =
                     spatial.getControl(SkinningControl.class);
             if (skinningControl != null) {

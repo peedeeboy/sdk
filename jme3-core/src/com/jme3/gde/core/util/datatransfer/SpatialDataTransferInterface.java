@@ -10,7 +10,7 @@ import com.jme3.scene.Spatial;
 public interface SpatialDataTransferInterface {
 
     /**
-     * Performs the data transfer
+     * Performs the data transfer.
      *
      * @param root     the node containing the spatial to update
      * @param original spatial to update data from

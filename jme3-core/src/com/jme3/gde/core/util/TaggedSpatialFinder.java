@@ -10,12 +10,12 @@ import java.util.logging.Logger;
  */
 public class TaggedSpatialFinder {
     
-    public TaggedSpatialFinder(){
-        
-    }
-
     private static final Logger LOGGER =
             Logger.getLogger(TaggedSpatialFinder.class.getName());
+    
+    public TaggedSpatialFinder() {
+        
+    }
 
     /**
      * Finds a previously marked spatial in the supplied root Spatial, creates

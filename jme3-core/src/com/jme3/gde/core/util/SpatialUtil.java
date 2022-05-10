@@ -50,6 +50,7 @@ public class SpatialUtil {
 
     public static final String ORIGINAL_NAME = "ORIGINAL_NAME";
     public static final String ORIGINAL_PATH = "ORIGINAL_PATH";
+    
     private static final Logger LOGGER =
             Logger.getLogger(SpatialUtil.class.getName());
 

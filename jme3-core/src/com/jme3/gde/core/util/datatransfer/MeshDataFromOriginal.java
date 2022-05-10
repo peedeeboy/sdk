@@ -45,12 +45,13 @@ public class MeshDataFromOriginal implements SpatialDataTransferInterface {
     }
 
     /**
-     * Adds a leaf to a spatial, including all nonexisting parents.
+     * Adds a leaf to a spatial, including all non-existing parents.
      *
      * @param root
      * @param leaf
      */
-    private void addLeafWithNonExistingParents(Spatial root, Spatial leaf) {
+    private void addLeafWithNonExistingParents(final Spatial root, 
+            final Spatial leaf) {
         if (!(root instanceof Node)) {
             LOGGER.log(Level.WARNING, "Cannot add new Leaf {0} to {1}, is not"
                     + " a Node!", new Object[]{leaf.getName(), root.getName()});
