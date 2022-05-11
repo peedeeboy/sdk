@@ -77,6 +77,13 @@ public class VehicleEditorController implements LookupListener, ActionListener {
         result.addLookupListener(this);
         toolsNode.addLight(new DirectionalLight());
         Node track = (Node) new DesktopAssetManager(true).loadModel("Models/Racetrack/Raceway.j3o");
+        if(track.getChild("Grass").getControl(RigidBodyControl.class) == null){
+            track.getChild("Grass").addControl(new RigidBodyControl());
+            track.getChild("Road").addControl(new RigidBodyControl());
+            track.getChild("Wall").addControl(new RigidBodyControl());
+            track.getChild("Rumble-Strip").addControl(new RigidBodyControl());
+        }
+        
         toolsNode.attachChild(track);
         bulletState = new BulletAppState();
 
