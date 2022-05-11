@@ -4,6 +4,7 @@
  */
 package com.jme3.gde.materialdefinition.fileStructure;
 
+import com.jme3.gde.materialdefinition.fileStructure.leaves.DefineBlock;
 import com.jme3.gde.materialdefinition.fileStructure.leaves.FragmentShaderFileBlock;
 import com.jme3.gde.materialdefinition.fileStructure.leaves.InputMappingBlock;
 import com.jme3.gde.materialdefinition.fileStructure.leaves.LightModeBlock;
@@ -52,6 +53,8 @@ public class TechniqueBlock extends UberStatement {
                 addStatement(new VertexShaderNodesBlock(statement));
             } else if (statement.getLine().trim().startsWith("FragmentShaderNodes")) {
                 addStatement(new FragmentShaderNodesBlock(statement));
+            } else if (statement.getLine().trim().startsWith("Defines")) {
+                addStatement(new DefinesBlock(statement));
             } else {
                 addStatement(new UnsupportedStatement(statement));
             }
