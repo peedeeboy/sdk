@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
+ * A statement that will not be decorated
  * @author Nehon
  */
 @SuppressWarnings({"unchecked", "rawtypes"})

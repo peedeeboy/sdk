@@ -1,20 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.jme3.gde.materialdefinition.fileStructure.leaves;
 
 import com.jme3.util.blockparser.Statement;
 import java.util.Objects;
 
 /**
- *
+ * Handles one row of Defines in a MaterialDef, ie ALBEDOMAP : AlbedoMap
  * @author rickard
  */
-public class DefineBlock extends LeafStatement{
-    
-    protected String name;
-    protected String define;
+public final class DefineBlock extends LeafStatement {
+
+    private String name;
+    private String define;
 
     protected DefineBlock(int lineNumber, String line) {
         super(lineNumber, line);
@@ -23,7 +19,7 @@ public class DefineBlock extends LeafStatement{
     public DefineBlock(Statement sta) {
         this(sta.getLineNumber(), sta.getLine());
         parse(sta);
-         updateLine();
+        updateLine();
     }
 
     public DefineBlock(String name, String define) {
@@ -54,8 +50,6 @@ public class DefineBlock extends LeafStatement{
         this.define = define;
         updateLine();
     }
-    
-    
 
     private void parse(Statement sta) {
         String[] values = sta.getLine().split(":");
@@ -73,10 +67,10 @@ public class DefineBlock extends LeafStatement{
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof DefineBlock)){
+        if (!(obj instanceof DefineBlock)) {
             return false;
         }
-        return ((DefineBlock)obj).getName().equals(name) && ((DefineBlock)obj).getDefine().equals(define);
+        return ((DefineBlock) obj).getName().equals(name) && ((DefineBlock) obj).getDefine().equals(define);
     }
-    
+
 }
