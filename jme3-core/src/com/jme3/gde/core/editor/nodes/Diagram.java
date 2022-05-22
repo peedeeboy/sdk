@@ -272,7 +272,11 @@ public abstract class Diagram extends JPanel implements MouseListener,
         repaint();
         parent.notifyRemoveNode(node);
     }
-
+    
+    public void updateDefaultValue(String name, String value){
+        parent.notifyDefaultValueUpdated(name, value);
+    }
+    
     public List<Selectable> getSelectedItems() {
         return selectedItems;
     }
@@ -557,6 +561,12 @@ public abstract class Diagram extends JPanel implements MouseListener,
      * come up with a better/easier solution
      */
     public abstract void autoLayout();
+    
+    /**
+     * This toggles continuous updates for material previews
+     * @param on
+     */
+    public abstract void toggleUpdateThread(boolean on);
     
     @Override
     public void componentResized(ComponentEvent e) {
