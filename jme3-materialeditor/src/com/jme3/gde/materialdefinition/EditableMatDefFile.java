@@ -43,6 +43,7 @@ import com.jme3.gde.materialdefinition.fileStructure.leaves.LeafStatement;
 import com.jme3.gde.materialdefinition.fileStructure.leaves.MatParamBlock;
 import com.jme3.gde.materialdefinition.fileStructure.leaves.OutputMappingBlock;
 import com.jme3.gde.materialdefinition.navigator.node.MatDefNode;
+import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.material.TechniqueDef;
@@ -88,7 +89,7 @@ public class EditableMatDefFile {
     private MatDefBlock matDefStructure;
     private TechniqueBlock currentTechnique;
     private MaterialDef materialDef;
-    private static ProjectAssetManager assetManager;
+    private ProjectAssetManager assetManager;
     private ShaderGenerator glsl100;
     private ShaderGenerator glsl150;    
     private final static String GLSL100 = "GLSL100";    
@@ -253,6 +254,14 @@ public class EditableMatDefFile {
         try {
             //material.selectTechnique("Default", SceneApplication.getApplication().getRenderManager());
             if (matToRemove != null) {
+                for (MatParam matParam : matToRemove.getParams()) {
+                    try {
+                        material.setParam(matParam.getName(), matParam.getVarType(), matParam.getValue());
+                    } catch (IllegalArgumentException ie) {
+                        matToRemove.clearParam(matParam.getName());
+                    }
+
+                }
                 obj.getLookupContents().remove(matToRemove);
                 matToRemove = null;
             }
@@ -395,9 +404,5 @@ public class EditableMatDefFile {
         
         setCurrentTechnique(null);
         setLoaded(false);
-    }
-    
-    public static ProjectAssetManager getAssetManager(){
-        return assetManager;
     }
 }
