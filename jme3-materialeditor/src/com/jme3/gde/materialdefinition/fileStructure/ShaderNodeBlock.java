@@ -16,16 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * A ShaderNodeBlock is a shader node in the MatDef file.
+ * 
  * @author Nehon
  */
-public class ShaderNodeBlock extends UberStatement implements Comparable<ShaderNodeBlock>, PropertyChangeListener {
+public class ShaderNodeBlock extends UberStatement implements PropertyChangeListener {
 
     public final static String POSITION = "position";
     public final static String INPUT = "input";
     public final static String OUTPUT = "output";
     public static final String ADD_MAPPING = "addMapping";
     public static final String REMOVE_MAPPING = "removeMapping";
+    public static final String VALUE = "defaultValue";
     protected String name;
     //built up data for fast sorting 
     protected int spatialOrder;
@@ -190,19 +192,6 @@ public class ShaderNodeBlock extends UberStatement implements Comparable<ShaderN
             b.removeMapping(mapping);
         }
         fire(REMOVE_MAPPING, mapping, null);
-    }
-
-    public int compareTo(ShaderNodeBlock o) {
-        if (inputNodes.contains(o.getName())) {
-            return 1;
-        }
-        if (o.inputNodes.contains(name)) {
-            return -1;
-        }
-        if ((globalInput && o.globalOutput) || (o.globalInput && globalOutput)) {
-            return (int) Math.signum(spatialOrder - o.spatialOrder);
-        }
-        return 0;
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
