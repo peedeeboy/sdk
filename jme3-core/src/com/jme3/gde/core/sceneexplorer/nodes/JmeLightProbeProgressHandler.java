@@ -34,7 +34,6 @@ package com.jme3.gde.core.sceneexplorer.nodes;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.LightProbe;
 import org.netbeans.api.progress.ProgressHandle;
-import org.netbeans.api.progress.ProgressHandleFactory;
 
 /**
  * Class which is informed about the current LightProbe State and informs the
@@ -50,12 +49,11 @@ public class JmeLightProbeProgressHandler extends JobProgressAdapter<LightProbe>
     @Override
     public void start() {
         handle.start(100);
+        handle.switchToIndeterminate();
     }
     
     @Override
     public void progress(double value) {
-        lastProgress = (int) (value * 100);
-        handle.progress(lastProgress);
     }
     
     @Override
