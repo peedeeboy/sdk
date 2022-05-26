@@ -88,7 +88,7 @@ public class EditableMatDefFile {
     private MatDefBlock matDefStructure;
     private TechniqueBlock currentTechnique;
     private MaterialDef materialDef;
-    private static ProjectAssetManager assetManager;
+    private ProjectAssetManager assetManager;
     private ShaderGenerator glsl100;
     private ShaderGenerator glsl150;    
     private final static String GLSL100 = "GLSL100";    
@@ -397,7 +397,4 @@ public class EditableMatDefFile {
         setLoaded(false);
     }
     
-    public static ProjectAssetManager getAssetManager(){
-        return assetManager;
-    }
 }

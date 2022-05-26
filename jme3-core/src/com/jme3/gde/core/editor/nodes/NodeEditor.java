@@ -85,5 +85,4 @@ public interface NodeEditor {
      * @param selectable The selected item
      */
     void selectionChanged(Selectable selectable);
-
 }
