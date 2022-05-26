@@ -273,10 +273,6 @@ public abstract class Diagram extends JPanel implements MouseListener,
         parent.notifyRemoveNode(node);
     }
     
-    public void updateDefaultValue(String name, String value){
-        parent.notifyDefaultValueUpdated(name, value);
-    }
-    
     public List<Selectable> getSelectedItems() {
         return selectedItems;
     }
