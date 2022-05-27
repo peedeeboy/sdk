@@ -16,14 +16,14 @@ import java.util.logging.Logger;
 /**
  * Copies AnimComposer and AnimClips from an updated spatial to the original.
  */
-public final class AnimationDataFromOriginal implements SpatialDataTransferInterface {
+public final class CopyAnimationDataFromOriginal implements SpatialDataTransferInterface {
 
     private static final Logger LOGGER
-            = Logger.getLogger(AnimationDataFromOriginal.class.getName());
+            = Logger.getLogger(CopyAnimationDataFromOriginal.class.getName());
 
     private final TaggedSpatialFinder finder;
 
-    public AnimationDataFromOriginal(final TaggedSpatialFinder finder) {
+    public CopyAnimationDataFromOriginal(final TaggedSpatialFinder finder) {
         this.finder = finder;
     }
 

@@ -39,10 +39,10 @@ import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.util.SpatialUtil;
 import com.jme3.gde.core.util.TaggedSpatialFinder;
-import com.jme3.gde.core.util.datatransfer.AnimationDataFromOriginal;
-import com.jme3.gde.core.util.datatransfer.MaterialDataFromOriginal;
-import com.jme3.gde.core.util.datatransfer.MeshDataFromOriginal;
-import com.jme3.gde.core.util.datatransfer.TransformDataFromOriginal;
+import com.jme3.gde.core.util.datatransfer.CopyAnimationDataFromOriginal;
+import com.jme3.gde.core.util.datatransfer.CopyMaterialDataFromOriginal;
+import com.jme3.gde.core.util.datatransfer.CopyMeshDataFromOriginal;
+import com.jme3.gde.core.util.datatransfer.CopyTransformDataFromOriginal;
 import com.jme3.scene.Spatial;
 import java.io.IOException;
 
@@ -161,16 +161,16 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
             final TaggedSpatialFinder finder = new TaggedSpatialFinder();
 
             if(!onlyMeshData && SpatialUtil.hasAnimations(original)) {
-                new AnimationDataFromOriginal(finder).update(spat,
+                new CopyAnimationDataFromOriginal(finder).update(spat,
                             original);
                 
             }
             if(!onlyAnimData){
-                new MeshDataFromOriginal(finder).update(spat, original);
+                new CopyMeshDataFromOriginal(finder).update(spat, original);
             }
             if (!onlyMeshData && !onlyAnimData) {
-                new TransformDataFromOriginal(finder).update(spat, original);
-                new MaterialDataFromOriginal(finder).update(spat, original);
+                new CopyTransformDataFromOriginal(finder).update(spat, original);
+                new CopyMaterialDataFromOriginal(finder).update(spat, original);
             }
             // Do a complicated recurse refresh since AbstractSceneExplorerNode:refresh() isn't working
             SceneApplication.getApplication().enqueue((Runnable) () -> {

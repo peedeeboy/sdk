@@ -1,6 +1,5 @@
 package com.jme3.gde.core.util.datatransfer;
 
-import com.jme3.gde.core.scene.ApplicationLogHandler.LogLevel;
 import com.jme3.gde.core.util.SpatialUtil;
 import com.jme3.gde.core.util.TaggedSpatialFinder;
 import com.jme3.scene.Geometry;
@@ -11,16 +10,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Copies mesh data from an updated external file to the spatial
+ * Copies mesh data from an updated external file to the spatial.
  */
-public class MeshDataFromOriginal implements SpatialDataTransferInterface {
+public class CopyMeshDataFromOriginal implements SpatialDataTransferInterface {
 
     private static final Logger LOGGER =
-            Logger.getLogger(MeshDataFromOriginal.class.getName());
+            Logger.getLogger(CopyMeshDataFromOriginal.class.getName());
 
     private final TaggedSpatialFinder finder;
 
-    public MeshDataFromOriginal(final TaggedSpatialFinder finder) {
+    public CopyMeshDataFromOriginal(final TaggedSpatialFinder finder) {
         this.finder = finder;
     }
 
@@ -35,7 +34,7 @@ public class MeshDataFromOriginal implements SpatialDataTransferInterface {
                 final Geometry spat = (Geometry) finder.find(root, geom);
                 if (spat != null) {
                     spat.setMesh(geom.getMesh());
-                    LOGGER.log(LogLevel.USERINFO, "Updated mesh for Geometry "
+                    LOGGER.log(Level.INFO, "Updated mesh for Geometry "
                             + "{0}", geom.getName());
                 } else {
                     addLeafWithNonExistingParents(root, geom);
@@ -81,7 +80,7 @@ public class MeshDataFromOriginal implements SpatialDataTransferInterface {
                 //attach to new node in own root
                 Node otherNode = (Node) other;
                 otherNode.attachChild(s);
-                LOGGER.log(LogLevel.USERINFO, "Attached Node {0} with leaf "
+                LOGGER.log(Level.INFO, "Attached Node {0} with leaf "
                         + "{0}", new Object[]{other.getName(), leaf.getName()});
                 return;
             } else {

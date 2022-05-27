@@ -13,10 +13,6 @@ public class TaggedSpatialFinder {
     private static final Logger LOGGER =
             Logger.getLogger(TaggedSpatialFinder.class.getName());
     
-    public TaggedSpatialFinder() {
-        
-    }
-
     /**
      * Finds a previously marked spatial in the supplied root Spatial, creates
      * the name and path to be looked for from the given needle Spatial.
