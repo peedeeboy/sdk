@@ -77,6 +77,7 @@ public class ShaderNodeDiagram extends Diagram implements ComponentListener {
     private String currentTechniqueName;
     private final BackdropPanel backDrop = new BackdropPanel();
     private final Point pp = new Point();
+    private Thread backgroundThread;
     private UpdateBackgroundRunnable backgroundUpdate = new UpdateBackgroundRunnable();
 
     @SuppressWarnings("LeakingThisInConstructor")
@@ -133,9 +134,6 @@ public class ShaderNodeDiagram extends Diagram implements ComponentListener {
                         bus.dispatchEvent(me);
                     }
                 }
-//                if (!e.isConsumed()){
-//                    setLocation(e.getX(), e.getY());
-//                }
             }
         } else {
             super.mouseDragged(e); // Handle all the UI Stuff
@@ -499,9 +497,16 @@ public class ShaderNodeDiagram extends Diagram implements ComponentListener {
     public void toggleUpdateThread(boolean on) {
         if(on && !backgroundUpdate.isRunning()){
             backgroundUpdate.setRunning(true);
-            new Thread(backgroundUpdate).start();
+            backgroundThread = new Thread(backgroundUpdate);
+            backgroundThread.setDaemon(true);
+            backgroundThread.start();
         } else if (!on && backgroundUpdate.isRunning()){
-            backgroundUpdate.setRunning(false);
+            try {
+                backgroundUpdate.setRunning(false);
+                backgroundThread.join();
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 

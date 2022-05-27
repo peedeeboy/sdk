@@ -136,7 +136,6 @@ public final class MatDefEditorlElement extends JPanel implements
         if (!file.isLoaded()) {
             throw new IllegalArgumentException("Cannot build MatDefEditorlElement: Failed at loading the EditableMatDefFile");
         }
-        
         reload(file, lkp);        
         toolbar.setParent(this);
         toolbar.addTechnique(lkp.lookup(MatDefBlock.class).getTechniques());
