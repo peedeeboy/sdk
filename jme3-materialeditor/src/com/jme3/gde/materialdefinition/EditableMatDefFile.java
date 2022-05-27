@@ -77,7 +77,9 @@ import org.openide.util.Lookup;
 import org.openide.util.WeakListeners;
 
 /**
- *
+ * This is the MatDef representation in the editor. It will update the file with
+ * any changes.
+ * 
  * @author Nehon
  */
 public class EditableMatDefFile {
