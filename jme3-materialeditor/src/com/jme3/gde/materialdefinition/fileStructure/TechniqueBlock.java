@@ -52,6 +52,8 @@ public class TechniqueBlock extends UberStatement {
                 addStatement(new VertexShaderNodesBlock(statement));
             } else if (statement.getLine().trim().startsWith("FragmentShaderNodes")) {
                 addStatement(new FragmentShaderNodesBlock(statement));
+            } else if (statement.getLine().trim().startsWith("Defines")) {
+                addStatement(new DefinesBlock(statement));
             } else {
                 addStatement(new UnsupportedStatement(statement));
             }
@@ -111,7 +113,7 @@ public class TechniqueBlock extends UberStatement {
             return getWorldParameters().getWorldParams();
         else {
             logger.log(Level.WARNING, "Unable to build ShaderNodes: Could not find any WorldParameters. Most likely the technique {0} is broken.", line);
-            return new ArrayList<WorldParamBlock>();
+            return new ArrayList<>();
         }
     }
 
@@ -189,7 +191,7 @@ public class TechniqueBlock extends UberStatement {
     }
 
     public List<ShaderNodeBlock> getShaderNodes() {
-        List<ShaderNodeBlock> list = new ArrayList<ShaderNodeBlock>();
+        List<ShaderNodeBlock> list = new ArrayList<>();
         
         VertexShaderNodesBlock vert_block = getBlock(VertexShaderNodesBlock.class);
         if (vert_block == null)
