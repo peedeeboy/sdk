@@ -109,9 +109,9 @@ public class ShaderNodePanel extends NodePanel implements InOut,
     public ShaderNodePanel(ShaderNodeVariable singleOut, NodeType type) {
         super();
         this.type = type;
-        List<ShaderNodeVariable> outputs = new ArrayList<ShaderNodeVariable>();
+        List<ShaderNodeVariable> outputs = new ArrayList<>();
         outputs.add(singleOut);
-        init(new ArrayList<ShaderNodeVariable>(), outputs);
+        init(new ArrayList<>(), outputs);
         setToolbar(new ShaderNodeToolBar(this));
     }
     
