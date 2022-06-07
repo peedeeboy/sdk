@@ -44,10 +44,10 @@ import com.jme3.gde.materialdefinition.editor.ShaderNodePanel.NodeType;
 import com.jme3.gde.materialdefinition.fileStructure.ShaderNodeBlock;
 import com.jme3.gde.materialdefinition.fileStructure.leaves.MappingBlock;
 import com.jme3.gde.core.editor.icons.Icons;
+import com.jme3.gde.core.errorreport.ExceptionUtils;
 import com.jme3.gde.materialdefinition.utils.MaterialUtils;
 import com.jme3.material.Material;
 import com.jme3.shader.Shader;
-//import static com.jme3.gde.materialdefinition.editor.ShaderNodePanel.NodeType;
 import com.jme3.shader.ShaderNodeDefinition;
 import com.jme3.shader.ShaderNodeVariable;
 import com.jme3.shader.UniformBinding;
@@ -58,9 +58,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
@@ -68,6 +69,7 @@ import javax.swing.SwingUtilities;
 /**
  * The Diagram is the main canvas where all nodes {@link DraggablePanel} and
  * their connections {@link ConnectionEndpoint} {@link Connection} are added onto.
+ * 
  * @author Nehon
  */
 public class ShaderNodeDiagram extends Diagram implements ComponentListener {
@@ -75,7 +77,8 @@ public class ShaderNodeDiagram extends Diagram implements ComponentListener {
     protected List<ShaderOutBusPanel> outBuses = new ArrayList<ShaderOutBusPanel>();
     private String currentTechniqueName;
     private final BackdropPanel backDrop = new BackdropPanel();
-    private final Point pp = new Point();
+    private Thread backgroundThread;
+    private UpdateBackgroundRunnable backgroundUpdate = new UpdateBackgroundRunnable();
 
     @SuppressWarnings("LeakingThisInConstructor")
     public ShaderNodeDiagram() {
@@ -107,7 +110,6 @@ public class ShaderNodeDiagram extends Diagram implements ComponentListener {
                     return;
                 }
             }
-
             dispatchToOutBuses(e);
         } else {
             super.mouseReleased(e); // Handle all the UI Stuff
@@ -320,6 +322,7 @@ public class ShaderNodeDiagram extends Diagram implements ComponentListener {
     public void clear() {
         super.clear();
         outBuses.clear();
+        backgroundUpdate.setRunning(false);
     }
 
     @Override
@@ -489,4 +492,54 @@ public class ShaderNodeDiagram extends Diagram implements ComponentListener {
         return 0;
 
     }
+
+    @Override
+    public void toggleUpdateThread(boolean on) {
+        if (on && !backgroundUpdate.isRunning()) {
+            backgroundUpdate.setRunning(true);
+            backgroundThread = new Thread(backgroundUpdate);
+            backgroundThread.setDaemon(true);
+            backgroundThread.start();
+        } else if (!on && backgroundUpdate.isRunning()) {
+            try {
+                backgroundUpdate.setRunning(false);
+                backgroundThread.join();
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    private final class UpdateBackgroundRunnable implements Runnable {
+
+        private boolean running;
+
+        @Override
+        public void run() {
+            while (running) {
+                if (backDrop.isVisible() && !backDrop.getRenderer().isPreviewRequested()) {
+                    backDrop.refreshOnly();
+                }
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException ex) {
+                    running = false;
+                    ExceptionUtils.caughtException(ex, "Material update thread caught an exception and shut down.");
+                }
+                if (!ShaderNodeDiagram.this.isShowing()) {
+                    running = false;
+                }
+            }
+            Logger.getLogger(ShaderNodeDiagram.class.getName()).log(Level.INFO, "UpdateThread stopped");
+        }
+
+        public boolean isRunning() {
+            return running;
+        }
+
+        public void setRunning(boolean on) {
+            this.running = on;
+        }
+    }
+    
 }
