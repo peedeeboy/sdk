@@ -3,7 +3,7 @@ import groovy.xml.MarkupBuilder
 import java.util.zip.ZipFile
 
 plugins {
-    id "de.undercouch.download" version "3.4.3"
+    id "de.undercouch.download" version "5.1.0"
 }
 
 apply from: 'gradle/libs/digest.gradle'
@@ -82,7 +82,7 @@ task checkPlatformConfig {
              * def f = file("netbeans.zip")
              * new URL(netbeansUrl).withInputStream{ i -> f.withOutputStream{ it << i }}
              */
-            download {
+            download.run {
                 src netbeansUrl
                 dest "netbeans.zip"
                 overwrite false // however if overwrite matters the build failed anyway
