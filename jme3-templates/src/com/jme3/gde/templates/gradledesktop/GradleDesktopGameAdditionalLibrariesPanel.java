@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2010 jMonkeyEngine
+ * Copyright (c) 2022 jMonkeyEngine
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,12 +29,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.jme3.gde.templates.gradledesktop;
 
 import java.awt.Component;
-import java.util.HashSet;
-import java.util.Set;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.openide.WizardDescriptor;
 import org.openide.WizardValidationException;
@@ -42,75 +40,73 @@ import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 
 /**
- * Panel just asking for basic info.
+ * New Gradle Game Wizard Panel for selecting additional jMonkeyEngine
+ * and 3rd party recommended libraries.
+ *
+ * @author peedeeboy
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class GradleDesktopGameWizardPanel implements WizardDescriptor.Panel,
-        WizardDescriptor.ValidatingPanel, WizardDescriptor.FinishablePanel {
+public class GradleDesktopGameAdditionalLibrariesPanel implements 
+        WizardDescriptor.Panel, WizardDescriptor.ValidatingPanel,
+        WizardDescriptor.FinishablePanel {
 
-    private WizardDescriptor wizardDescriptor;
-    private GradleDesktopGamePanelVisual component;
+    /**
+     * JPanel containing the Additional Libraries UI
+     */
+    private GradleDesktopGameAdditionalLibrariesPanelVisual component;
 
-    public GradleDesktopGameWizardPanel() {
+    public GradleDesktopGameAdditionalLibrariesPanel() {
     }
 
+    @Override
     public Component getComponent() {
         if (component == null) {
-            component = new GradleDesktopGamePanelVisual(this);
-            component.setName(NbBundle.getMessage(GradleDesktopGameWizardPanel.class, "LBL_CreateProjectStep"));
+            component = new GradleDesktopGameAdditionalLibrariesPanelVisual(this);
+            component.setName(NbBundle.getMessage(
+                    GradleDesktopGameAdditionalLibrariesPanel.class, 
+                    "LBL_ChooseAdditionalLibrariesStep"));
         }
         return component;
     }
 
+    @Override
     public HelpCtx getHelp() {
         return new HelpCtx("sdk.project_creation");
     }
 
-    public boolean isValid() {
-        getComponent();
-        return component.valid(wizardDescriptor);
-    }
-    private final Set<ChangeListener> listeners = new HashSet<ChangeListener>(1); // or can use ChangeSupport in NB 6.0
-
-    public final void addChangeListener(ChangeListener l) {
-        synchronized (listeners) {
-            listeners.add(l);
-        }
-    }
-
-    public final void removeChangeListener(ChangeListener l) {
-        synchronized (listeners) {
-            listeners.remove(l);
-        }
-    }
-
-    protected final void fireChangeEvent() {
-        Set<ChangeListener> ls;
-        synchronized (listeners) {
-            ls = new HashSet<ChangeListener>(listeners);
-        }
-        ChangeEvent ev = new ChangeEvent(this);
-        for (ChangeListener l : ls) {
-            l.stateChanged(ev);
-        }
-    }
-
+    @Override
     public void readSettings(Object settings) {
-        wizardDescriptor = (WizardDescriptor) settings;
-        component.read(wizardDescriptor);
     }
 
+    @Override
     public void storeSettings(Object settings) {
         WizardDescriptor d = (WizardDescriptor) settings;
         component.store(d);
     }
 
-    public boolean isFinishPanel() {
-        return false;
+    @Override
+    public boolean isValid() {
+        return true;
     }
 
-    public void validate() throws WizardValidationException {
-        getComponent();
-        component.validate(wizardDescriptor);
+    @Override
+    public void addChangeListener(ChangeListener listener) {
+        // Not required - no validation on this panel
     }
+
+    @Override
+    public void removeChangeListener(ChangeListener listener) {
+        // Not required - no validation on this panel
+    }
+
+    @Override
+    public void validate() throws WizardValidationException {
+        // Not required - no validation on this panel
+    }
+
+    @Override
+    public boolean isFinishPanel() {
+        return true;
+    }
+
 }
