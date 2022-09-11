@@ -103,7 +103,7 @@ public class AssetsLookupProvider implements LookupProvider {
         project = prj;
         if (SDKProjectUtils.isGradleProject(prj)) {
             GradleBaseProject gradle = GradleBaseProject.get(project);
-            if (gradle.getSubProjects().containsKey("assets")) {
+            if (gradle.getSubProjects().containsKey(":assets")) {
                 logger.log(Level.FINE, "Found assets subproject, extending with ProjectAssetManager");
                 /* Note: The ProjectAssetManager needs the Subproject's Project,
                  * because otherwise reading assets won't work (as assets is
@@ -115,7 +115,7 @@ public class AssetsLookupProvider implements LookupProvider {
                  * assets subproject could be stored in a folder called "foo"
                  * or "bar" and we still need to locate it correctly
                 */
-                Path assetsPath = gradle.getSubProjects().get("assets").toPath();
+                Path assetsPath = gradle.getSubProjects().get(":assets").toPath();
                 Path parentPath = new File(prj.getProjectDirectory().getPath()).toPath();
                 Path relativePath = parentPath.relativize(assetsPath);
                 try {
