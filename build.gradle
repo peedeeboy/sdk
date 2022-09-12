@@ -28,33 +28,37 @@ configurations {
     examplelibs
 }
 
+configurations.examplelibs {
+    transitive = false
+}
+
 dependencies {
 
     corelibs dep("com.github.xbuf:jme3_xbuf:0.9.1", false, false)
     corelibs dep("com.badlogicgames.gdx:gdx-ai:1.8.2", true, true)
     corelibs dep("javax.help:javahelp:2.0.05", false, false)
 
-    corelibs dep("org.jmonkeyengine:jme3-core:$jmeVersion-$jmeVersionTag", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-desktop:$jmeVersion-$jmeVersionTag", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-lwjgl:$jmeVersion-$jmeVersionTag", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-effects:$jmeVersion-$jmeVersionTag", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-core:$jmeVersion-$jmeVersionTag", true, true)
+    corelibs dep("org.jmonkeyengine:jme3-desktop:$jmeVersion-$jmeVersionTag", true, true)
+    corelibs dep("org.jmonkeyengine:jme3-lwjgl:$jmeVersion-$jmeVersionTag", true, true)
+    corelibs dep("org.jmonkeyengine:jme3-effects:$jmeVersion-$jmeVersionTag", true, true)
     corelibs dep("org.jmonkeyengine:jme3-blender:3.3.2-stable", false, false) // Pin Pointed until jme3-blender has a dedicated release or support is phased out.
     optlibs dep("com.github.stephengold:Minie:6.0.0", false, false) // replacement for bullet-native
     corelibs dep(fileTree("lib"), false, false)
     corelibs dep("org.jmonkeyengine:jme3-jogg:$jmeVersion-$jmeVersionTag", true, true)
 
-    corelibs dep("org.jmonkeyengine:jme3-networking:$jmeVersion-$jmeVersionTag", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-niftygui:$jmeVersion-$jmeVersionTag", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-plugins:$jmeVersion-$jmeVersionTag", false, false)
-    corelibs dep("org.jmonkeyengine:jme3-terrain:$jmeVersion-$jmeVersionTag", false, false)
+    corelibs dep("org.jmonkeyengine:jme3-networking:$jmeVersion-$jmeVersionTag", true, true)
+    corelibs dep("org.jmonkeyengine:jme3-niftygui:$jmeVersion-$jmeVersionTag", true, true)
+    corelibs dep("org.jmonkeyengine:jme3-plugins:$jmeVersion-$jmeVersionTag", true, true)
+    corelibs dep("org.jmonkeyengine:jme3-terrain:$jmeVersion-$jmeVersionTag", true, true)
 
-    optlibs dep("org.jmonkeyengine:jme3-jbullet:$jmeVersion-$jmeVersionTag", false, false)
-    optlibs dep("org.jmonkeyengine:jme3-android:$jmeVersion-$jmeVersionTag", false, false)
-    optlibs dep("org.jmonkeyengine:jme3-ios:$jmeVersion-$jmeVersionTag", false, false)
-    optlibs dep("org.jmonkeyengine:jme3-android-native:$jmeVersion-$jmeVersionTag", false, false)
-    optlibs dep("org.jmonkeyengine:jme3-lwjgl3:$jmeVersion-$jmeVersionTag", false, false)
-    optlibs dep("com.github.stephengold:Heart:8.1.0", false, false)
-    optlibs dep("com.github.stephengold:Wes:0.7.2", false, false)
+    optlibs dep("org.jmonkeyengine:jme3-jbullet:$jmeVersion-$jmeVersionTag", true, true)
+    optlibs dep("org.jmonkeyengine:jme3-android:$jmeVersion-$jmeVersionTag", true, true)
+    optlibs dep("org.jmonkeyengine:jme3-ios:$jmeVersion-$jmeVersionTag", true, true)
+    optlibs dep("org.jmonkeyengine:jme3-android-native:$jmeVersion-$jmeVersionTag", true, true)
+    optlibs dep("org.jmonkeyengine:jme3-lwjgl3:$jmeVersion-$jmeVersionTag", true, true)
+    optlibs dep("com.github.stephengold:Heart:8.1.0", true, true)
+    optlibs dep("com.github.stephengold:Wes:0.7.2", true, true)
     testdatalibs dep("org.jmonkeyengine:jme3-testdata:$jmeVersion-$jmeVersionTag", false, false)
     examplelibs dep("org.jmonkeyengine:jme3-examples:$jmeVersion-$jmeVersionTag", false, true)
 }
