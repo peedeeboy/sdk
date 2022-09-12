@@ -37,6 +37,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.DesktopAssetManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,9 +46,11 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.netbeans.api.java.classpath.ClassPath;
@@ -57,6 +60,9 @@ import org.netbeans.api.project.ProjectManager;
 import org.netbeans.api.project.ProjectUtils;
 import org.netbeans.api.project.SourceGroup;
 import org.netbeans.api.project.Sources;
+import org.netbeans.modules.gradle.api.GradleBaseProject;
+import org.netbeans.modules.gradle.java.api.GradleJavaProject;
+import org.netbeans.modules.gradle.java.api.GradleJavaSourceSet;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 import org.openide.filesystems.FileAttributeEvent;
@@ -179,9 +185,51 @@ public class ProjectAssetManager extends DesktopAssetManager {
                     }
                 }
             }
+            
+            // Gradle
+            FileObject rootDir = FileUtil.toFileObject(GradleBaseProject.get(project).getRootDir());
+            List<String> dependencies = new ArrayList<>();
+            Set<File> runtimeFiles = new HashSet<>();
+            try {
+                Project rootPrj = ProjectManager.getDefault().findProject(rootDir);
+                GradleJavaProject rootGjp = GradleJavaProject.get(rootPrj);
+                for(GradleJavaSourceSet sourceSet : rootGjp.getSourceSets().values()) {
+                    dependencies.add(sourceSet.getName());
+                    if(sourceSet.getName().equals("main")) {
+                        runtimeFiles = sourceSet.getRuntimeClassPath();
+                    }
+                }           
+            } catch (IOException ex) { 
+                Exceptions.printStackTrace(ex);
+            } catch (IllegalArgumentException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+            
+            for(File file : runtimeFiles) {
+                // logger.info(file.getName() + " : "  + file.getAbsolutePath());
+                FileObject fo = FileUtil.toFileObject(file);
+                if(fo != null && !fo.isFolder()) {
+                    logger.info(fo.toURL().toExternalForm());
+                    if (!fo.equals(getAssetFolder())) {
+                            fo.addRecursiveListener(listener);
+                            logger.log(Level.INFO, "Add classpath:{0}", fo);
+                            classPathItems.add(new ClassPathItem(fo, listener));
+                            urls.add(fo.toURL());
+                        }
+                    if (fo.toURL().toExternalForm().startsWith("jar")) {
+                            logger.log(Level.INFO, "Add Gradle locator:{0}", fo.toURL());
+                            jarItems.add(fo);
+                            registerLocator(fo.toURL().toExternalForm(),
+                                    "com.jme3.asset.plugins.UrlLocator");
+                        }
+                }
+                
+                
+            }
+            
             loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), getClass().getClassLoader());
             addClassLoader(loader);
-            logger.log(Level.FINE, "Updated {0} classpath entries and {1} url locators for project {2}", new Object[]{classPathItems.size(), jarItems.size(), project.toString()});
+            logger.log(Level.INFO, "Updated {0} classpath entries and {1} url locators for project {2}", new Object[]{classPathItems.size(), jarItems.size(), project.toString()});
         }
     }
     FileChangeListener listener = new FileChangeListener() {
@@ -478,16 +526,19 @@ public class ProjectAssetManager extends DesktopAssetManager {
             while (classPathItemsIter.hasNext()) {
                 ClassPathItem classPathItem = classPathItemsIter.next();
                 FileObject jarFile = classPathItem.object;
-
-                Enumeration<FileObject> jarEntry = (Enumeration<FileObject>) jarFile.getChildren(true);
-                while (jarEntry.hasMoreElements()) {
-                    FileObject jarEntryAsset = jarEntry.nextElement();
-                    if (jarEntryAsset.getExt().equalsIgnoreCase(suffix)) {
-                        if (!jarEntryAsset.getPath().startsWith("/")) {
-                            list.add(jarEntryAsset.getPath());
+                if(FileUtil.isArchiveFile(jarFile)) {
+                    FileObject jarFileRoot = FileUtil.getArchiveRoot(jarFile);
+                    Enumeration<FileObject> jarEntry = (Enumeration<FileObject>) jarFileRoot.getChildren(true);
+                    while (jarEntry.hasMoreElements()) {
+                        FileObject jarEntryAsset = jarEntry.nextElement();
+                        if (jarEntryAsset.getExt().equalsIgnoreCase(suffix)) {
+                            if (!jarEntryAsset.getPath().startsWith("/")) {
+                                list.add(jarEntryAsset.getPath());
+                            }
                         }
                     }
                 }
+                
             }
             return list;
         }
