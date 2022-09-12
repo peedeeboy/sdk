@@ -21,7 +21,7 @@ public class FloatPanel extends MaterialPropertyWidget {
     /** Creates new form NumberPanel */
     public FloatPanel() {
         initComponents();
-           jSpinner1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
     }
 
     /** This method is called from within the constructor to

@@ -45,7 +45,7 @@ public class ShaderNodesBlock extends UberStatement implements PropertyChangeLis
     public boolean removeShaderNode(ShaderNodeBlock shaderNodeBlock) {
         return contents.remove(shaderNodeBlock);
     }
-
+    
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(ShaderNodeBlock.ADD_MAPPING) || evt.getPropertyName().equals("order")) {
@@ -66,7 +66,7 @@ public class ShaderNodesBlock extends UberStatement implements PropertyChangeLis
         contents.addAll(list);
         fire("reorder", null, null);
     }
-
+    
     /**
      * Sorts nodes so that they are initialized after their input dependencies.
      * Will look higher up in hierarchy and move node incrementally. This may require several passes

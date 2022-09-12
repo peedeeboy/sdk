@@ -43,7 +43,7 @@ public class MaterialPreviewRenderer implements SceneListener {
     private Geometry currentGeom;
     private Material currentMaterial;
     private boolean init = false;
-    final JLabel label;
+    private final JLabel label;
     private final ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(5);
     private boolean previewRequested;
 
@@ -60,9 +60,9 @@ public class MaterialPreviewRenderer implements SceneListener {
 
     private void init() {
         SceneApplication.getApplication().addSceneListener(this);
-        Sphere sphMesh = new Sphere(64, 64, 2.5f);
-        sphMesh.setTextureMode(Sphere.TextureMode.Polar);
-        sphMesh.updateGeometry(64, 64, 2.5f, false, false);
+        Sphere sphMesh = new Sphere(32, 32, 2.5f);
+        sphMesh.setTextureMode(Sphere.TextureMode.Projected);
+        sphMesh.updateGeometry(32, 32, 2.5f, false, false);
         Logger log = Logger.getLogger(TangentBinormalGenerator.class.getName());
         log.setLevel(Level.SEVERE);
         TangentBinormalGenerator.generate(sphMesh);
@@ -261,6 +261,9 @@ public class MaterialPreviewRenderer implements SceneListener {
         return previewRequested;
     }
     
+    /**
+     * A more lightweight refresh than showMaterials that doesn't rebuild the material
+     */
     public void refreshOnly(){
         previewRequested = true;
         SceneApplication.getApplication().enqueue((Callable<Object>) () -> {

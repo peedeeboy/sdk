@@ -90,13 +90,14 @@ public class EditableMatDefFile {
     private MatDefBlock matDefStructure;
     private TechniqueBlock currentTechnique;
     private MaterialDef materialDef;
-    private ProjectAssetManager assetManager;
+    private static ProjectAssetManager assetManager;
     private ShaderGenerator glsl100;
     private ShaderGenerator glsl150;    
     private final static String GLSL100 = "GLSL100";    
     private Lookup lookup;
     private boolean loaded = false;
     private boolean dirty = false;
+    private final MatStructChangeListener changeListener = new MatStructChangeListener(this);
 
     public EditableMatDefFile(Lookup lookup) {
         obj = lookup.lookup(MatDefDataObject.class);
@@ -184,7 +185,7 @@ public class EditableMatDefFile {
         }
     }
 
-    private void registerListener(Statement sta) {
+    void registerListener(Statement sta) {
         if (sta instanceof UberStatement) {
             ((UberStatement) sta).addPropertyChangeListener(WeakListeners.propertyChange(changeListener, ((UberStatement) sta)));
         } else if (sta instanceof LeafStatement) {
@@ -245,7 +246,7 @@ public class EditableMatDefFile {
     public MatDefBlock getMatDefStructure() {
         return matDefStructure;
     }
-    private final MatStructChangeListener changeListener = new MatStructChangeListener();
+    
     J3MLoader loader = new J3MLoader();
 
     private void updateLookupWithMaterialData(MatDefDataObject obj) {
@@ -281,71 +282,9 @@ public class EditableMatDefFile {
         this.loaded = loaded;
     }
 
-    private class MatStructChangeListener implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            if (evt.getSource() instanceof ShaderNodeBlock && evt.getPropertyName().equals("name")) {
-                String oldValue = (String) evt.getOldValue();
-                String newValue = (String) evt.getNewValue();
-                for (ShaderNodeBlock shaderNodeBlock : currentTechnique.getShaderNodes()) {
-                    List<InputMappingBlock> lin = shaderNodeBlock.getInputs();
-                    if (lin != null) {
-                        for (InputMappingBlock inputMappingBlock : shaderNodeBlock.getInputs()) {
-                            if (inputMappingBlock.getLeftNameSpace().equals(oldValue)) {
-                                inputMappingBlock.setLeftNameSpace(newValue);
-                            }
-                            if (inputMappingBlock.getRightNameSpace().equals(oldValue)) {
-                                inputMappingBlock.setRightNameSpace(newValue);
-                            }
-                        }
-                    }
-                    List<OutputMappingBlock> l = shaderNodeBlock.getOutputs();
-                    if (l != null) {
-                        for (OutputMappingBlock outputMappingBlock : l) {
-                            if (outputMappingBlock.getRightNameSpace().equals(oldValue)) {
-                                outputMappingBlock.setRightNameSpace(newValue);
-                            }
-                        }
-                    }
-                }
-            }
-            if (evt.getPropertyName().equals(MatDefBlock.REMOVE_MAT_PARAM)) {
-                MatParamBlock oldValue = (MatParamBlock) evt.getOldValue();
-
-                for (ShaderNodeBlock shaderNodeBlock : currentTechnique.getShaderNodes()) {
-
-                    if (shaderNodeBlock.getCondition() != null && shaderNodeBlock.getCondition().contains(oldValue.getName())) {
-                        shaderNodeBlock.setCondition(shaderNodeBlock.getCondition().replaceAll(oldValue.getName(), "").trim());
-                    }
-                    List<InputMappingBlock> lin = shaderNodeBlock.getInputs();
-                    if (lin != null) {
-                        for (InputMappingBlock inputMappingBlock : shaderNodeBlock.getInputs()) {
-                            if (inputMappingBlock.getCondition() != null && inputMappingBlock.getCondition().contains(oldValue.getName())) {
-                                inputMappingBlock.setCondition(inputMappingBlock.getCondition().replaceAll(oldValue.getName(), "").trim());
-                            }
-                        }
-                    }
-                    List<OutputMappingBlock> l = shaderNodeBlock.getOutputs();
-                    if (l != null) {
-                        for (OutputMappingBlock outputMappingBlock : l) {
-                            if (outputMappingBlock.getCondition() != null && outputMappingBlock.getCondition().contains(oldValue.getName())) {
-                                outputMappingBlock.setCondition(outputMappingBlock.getCondition().replaceAll(oldValue.getName(), "").trim());
-                            }
-                        }
-                    }
-                }
-            }
-            if (evt.getPropertyName().equals(MatDefBlock.ADD_MAT_PARAM)
-                    || evt.getPropertyName().equals(TechniqueBlock.ADD_SHADER_NODE)
-                    || evt.getPropertyName().equals(ShaderNodeBlock.ADD_MAPPING)) {
-                registerListener((Statement) evt.getNewValue());
-            }
-            applyChange();
-        }
-    }
     Material matToRemove;
 
-    private void applyChange() {
+    protected void applyChange() {
 
         try {
             EditorCookie ec = lookup.lookup(EditorCookie.class);
@@ -399,4 +338,7 @@ public class EditableMatDefFile {
         setLoaded(false);
     }
     
+    public static ProjectAssetManager getAssetManager(){
+        return assetManager;
+    }
 }

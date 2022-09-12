@@ -38,6 +38,8 @@ import com.jme3.gde.materialdefinition.fileStructure.leaves.DefinitionBlock;
 import com.jme3.gde.materialdefinition.fileStructure.leaves.InputMappingBlock;
 import com.jme3.gde.materialdefinition.fileStructure.leaves.OutputMappingBlock;
 import com.jme3.gde.core.editor.icons.Icons;
+import com.jme3.gde.materialdefinition.editor.previews.BasePreview;
+import com.jme3.gde.materialdefinition.editor.previews.PreviewFactory;
 import com.jme3.shader.Shader;
 import com.jme3.shader.ShaderNodeDefinition;
 import com.jme3.shader.ShaderNodeVariable;
@@ -93,7 +95,6 @@ public class ShaderNodePanel extends NodePanel implements InOut,
         } else {
             type = NodeType.Fragment;
         }
-        
         node.addPropertyChangeListener(WeakListeners.propertyChange(this, node));
         this.addPropertyChangeListener(WeakListeners.propertyChange(node, this));
         
@@ -116,7 +117,14 @@ public class ShaderNodePanel extends NodePanel implements InOut,
     }
     
     private void init(List<ShaderNodeVariable> inputs, List<ShaderNodeVariable> outputs) {
-        setBounds(0, 0, 120, 30 + inputs.size() * 20 + outputs.size() * 20);
+        if(outputs.size() == 1 && outputs.get(0).getType().startsWith("sampler")){
+            setBounds(0, 0, 120, 80);
+        } else if(type == NodeType.WorldParam || type == NodeType.Attribute){
+            setBounds(0, 0, 120, 45);
+        } else {
+            setBounds(0, 0, 120, 40 + inputs.size() * 20 + outputs.size() * 20);
+        }
+        
 
         for (ShaderNodeVariable input : inputs) {
             JLabel label = createLabel(input.getType(), input.getName(), ConnectionEndpoint.ParamType.Input);
@@ -130,13 +138,22 @@ public class ShaderNodePanel extends NodePanel implements InOut,
             JLabel label = createLabel(output.getType(), outName, ConnectionEndpoint.ParamType.Output);
             ConnectionEndpoint dot = createConnectionEndpoint(output.getType(), ConnectionEndpoint.ParamType.Output, outName);
             dot.setIndex(index++);
+            
             outputLabels.add(label);
             outputDots.add(dot);
+            if(type == NodeType.MatParam){
+                BasePreview c = PreviewFactory.createPreviewComponent(output);
+                
+                if(c != null){
+                    c.addPropertyChangeListener(this);
+                    previews.add(c);
+                }
+            }
+            
         }
-
         initComponents();
         updateType();
-        setOpaque(false);
+        setOpaque(true);
     }
 
     @Override
@@ -149,7 +166,9 @@ public class ShaderNodePanel extends NodePanel implements InOut,
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("name")) {
+        if(evt.getSource() instanceof BasePreview && evt.getNewValue() instanceof String){
+            diagram.updateDefaultValue(evt.getPropertyName(), (String) evt.getNewValue());
+        } else if (evt.getPropertyName().equals("name")) {
             refresh((ShaderNodeBlock) evt.getSource());
         }
     }
@@ -194,15 +213,18 @@ public class ShaderNodePanel extends NodePanel implements InOut,
                 break;
             case Attribute:
                 header.setIcon(Icons.attrib);
-                setNameAndTitle("Attr");
+                name = "Attr";
+                setTitle(outputLabels.get(0).getText() ); // sets text _and_ tooltip the same
                 break;
             case WorldParam:
                 header.setIcon(Icons.world);
-                setNameAndTitle("WorldParam");
+                name = "WorldParam";
+                setTitle(outputLabels.get(0).getText());
                 break;
             case MatParam:
                 header.setIcon(Icons.mat);
-                setNameAndTitle("MatParam");
+                name = "MatParam";
+                setTitle(outputLabels.get(0).getText());
                 break;
         }
         color = type.getColor();
@@ -231,7 +253,7 @@ public class ShaderNodePanel extends NodePanel implements InOut,
      */
     protected JLabel createLabel(String glslType, String txt, ConnectionEndpoint.ParamType type) {
         JLabel label = super.createLabel(txt, type);
-        label.setToolTipText(glslType + " " + txt);
+        label.setToolTipText(type + " " + glslType + " " + txt);
         return label;
     }
     
@@ -267,4 +289,5 @@ public class ShaderNodePanel extends NodePanel implements InOut,
     public void removeOutputMapping(OutputMappingBlock block) {
         firePropertyChange(ShaderNodeBlock.OUTPUT, block, null);
     }
+    
 }

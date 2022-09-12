@@ -67,7 +67,7 @@ public class SceneToolController extends AbstractAppState {
     protected AssetManager manager;
     protected Material blueMat;
     protected AbstractCameraController camController;
-    
+
     private SceneToolControllerListener toolListener;
     
     /**
@@ -211,7 +211,7 @@ public class SceneToolController extends AbstractAppState {
         }
         if (toolListener != null) {
             toolListener.onSetCursorLocation(location);
-        }
+    }
     }
 
     public void snapCursorToSelection() {
