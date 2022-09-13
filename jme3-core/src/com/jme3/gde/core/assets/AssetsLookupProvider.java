@@ -39,7 +39,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,7 +50,6 @@ import org.netbeans.modules.gradle.api.GradleBaseProject;
 import org.netbeans.modules.java.j2seproject.J2SEProject;
 import org.netbeans.modules.java.j2seproject.api.J2SEPropertyEvaluator;
 import org.netbeans.spi.project.LookupProvider;
-import org.netbeans.spi.project.SubprojectProvider;
 import org.netbeans.spi.project.support.ant.AntProjectHelper;
 import org.netbeans.spi.project.support.ant.EditableProperties;
 import org.netbeans.spi.project.ui.ProjectOpenedHook;
@@ -103,7 +102,15 @@ public class AssetsLookupProvider implements LookupProvider {
         project = prj;
         if (SDKProjectUtils.isGradleProject(prj)) {
             GradleBaseProject gradle = GradleBaseProject.get(project);
-            if (gradle.getSubProjects().containsKey(":assets")) {
+            
+            // In a new project, Assets project name is returned by NB as "assets"
+            // but when project is reloaded, it is returned as ":assets"
+            Optional<String> assetsProjectName = 
+                    (gradle.getSubProjects().containsKey("assets")) ? Optional.of("assets") : 
+                    (gradle.getSubProjects().containsKey(":assets")) ? Optional.of(":assets") :
+                    Optional.empty();
+            
+            if (assetsProjectName.isPresent()) {
                 logger.log(Level.FINE, "Found assets subproject, extending with ProjectAssetManager");
                 /* Note: The ProjectAssetManager needs the Subproject's Project,
                  * because otherwise reading assets won't work (as assets is
@@ -115,7 +122,7 @@ public class AssetsLookupProvider implements LookupProvider {
                  * assets subproject could be stored in a folder called "foo"
                  * or "bar" and we still need to locate it correctly
                 */
-                Path assetsPath = gradle.getSubProjects().get(":assets").toPath();
+                Path assetsPath = gradle.getSubProjects().get(assetsProjectName.get()).toPath();
                 Path parentPath = new File(prj.getProjectDirectory().getPath()).toPath();
                 Path relativePath = parentPath.relativize(assetsPath);
                 try {
