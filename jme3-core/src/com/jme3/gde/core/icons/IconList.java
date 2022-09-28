@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2012 jMonkeyEngine
+ * Copyright (c) 2003-2022 jMonkeyEngine
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -31,6 +31,7 @@
  */
 package com.jme3.gde.core.icons;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.openide.util.ImageUtilities;
 
@@ -64,6 +65,7 @@ public class IconList {
     public static final String PLAY = ICONS_PATH + "play.svg";
     public static final String PICTURE = ICONS_PATH + "mona-lisa.svg";
     public static final String INFO = ICONS_PATH + "info.svg";
+    public static final String INFO_GREEN = ICONS_PATH + "info_green.svg";
     public static final String EMITTER = ICONS_PATH + "bright-fireworks.svg";
     public static final String PLAYER = ICONS_PATH + "character.svg";
     public static final String GHOST_CONTROL = ICONS_PATH + "invisible.svg";
@@ -87,6 +89,9 @@ public class IconList {
     public static final String MOTION_EVENT = ICONS_PATH + "run.svg";
     public static final String TERRAIN = ICONS_PATH + "terrain.svg";
     public static final String PBR_SKY = ICONS_PATH + "sun-cloud.svg";
+    public static final String PBR_ENV = ICONS_PATH + "confirmed_large.svg";
+    
+    // 16x16
     
     public static final ImageIcon jmeLogo =
             ImageUtilities.loadImageIcon(JME_LOGO, false);
@@ -138,16 +143,8 @@ public class IconList {
             ImageUtilities.loadImageIcon(LIGHT_BULB, false);
     public static final ImageIcon eyeOpen =
             ImageUtilities.loadImageIcon(EYE, false);
-    public static final ImageIcon eyeGreen =
-            ImageUtilities.loadImageIcon(EYE_GREEN, false);
-    public static final ImageIcon eyeOff =
-            ImageUtilities.loadImageIcon(EYE_OFF, false);
     public static final ImageIcon eyeCrossed =
             ImageUtilities.loadImageIcon(EYE_OFF, false);
-    public static final ImageIcon colorBox =
-            ImageUtilities.loadImageIcon(BOX_COLOR, false);
-    public static final ImageIcon wireBox =
-            ImageUtilities.loadImageIcon(WIRE_MESH, false);
     public static final ImageIcon info =
             ImageUtilities.loadImageIcon(INFO, false);
     public static final ImageIcon player =
@@ -170,8 +167,6 @@ public class IconList {
             ImageUtilities.loadImageIcon(GEOMETRY, false);
     public static final ImageIcon ghostControl =
             ImageUtilities.loadImageIcon(GHOST_CONTROL, false);
-    public static final ImageIcon light =
-            ImageUtilities.loadImageIcon(LIGHT_BULB, false);
     public static final ImageIcon mesh =
             ImageUtilities.loadImageIcon(MESH, false);
     public static final ImageIcon motionEvent =
@@ -192,13 +187,29 @@ public class IconList {
             ImageUtilities.loadImageIcon(QUESTION, false);
     public static final ImageIcon exception =
             ImageUtilities.loadImageIcon(ERROR, false);
-    public static final ImageIcon chimpMad =
-            ImageUtilities.loadImageIcon(PBR_SKY, false);
     public static final ImageIcon chimpNogood =
             ImageUtilities.loadImageIcon(ERROR, false);
     public static final ImageIcon chimpSad =
             ImageUtilities.loadImageIcon(WARNING, false);
     public static final ImageIcon chimpSmile =
             ImageUtilities.loadImageIcon(CONFIRMED, false);
+    
+    // SceneViewer 32x32
    
+    public static final ImageIcon colorBox =
+            ImageUtilities.loadImageIcon(BOX_COLOR, false);
+    public static final ImageIcon wireBox =
+            ImageUtilities.loadImageIcon(WIRE_MESH, false);
+    public static final ImageIcon light =
+            ImageUtilities.loadImageIcon(LIGHT_BULB, false);
+    public static final ImageIcon eyeOff =
+            ImageUtilities.loadImageIcon(EYE_OFF, false);
+    public static final ImageIcon eyeGreen =
+            ImageUtilities.loadImageIcon(EYE_GREEN, false);
+    public static final ImageIcon enablePbrEnvironment =
+            ImageUtilities.loadImageIcon(PBR_ENV, false);
+    public static final ImageIcon enablePbrSky =
+            ImageUtilities.loadImageIcon(PBR_SKY, false);
+    public static final ImageIcon sceneInfo =
+            ImageUtilities.loadImageIcon(INFO_GREEN, false);
 }
