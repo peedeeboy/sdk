@@ -58,7 +58,7 @@
      id="path2" />
   <path
      id="rect856-0-0"
-     style="opacity:0.98999999;fill:none;fill-opacity:1;stroke:#48baff;stroke-width:4.27199984;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+     style="opacity:0.98999999;fill:none;fill-opacity:1;stroke:#0096f0;stroke-width:4.27199984;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
      d="m 337.48609,354.84212 h 87.91647 v 93.34023 h -87.91647 z m -87.91647,0 h 87.91646 v 93.34023 h -87.91646 z m -87.91648,0 h 87.91647 v 93.34023 h -87.91647 z m -87.916462,0 h 87.916462 v 93.34023 H 73.736678 Z M 337.48609,261.50189 h 87.91647 v 93.34023 h -87.91647 z m -87.91647,0 h 87.91646 v 93.34023 h -87.91646 z m -87.91648,0 h 87.91647 v 93.34023 h -87.91647 z m -87.916465,0 h 87.916465 v 93.34023 H 73.736675 Z M 337.48609,168.16166 h 87.91647 v 93.34023 h -87.91647 z m -87.91644,0 h 87.91646 v 93.34023 h -87.91646 z m -87.91649,0 h 87.91646 v 93.34023 h -87.91646 z m -87.916462,0 h 87.916462 v 93.34023 H 73.736698 Z M 337.48609,74.82142 h 87.91647 v 93.34024 h -87.91647 z m -87.91647,0 h 87.91646 v 93.34024 h -87.91646 z m -87.91648,0 h 87.91647 v 93.34024 h -87.91647 z m -87.916466,0 h 87.916466 v 93.34024 H 73.736674 Z"
      inkscape:connector-curvature="0" />
   <g
@@ -72,6 +72,6 @@
        data-darkreader-inline-fill=""
        id="path4"
        fill-opacity="1"
-       fill="#76df76" />
+       fill="#26a326" />
   </g>
 </svg>
