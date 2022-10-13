@@ -63,7 +63,7 @@
      id="g6">
     <path
        d="M18 112v39h38v-39zm102 0v39h48v-39zm112 0v39h48v-39zm112 0v39h48v-39zm112 0v39h38v-39zM18 169v30h476v-30zm0 48v78h38v-78zm102 0v78h48v-78zm112 0v78h48v-78zm112 0v78h48v-78zm112 0v78h38v-78zM18 313v30h476v-30zm0 48v39h38v-39zm102 0v39h48v-39zm112 0v39h48v-39zm112 0v39h48v-39zm112 0v39h38v-39z"
-       fill="#26a326"
+       fill="#76df76"
        fill-opacity="1"
        style="--darkreader-inline-fill: #8b8104;"
        data-darkreader-inline-fill=""
@@ -76,7 +76,7 @@
     <path
        id="path2-3"
        data-darkreader-inline-fill=""
-       style="fill:#0096f0;fill-opacity:0;stroke:#000000;stroke-opacity:1"
+       style="fill:#48baff;fill-opacity:0;stroke:#000000;stroke-opacity:1"
        d="M 0,0 H 512 V 512 H 0 Z"
        inkscape:connector-curvature="0" />
     <g
@@ -87,7 +87,7 @@
          inkscape:connector-curvature="0"
          id="path825"
          d="m 407.406,22.53 c -9.832,0.353 -19.334,5.774 -25.03,18 C 310.03,195.818 206.43,320.097 49.405,373.47 c -59.39,20.186 -15.982,92.874 47.094,47.092 -53.34,55.186 19.308,97.326 42.22,42.22 60.94,-146.596 186.387,-265.928 332.967,-332.97 50.467,-23.082 7.442,-85.442 -40.843,-40.843 28.943,-35.27 1.69,-67.337 -23.438,-66.44 z"
-         style="fill:#0096f0;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
+         style="fill:#48baff;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
     </g>
   </g>
 </svg>
