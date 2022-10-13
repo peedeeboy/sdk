@@ -90,6 +90,7 @@ public class IconList {
     public static final String TERRAIN = ICONS_PATH + "terrain.svg";
     public static final String PBR_SKY = ICONS_PATH + "sun-cloud.svg";
     public static final String PBR_ENV = ICONS_PATH + "confirmed_large.svg";
+    public static final String NORMAL_VIEW = ICONS_PATH + "normal_view.svg";
     
     // 16x16
     
@@ -212,4 +213,6 @@ public class IconList {
             ImageUtilities.loadImageIcon(PBR_SKY, false);
     public static final ImageIcon sceneInfo =
             ImageUtilities.loadImageIcon(INFO_GREEN, false);
+    public static final ImageIcon normalView =
+            ImageUtilities.loadImageIcon(NORMAL_VIEW, false);
 }
