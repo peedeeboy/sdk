@@ -171,6 +171,7 @@ public final class SceneViewerTopComponent extends TopComponent {
         enableWireframe = new javax.swing.JToggleButton();
         enablePBREnv = new javax.swing.JToggleButton();
         enablePBRSky = new javax.swing.JToggleButton();
+        enableNormalView = new javax.swing.JToggleButton();
         jPanel1 = new javax.swing.JPanel();
         enableStats = new javax.swing.JToggleButton();
         oGLPanel = new javax.swing.JPanel();
@@ -249,6 +250,20 @@ public final class SceneViewerTopComponent extends TopComponent {
             }
         });
         jToolBar1.add(enablePBRSky);
+
+        enableNormalView.setIcon(IconList.chimpMad);
+        org.openide.awt.Mnemonics.setLocalizedText(enableNormalView, org.openide.util.NbBundle.getMessage(SceneViewerTopComponent.class, "SceneViewerTopComponent.enableNormalView.text")); // NOI18N
+        enableNormalView.setToolTipText(org.openide.util.NbBundle.getMessage(SceneViewerTopComponent.class, "SceneViewerTopComponent.enableNormalView.toolTipText")); // NOI18N
+        enableNormalView.setFocusable(false);
+        enableNormalView.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        enableNormalView.setSelectedIcon(IconList.chimpMad);
+        enableNormalView.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        enableNormalView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enableNormalViewActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(enableNormalView);
         jToolBar1.add(jPanel1);
 
         enableStats.setIcon(IconList.info);
@@ -295,8 +310,13 @@ public final class SceneViewerTopComponent extends TopComponent {
         app.enablePBRSkybox(enablePBRSky.isSelected());
     }//GEN-LAST:event_enablePBRSkyActionPerformed
 
+    private void enableNormalViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enableNormalViewActionPerformed
+        app.enableNormalView(enableNormalView.isSelected());
+    }//GEN-LAST:event_enableNormalViewActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton enableCamLight;
+    private javax.swing.JToggleButton enableNormalView;
     private javax.swing.JToggleButton enablePBREnv;
     private javax.swing.JToggleButton enablePBRSky;
     private javax.swing.JToggleButton enableStats;

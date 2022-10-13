@@ -36,6 +36,7 @@ import com.jme3.gde.core.assets.AssetData;
 import com.jme3.gde.core.assets.AssetDataObject;
 import com.jme3.gde.core.scene.controller.AbstractCameraController;
 import com.jme3.gde.core.scene.processors.WireProcessor;
+import com.jme3.gde.core.scene.state.NormalViewState;
 import com.jme3.gde.core.sceneexplorer.nodes.NodeUtility;
 import com.jme3.gde.core.sceneviewer.SceneViewerTopComponent;
 import com.jme3.gde.core.undoredo.SceneUndoRedoManager;
@@ -768,5 +769,13 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
 
     public boolean isAwt() {
         return java.awt.EventQueue.isDispatchThread();
+    }
+
+    public void enableNormalView(boolean selected) {
+        if(selected) {
+            stateManager.attach(new NormalViewState());
+        } else if(stateManager.getState(NormalViewState.class) != null) {
+            stateManager.detach(stateManager.getState(NormalViewState.class));
+        }
     }
 }
