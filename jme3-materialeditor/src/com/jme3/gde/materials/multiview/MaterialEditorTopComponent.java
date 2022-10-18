@@ -66,7 +66,7 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
     private final SaveCookie saveCookie = new SaveCookieImpl();
     private boolean saveImmediate = true;
     private boolean updateProperties = false;
-    private final List<MaterialChangeListener> materialListeners = new ArrayList<MaterialChangeListener>();
+    private final List<MaterialChangeListener> materialListeners = new ArrayList<>();
 
     public MaterialEditorTopComponent() {
     }

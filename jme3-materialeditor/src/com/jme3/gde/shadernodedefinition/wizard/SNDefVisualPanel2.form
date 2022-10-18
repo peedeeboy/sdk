@@ -51,12 +51,14 @@
               </Table>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="SNDefVisualPanel2_varTable"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JToolBar" name="jToolBar1">
       <Properties>
-        <Property name="floatable" type="boolean" value="false"/>
         <Property name="rollover" type="boolean" value="true"/>
       </Properties>
 
