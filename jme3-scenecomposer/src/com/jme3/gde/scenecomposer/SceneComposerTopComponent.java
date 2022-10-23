@@ -20,6 +20,7 @@ import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.core.sceneexplorer.nodes.NodeUtility;
 import com.jme3.gde.core.sceneviewer.SceneViewerTopComponent;
+import com.jme3.gde.scenecomposer.icons.Icons;
 import com.jme3.gde.scenecomposer.tools.MoveTool;
 import com.jme3.gde.scenecomposer.tools.RotateTool;
 import com.jme3.gde.scenecomposer.tools.ScaleTool;
@@ -307,6 +308,8 @@ public final class SceneComposerTopComponent extends TopComponent implements
         );
 
         jToolBar1.setRollover(true);
+        jToolBar1.setMinimumSize(new java.awt.Dimension(684, 40));
+        jToolBar1.setPreferredSize(new java.awt.Dimension(824, 40));
 
         transformationTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Local", "Global", "Camera" }));
         transformationTypeComboBox.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.transformationTypeComboBox.toolTipText")); // NOI18N
@@ -319,12 +322,17 @@ public final class SceneComposerTopComponent extends TopComponent implements
         jToolBar1.add(jSeparator9);
 
         spatialModButtonGroup.add(selectButton);
-        selectButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/icon_select.png"))); // NOI18N
+        selectButton.setIcon(Icons.select);
         selectButton.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(selectButton, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.selectButton.text")); // NOI18N
         selectButton.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.selectButton.toolTipText")); // NOI18N
+        selectButton.setBorder(javax.swing.BorderFactory.createCompoundBorder());
         selectButton.setFocusable(false);
         selectButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        selectButton.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        selectButton.setMaximumSize(new java.awt.Dimension(32, 32));
+        selectButton.setMinimumSize(new java.awt.Dimension(32, 32));
+        selectButton.setPreferredSize(new java.awt.Dimension(32, 32));
         selectButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         selectButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -334,11 +342,16 @@ public final class SceneComposerTopComponent extends TopComponent implements
         jToolBar1.add(selectButton);
 
         spatialModButtonGroup.add(moveButton);
-        moveButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/icon_arrow_out.png"))); // NOI18N
+        moveButton.setIcon(Icons.move);
         org.openide.awt.Mnemonics.setLocalizedText(moveButton, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.moveButton.text")); // NOI18N
         moveButton.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.moveButton.toolTipText")); // NOI18N
+        moveButton.setBorder(javax.swing.BorderFactory.createCompoundBorder());
         moveButton.setFocusable(false);
         moveButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        moveButton.setMargin(new java.awt.Insets(8, 14, 8, 14));
+        moveButton.setMaximumSize(new java.awt.Dimension(32, 32));
+        moveButton.setMinimumSize(new java.awt.Dimension(32, 32));
+        moveButton.setPreferredSize(new java.awt.Dimension(32, 32));
         moveButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         moveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -348,11 +361,15 @@ public final class SceneComposerTopComponent extends TopComponent implements
         jToolBar1.add(moveButton);
 
         spatialModButtonGroup.add(rotateButton);
-        rotateButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/icon_arrow_rotate_clockwise.png"))); // NOI18N
+        rotateButton.setIcon(Icons.rotate);
         org.openide.awt.Mnemonics.setLocalizedText(rotateButton, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.rotateButton.text")); // NOI18N
         rotateButton.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.rotateButton.toolTipText")); // NOI18N
+        rotateButton.setBorder(javax.swing.BorderFactory.createCompoundBorder());
         rotateButton.setFocusable(false);
         rotateButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rotateButton.setMaximumSize(new java.awt.Dimension(32, 32));
+        rotateButton.setMinimumSize(new java.awt.Dimension(32, 32));
+        rotateButton.setPreferredSize(new java.awt.Dimension(32, 32));
         rotateButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         rotateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -362,11 +379,15 @@ public final class SceneComposerTopComponent extends TopComponent implements
         jToolBar1.add(rotateButton);
 
         spatialModButtonGroup.add(scaleButton);
-        scaleButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/icon_arrow_inout.png"))); // NOI18N
+        scaleButton.setIcon(Icons.scale);
         org.openide.awt.Mnemonics.setLocalizedText(scaleButton, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.scaleButton.text")); // NOI18N
         scaleButton.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.scaleButton.toolTipText")); // NOI18N
+        scaleButton.setBorder(javax.swing.BorderFactory.createCompoundBorder());
         scaleButton.setFocusable(false);
         scaleButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        scaleButton.setMaximumSize(new java.awt.Dimension(32, 32));
+        scaleButton.setMinimumSize(new java.awt.Dimension(32, 32));
+        scaleButton.setPreferredSize(new java.awt.Dimension(32, 32));
         scaleButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         scaleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -376,13 +397,18 @@ public final class SceneComposerTopComponent extends TopComponent implements
         jToolBar1.add(scaleButton);
         scaleButton.getAccessibleContext().setAccessibleDescription(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.scaleButton.AccessibleContext.accessibleDescription")); // NOI18N
 
+        jSeparator5.setPreferredSize(new java.awt.Dimension(10, 32));
+        jSeparator5.setSeparatorSize(new java.awt.Dimension(10, 32));
         jToolBar1.add(jSeparator5);
 
-        jToggleScene.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/snapScene.png"))); // NOI18N
+        jToggleScene.setIcon(Icons.snapToScene);
         org.openide.awt.Mnemonics.setLocalizedText(jToggleScene, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jToggleScene.text")); // NOI18N
         jToggleScene.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jToggleScene.toolTipText")); // NOI18N
         jToggleScene.setFocusable(false);
         jToggleScene.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleScene.setMaximumSize(new java.awt.Dimension(32, 32));
+        jToggleScene.setMinimumSize(new java.awt.Dimension(32, 32));
+        jToggleScene.setPreferredSize(new java.awt.Dimension(32, 32));
         jToggleScene.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToggleScene.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -391,11 +417,14 @@ public final class SceneComposerTopComponent extends TopComponent implements
         });
         jToolBar1.add(jToggleScene);
 
-        jToggleGrid.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/snapGrid.png"))); // NOI18N
+        jToggleGrid.setIcon(Icons.snapToGrid);
         org.openide.awt.Mnemonics.setLocalizedText(jToggleGrid, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jToggleGrid.text")); // NOI18N
         jToggleGrid.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jToggleGrid.toolTipText")); // NOI18N
         jToggleGrid.setFocusable(false);
         jToggleGrid.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleGrid.setMaximumSize(new java.awt.Dimension(32, 32));
+        jToggleGrid.setMinimumSize(new java.awt.Dimension(32, 32));
+        jToggleGrid.setPreferredSize(new java.awt.Dimension(32, 32));
         jToggleGrid.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToggleGrid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -405,11 +434,14 @@ public final class SceneComposerTopComponent extends TopComponent implements
         jToolBar1.add(jToggleGrid);
         jToolBar1.add(jSeparator8);
 
-        jToggleSelectGeom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/selectGeometry.png"))); // NOI18N
+        jToggleSelectGeom.setIcon(Icons.selectGeometry);
         org.openide.awt.Mnemonics.setLocalizedText(jToggleSelectGeom, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jToggleSelectGeom.text")); // NOI18N
         jToggleSelectGeom.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jToggleSelectGeom.toolTipText")); // NOI18N
         jToggleSelectGeom.setFocusable(false);
         jToggleSelectGeom.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleSelectGeom.setMaximumSize(new java.awt.Dimension(32, 32));
+        jToggleSelectGeom.setMinimumSize(new java.awt.Dimension(32, 32));
+        jToggleSelectGeom.setPreferredSize(new java.awt.Dimension(32, 32));
         jToggleSelectGeom.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToggleSelectGeom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -418,11 +450,14 @@ public final class SceneComposerTopComponent extends TopComponent implements
         });
         jToolBar1.add(jToggleSelectGeom);
 
-        jToggleSelectTerrain.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/selectTerrain.png"))); // NOI18N
+        jToggleSelectTerrain.setIcon(Icons.selectTerrain);
         org.openide.awt.Mnemonics.setLocalizedText(jToggleSelectTerrain, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jToggleSelectTerrain.text")); // NOI18N
         jToggleSelectTerrain.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jToggleSelectTerrain.toolTipText")); // NOI18N
         jToggleSelectTerrain.setFocusable(false);
         jToggleSelectTerrain.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleSelectTerrain.setMaximumSize(new java.awt.Dimension(32, 32));
+        jToggleSelectTerrain.setMinimumSize(new java.awt.Dimension(32, 32));
+        jToggleSelectTerrain.setPreferredSize(new java.awt.Dimension(32, 32));
         jToggleSelectTerrain.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToggleSelectTerrain.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -430,13 +465,20 @@ public final class SceneComposerTopComponent extends TopComponent implements
             }
         });
         jToolBar1.add(jToggleSelectTerrain);
+
+        jSeparator7.setPreferredSize(new java.awt.Dimension(10, 40));
+        jSeparator7.setRequestFocusEnabled(false);
+        jSeparator7.setSeparatorSize(new java.awt.Dimension(10, 40));
         jToolBar1.add(jSeparator7);
 
-        moveToCursorButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/move.gif"))); // NOI18N
+        moveToCursorButton.setIcon(Icons.moveToCursor);
         org.openide.awt.Mnemonics.setLocalizedText(moveToCursorButton, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.moveToCursorButton.text")); // NOI18N
         moveToCursorButton.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.moveToCursorButton.toolTipText")); // NOI18N
         moveToCursorButton.setFocusable(false);
         moveToCursorButton.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        moveToCursorButton.setMaximumSize(new java.awt.Dimension(32, 32));
+        moveToCursorButton.setMinimumSize(new java.awt.Dimension(32, 32));
+        moveToCursorButton.setPreferredSize(new java.awt.Dimension(32, 32));
         moveToCursorButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         moveToCursorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -444,9 +486,11 @@ public final class SceneComposerTopComponent extends TopComponent implements
             }
         });
         jToolBar1.add(moveToCursorButton);
+
+        jSeparator3.setSeparatorSize(new java.awt.Dimension(24, 24));
         jToolBar1.add(jSeparator3);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/cursor.gif"))); // NOI18N
+        jLabel1.setIcon(Icons.cursorPin);
         org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jLabel1.text")); // NOI18N
         jToolBar1.add(jLabel1);
 
@@ -475,8 +519,11 @@ public final class SceneComposerTopComponent extends TopComponent implements
         jToolBar1.add(cursorToSelectionButton);
         jToolBar1.add(jSeparator2);
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/camera.gif"))); // NOI18N
+        jLabel2.setIcon(Icons.camera);
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jLabel2.text")); // NOI18N
+        jLabel2.setMaximumSize(new java.awt.Dimension(24, 24));
+        jLabel2.setMinimumSize(new java.awt.Dimension(24, 24));
+        jLabel2.setPreferredSize(new java.awt.Dimension(24, 24));
         jToolBar1.add(jLabel2);
 
         org.openide.awt.Mnemonics.setLocalizedText(camToCursorSelectionButton, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.camToCursorSelectionButton.text")); // NOI18N
@@ -490,17 +537,23 @@ public final class SceneComposerTopComponent extends TopComponent implements
             }
         });
         jToolBar1.add(camToCursorSelectionButton);
+
+        jSeparator4.setSeparatorSize(new java.awt.Dimension(24, 24));
         jToolBar1.add(jSeparator4);
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/box_wire.gif"))); // NOI18N
+        jLabel3.setIcon(Icons.display);
         org.openide.awt.Mnemonics.setLocalizedText(jLabel3, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jLabel3.text")); // NOI18N
         jToolBar1.add(jLabel3);
 
         showSelectionToggleButton.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(showSelectionToggleButton, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.showSelectionToggleButton.text")); // NOI18N
-        showSelectionToggleButton.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.showSelectionToggleButton.toolTipText")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(showSelectionToggleButton, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.Selection.text")); // NOI18N
+        showSelectionToggleButton.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.Selection.toolTipText")); // NOI18N
         showSelectionToggleButton.setFocusable(false);
         showSelectionToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        showSelectionToggleButton.setMaximumSize(new java.awt.Dimension(72, 26));
+        showSelectionToggleButton.setMinimumSize(new java.awt.Dimension(72, 26));
+        showSelectionToggleButton.setName("Selection"); // NOI18N
+        showSelectionToggleButton.setPreferredSize(new java.awt.Dimension(72, 26));
         showSelectionToggleButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         showSelectionToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -510,10 +563,14 @@ public final class SceneComposerTopComponent extends TopComponent implements
         jToolBar1.add(showSelectionToggleButton);
 
         showGridToggleButton.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(showGridToggleButton, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.showGridToggleButton.text")); // NOI18N
-        showGridToggleButton.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.showGridToggleButton.toolTipText")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(showGridToggleButton, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.Grid.text")); // NOI18N
+        showGridToggleButton.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.Grid.toolTipText")); // NOI18N
         showGridToggleButton.setFocusable(false);
         showGridToggleButton.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        showGridToggleButton.setMaximumSize(new java.awt.Dimension(58, 26));
+        showGridToggleButton.setMinimumSize(new java.awt.Dimension(58, 26));
+        showGridToggleButton.setName("Grid"); // NOI18N
+        showGridToggleButton.setPreferredSize(new java.awt.Dimension(58, 26));
         showGridToggleButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         showGridToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -527,11 +584,11 @@ public final class SceneComposerTopComponent extends TopComponent implements
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 571, Short.MAX_VALUE)
+            .addGap(0, 45, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 21, Short.MAX_VALUE)
+            .addGap(0, 36, Short.MAX_VALUE)
         );
 
         jToolBar1.add(jPanel3);
@@ -591,11 +648,16 @@ public final class SceneComposerTopComponent extends TopComponent implements
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jLabel6.text")); // NOI18N
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/play.gif"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jButton2.text")); // NOI18N
-        jButton2.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jButton2.toolTipText")); // NOI18N
+        jButton2.setIcon(Icons.play);
+        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.text")); // NOI18N
+        jButton2.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.toolTipText")); // NOI18N
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton2.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        jButton2.setMaximumSize(new java.awt.Dimension(32, 32));
+        jButton2.setMinimumSize(new java.awt.Dimension(32, 32));
+        jButton2.setName(""); // NOI18N
+        jButton2.setPreferredSize(new java.awt.Dimension(32, 32));
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -603,11 +665,14 @@ public final class SceneComposerTopComponent extends TopComponent implements
             }
         });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/jme3/gde/scenecomposer/pause.gif"))); // NOI18N
+        jButton3.setIcon(Icons.pause);
         org.openide.awt.Mnemonics.setLocalizedText(jButton3, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jButton3.text")); // NOI18N
         jButton3.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jButton3.toolTipText")); // NOI18N
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton3.setMaximumSize(new java.awt.Dimension(32, 32));
+        jButton3.setMinimumSize(new java.awt.Dimension(32, 32));
+        jButton3.setPreferredSize(new java.awt.Dimension(32, 32));
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -631,9 +696,9 @@ public final class SceneComposerTopComponent extends TopComponent implements
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton2)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
-                                .addComponent(jButton3))
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -658,8 +723,8 @@ public final class SceneComposerTopComponent extends TopComponent implements
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(jLabel6))
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -701,7 +766,7 @@ public final class SceneComposerTopComponent extends TopComponent implements
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cameraPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
