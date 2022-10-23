@@ -103,9 +103,7 @@ public final class SceneComposerTopComponent extends TopComponent implements
     private void initComponents() {
 
         spatialModButtonGroup = new ButtonGroup();
-        sceneInfoPanel = new javax.swing.JPanel();
-        sceneInfoLabel1 = new javax.swing.JLabel();
-        sceneInfoLabel2 = new javax.swing.JLabel();
+        cameraPanel = new javax.swing.JPanel();
         jSlider1 = new javax.swing.JSlider();
         jSlider2 = new javax.swing.JSlider();
         jSpinner1 = new javax.swing.JSpinner();
@@ -118,6 +116,9 @@ public final class SceneComposerTopComponent extends TopComponent implements
         jLabel12 = new javax.swing.JLabel();
         cursorPositionHeader = new javax.swing.JLabel();
         cursorPositionLabel = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        fovSlider = new javax.swing.JSlider();
+        fovSpinner = new javax.swing.JSpinner();
         jToolBar1 = new javax.swing.JToolBar();
         transformationTypeComboBox = new javax.swing.JComboBox<>();
         jSeparator9 = new javax.swing.JToolBar.Separator();
@@ -163,15 +164,15 @@ public final class SceneComposerTopComponent extends TopComponent implements
         jLabel6 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        sceneInfoPanel = new javax.swing.JPanel();
+        sceneInfoLabel = new javax.swing.JLabel();
+        sceneInfoLabel1 = new javax.swing.JLabel();
 
-        sceneInfoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.sceneInfoPanel.border.title"))); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(sceneInfoLabel1, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.sceneInfoLabel1.text")); // NOI18N
-
-        org.openide.awt.Mnemonics.setLocalizedText(sceneInfoLabel2, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.sceneInfoLabel2.text")); // NOI18N
+        cameraPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.cameraPanel.border.title"))); // NOI18N
 
         jSlider1.setMaximum(2000);
         jSlider1.setMinimum(100);
+        jSlider1.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jSlider1.toolTipText")); // NOI18N
         jSlider1.setValue(1000);
         jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -218,70 +219,94 @@ public final class SceneComposerTopComponent extends TopComponent implements
 
         org.openide.awt.Mnemonics.setLocalizedText(cursorPositionLabel, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.cursorPositionLabel.text")); // NOI18N
 
-        javax.swing.GroupLayout sceneInfoPanelLayout = new javax.swing.GroupLayout(sceneInfoPanel);
-        sceneInfoPanel.setLayout(sceneInfoPanelLayout);
-        sceneInfoPanelLayout.setHorizontalGroup(
-            sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sceneInfoLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(sceneInfoLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(sceneInfoPanelLayout.createSequentialGroup()
-                .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSlider2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jSpinner2)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-            .addGroup(sceneInfoPanelLayout.createSequentialGroup()
-                .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel13, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jLabel13.text")); // NOI18N
+
+        fovSlider.setMaximum(360);
+        fovSlider.setMinimum(1);
+        fovSlider.setValue(45);
+        fovSlider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                fovSliderStateChanged(evt);
+            }
+        });
+
+        fovSpinner.setModel(new javax.swing.SpinnerNumberModel(45, null, null, 1));
+        fovSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                fovSpinnerStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout cameraPanelLayout = new javax.swing.GroupLayout(cameraPanel);
+        cameraPanel.setLayout(cameraPanelLayout);
+        cameraPanelLayout.setHorizontalGroup(
+            cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cameraPanelLayout.createSequentialGroup()
+                .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(jLabel10)
                     .addComponent(cursorPositionHeader))
                 .addGap(34, 34, 34)
-                .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cursorPositionLabel)
                     .addComponent(jLabel12)
                     .addComponent(jLabel11))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(134, Short.MAX_VALUE))
+            .addGroup(cameraPanelLayout.createSequentialGroup()
+                .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(cameraPanelLayout.createSequentialGroup()
+                        .addComponent(fovSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(fovSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(cameraPanelLayout.createSequentialGroup()
+                        .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSlider2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSpinner2)
+                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
-        sceneInfoPanelLayout.setVerticalGroup(
-            sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(sceneInfoPanelLayout.createSequentialGroup()
-                .addComponent(sceneInfoLabel1)
+        cameraPanelLayout.setVerticalGroup(
+            cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cameraPanelLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(fovSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13)
+                    .addComponent(fovSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sceneInfoLabel2)
-                .addGap(5, 5, 5)
-                .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
                     .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(sceneInfoPanelLayout.createSequentialGroup()
-                        .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(cameraPanelLayout.createSequentialGroup()
+                        .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jSlider2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8))
                         .addGap(1, 1, 1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(jLabel12))
                 .addGap(8, 8, 8)
-                .addGroup(sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(cameraPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cursorPositionHeader)
                     .addComponent(cursorPositionLabel)))
         );
 
-        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setMinimumSize(new java.awt.Dimension(684, 40));
         jToolBar1.setPreferredSize(new java.awt.Dimension(824, 40));
@@ -570,7 +595,6 @@ public final class SceneComposerTopComponent extends TopComponent implements
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jPanel4.border.title"))); // NOI18N
 
-        jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
 
         org.openide.awt.Mnemonics.setLocalizedText(createPhysicsMeshButton, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.createPhysicsMeshButton.text")); // NOI18N
@@ -591,7 +615,6 @@ public final class SceneComposerTopComponent extends TopComponent implements
         org.openide.awt.Mnemonics.setLocalizedText(jLabel4, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jLabel4.text")); // NOI18N
         jToolBar2.add(jLabel4);
 
-        jToolBar3.setFloatable(false);
         jToolBar3.setRollover(true);
 
         org.openide.awt.Mnemonics.setLocalizedText(jButton1, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jButton1.text")); // NOI18N
@@ -705,6 +728,28 @@ public final class SceneComposerTopComponent extends TopComponent implements
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        sceneInfoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.sceneInfoPanel.border.title"))); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(sceneInfoLabel, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.sceneInfoLabel.text_1")); // NOI18N
+
+        org.openide.awt.Mnemonics.setLocalizedText(sceneInfoLabel1, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.sceneInfoLabel1.text")); // NOI18N
+
+        javax.swing.GroupLayout sceneInfoPanelLayout = new javax.swing.GroupLayout(sceneInfoPanel);
+        sceneInfoPanel.setLayout(sceneInfoPanelLayout);
+        sceneInfoPanelLayout.setHorizontalGroup(
+            sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(sceneInfoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+            .addComponent(sceneInfoLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        sceneInfoPanelLayout.setVerticalGroup(
+            sceneInfoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(sceneInfoPanelLayout.createSequentialGroup()
+                .addComponent(sceneInfoLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(sceneInfoLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -712,7 +757,10 @@ public final class SceneComposerTopComponent extends TopComponent implements
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sceneInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(sceneInfoPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cameraPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -721,9 +769,13 @@ public final class SceneComposerTopComponent extends TopComponent implements
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(sceneInfoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(cameraPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sceneInfoPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
+
+        cameraPanel.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.cameraPanel.AccessibleContext.accessibleName")); // NOI18N
+        sceneInfoPanel.getAccessibleContext().setAccessibleName(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.sceneInfoPanel.AccessibleContext.accessibleName")); // NOI18N
     }// </editor-fold>//GEN-END:initComponents
 
     private void showSelectionToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showSelectionToggleButtonActionPerformed
@@ -869,7 +921,7 @@ private void jToggleSelectGeomActionPerformed(java.awt.event.ActionEvent evt) {/
         // This is called, when the spinner of the near plane has been changed.
         float near = ((float)jSlider1.getValue() / 1000f);
         float spin = (Float)jSpinner1.getValue();
-        
+        float fov = (Float) fovSpinner.getValue();
         // Prevent an endless loop of state changes and don't change the slider when the spinner
         // has gone out of range, since this would lead to the slider's StateChanged overwriting the spinner again.
         // but we want the spinner to be a free-form field
@@ -879,31 +931,59 @@ private void jToggleSelectGeomActionPerformed(java.awt.event.ActionEvent evt) {/
         }
         
         final Camera cam = SceneApplication.getApplication().getCamera();
-        cam.setFrustumPerspective(45f, (float)cam.getWidth() / cam.getHeight(), spin, cam.getFrustumFar());
+        cam.setFrustumPerspective(fov, (float)cam.getWidth() / cam.getHeight(), spin, cam.getFrustumFar());
     }//GEN-LAST:event_jSpinner1StateChanged
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
         // Prevent an endless loop of state changes and don't change the slider when the spinner
         // has gone out of range, since this would lead to the slider's StateChanged overwriting the spinner again.
         // but we want the spinner to be a free-form field
-        
+        float fov = (int) fovSpinner.getValue();
         float spin = (Float)jSpinner2.getValue();
         if (spin <= 3000f && spin >= 5f && !FastMath.approximateEquals(spin, (float)jSlider2.getValue())) {
             jSlider2.setValue((int)spin);
         }
         
         final Camera cam = SceneApplication.getApplication().getCamera();
-        cam.setFrustumPerspective(45f, (float)cam.getWidth() / cam.getHeight(), cam.getFrustumNear(), spin);
+        cam.setFrustumPerspective(fov, (float)cam.getWidth() / cam.getHeight(), cam.getFrustumNear(), spin);
     }//GEN-LAST:event_jSpinner2StateChanged
+
+    private void fovSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fovSliderStateChanged
+        int fov = (int) fovSlider.getValue();
+        
+        // Prevent an endless loop of state changes
+        if ((int) fovSpinner.getValue() != fov) {
+            fovSpinner.setValue((int) fov);
+        }
+    }//GEN-LAST:event_fovSliderStateChanged
+
+    private void fovSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_fovSpinnerStateChanged
+        // This is called, when the spinner of the near plane has been changed.
+        int fov = (int) fovSpinner.getValue();
+        
+        // Prevent an endless loop of state changes and don't change the slider when the spinner
+        // has gone out of range, since this would lead to the slider's StateChanged overwriting the spinner again.
+        // but we want the spinner to be a free-form field
+        
+        if (fov <= 360 && fov >= 1 && fovSlider.getValue() != fov) {
+            fovSlider.setValue((int) fovSpinner.getValue());
+        }
+        
+        final Camera cam = SceneApplication.getApplication().getCamera();
+        cam.setFrustumPerspective(fov, (float)cam.getWidth() / cam.getHeight(), cam.getFrustumNear(), cam.getFrustumFar());
+    }//GEN-LAST:event_fovSpinnerStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton camToCursorSelectionButton;
+    private javax.swing.JPanel cameraPanel;
     private javax.swing.JButton createPhysicsMeshButton;
     private javax.swing.JLabel cursorPositionHeader;
     private javax.swing.JLabel cursorPositionLabel;
     private javax.swing.JButton cursorToSelectionButton;
     private javax.swing.JButton emitButton;
     private javax.swing.JCheckBox fixedCheckBox;
+    private javax.swing.JSlider fovSlider;
+    private javax.swing.JSpinner fovSpinner;
     private javax.swing.JSpinner heightSpinner;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -913,6 +993,7 @@ private void jToggleSelectGeomActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -950,8 +1031,8 @@ private void jToggleSelectGeomActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JButton resetCursorButton;
     private javax.swing.JToggleButton rotateButton;
     private javax.swing.JToggleButton scaleButton;
+    private javax.swing.JLabel sceneInfoLabel;
     private javax.swing.JLabel sceneInfoLabel1;
-    private javax.swing.JLabel sceneInfoLabel2;
     private javax.swing.JPanel sceneInfoPanel;
     private javax.swing.JToggleButton selectButton;
     private javax.swing.JToggleButton showGridToggleButton;
@@ -1117,10 +1198,10 @@ private void jToggleSelectGeomActionPerformed(java.awt.event.ActionEvent evt) {/
             result.removeLookupListener(inst);
             showSelectionToggleButton.setSelected(true);
             showGridToggleButton.setSelected(true);
-            sceneInfoLabel1.setText("");
-            sceneInfoLabel2.setText("");
-            sceneInfoLabel1.setToolTipText("");
-            sceneInfoLabel2.setToolTipText("");
+            sceneInfoLabel.setText("");
+            sceneInfoLabel.setText("");
+            sceneInfoLabel.setToolTipText("");
+            sceneInfoLabel.setToolTipText("");
             close();
         } else {
             result.addLookupListener(this);
@@ -1128,10 +1209,10 @@ private void jToggleSelectGeomActionPerformed(java.awt.event.ActionEvent evt) {/
             showGridToggleButton.setSelected(true);
             //TODO: threading
             if (file != null) {
-                sceneInfoLabel1.setText("Name: " + file.getNameExt());
-                sceneInfoLabel2.setText("Size: " + file.getSize() / 1024 + " kB");
-                sceneInfoLabel1.setToolTipText("Name: " + file.getNameExt());
-                sceneInfoLabel2.setToolTipText("Size: " + file.getSize() / 1024 + " kB");
+                sceneInfoLabel.setText("Name: " + file.getNameExt());
+                sceneInfoLabel.setText("Size: " + file.getSize() / 1024 + " kB");
+                sceneInfoLabel.setToolTipText("Name: " + file.getNameExt());
+                sceneInfoLabel.setToolTipText("Size: " + file.getSize() / 1024 + " kB");
             }
             open();
             requestActive();
