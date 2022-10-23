@@ -270,12 +270,12 @@ public final class SceneViewerTopComponent extends TopComponent {
         });
         jToolBar1.add(enablePBRSky);
 
-        enableNormalView.setIcon(IconList.chimpMad);
+        enableNormalView.setIcon(IconList.normalView);
         org.openide.awt.Mnemonics.setLocalizedText(enableNormalView, org.openide.util.NbBundle.getMessage(SceneViewerTopComponent.class, "SceneViewerTopComponent.enableNormalView.text")); // NOI18N
         enableNormalView.setToolTipText(org.openide.util.NbBundle.getMessage(SceneViewerTopComponent.class, "SceneViewerTopComponent.enableNormalView.toolTipText")); // NOI18N
         enableNormalView.setFocusable(false);
         enableNormalView.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        enableNormalView.setSelectedIcon(IconList.chimpMad);
+        enableNormalView.setSelectedIcon(IconList.normalView);
         enableNormalView.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         enableNormalView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
