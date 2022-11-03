@@ -43,7 +43,7 @@
      id="namedview10"
      showgrid="false"
      inkscape:zoom="20.85965"
-     inkscape:cx="3.9955191"
+     inkscape:cx="-4.8732778"
      inkscape:cy="18.224682"
      inkscape:window-x="626"
      inkscape:window-y="178"
@@ -58,7 +58,7 @@
      id="path2" />
   <g
      class=""
-     style=""
+     style="stroke:#000000;stroke-opacity:1;opacity:0.95;stroke-width:4.192;stroke-miterlimit:4;stroke-dasharray:none"
      transform="translate(0,0)"
      id="g6">
     <path
@@ -71,7 +71,7 @@
        d="m 256,383.6749 0.76704,-75.16904 M 460.53,289.2699 461.29704,214.10086 M 256,194.8659 256.76704,119.69686 M 51.47,289.2699 52.23704,214.10086"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:#76df76;fill-opacity:1;stroke:none;stroke-width:16px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#76df76;fill-opacity:1;stroke:#000000;stroke-width:2.096;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
        d="m 253.69891,202.53621 -204.531254,94.40626 199.355004,88.5 0.78403,-82.07969 16.09969,0.0142 -1.53406,82.83532 194.35782,-89.26984 z"
        id="path852"
        inkscape:connector-curvature="0"
