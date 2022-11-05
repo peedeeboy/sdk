@@ -46,7 +46,7 @@ import org.openide.util.ImageUtilities;
 public class IconList {
     
     public static final String ICONS_PATH = "com/jme3/gde/core/icons/";
-    public static final String JME_LOGO = ICONS_PATH + "jaime_silhouette.svg";
+    public static final String JAIME = ICONS_PATH + "jaime_silhouette.svg";
     public static final String CARDBOARD_BOX = ICONS_PATH + "cardboard-box.svg";
     public static final String CARDBOARD_BOX_CLOSED = ICONS_PATH + "cardboard-box-closed.svg";
     public static final String SOUND = ICONS_PATH + "speaker.svg";
@@ -91,6 +91,7 @@ public class IconList {
     public static final String PBR_SKY = ICONS_PATH + "sun-cloud.svg";
     public static final String PBR_ENV = ICONS_PATH + "confirmed_large.svg";
     public static final String NORMAL_VIEW = ICONS_PATH + "normal_view.svg";
+    public static final String JME_LOGO = ICONS_PATH + "jme_logo.svg";
     
     // 16x16
     
@@ -194,6 +195,8 @@ public class IconList {
             ImageUtilities.loadImageIcon(WARNING, false);
     public static final ImageIcon chimpSmile =
             ImageUtilities.loadImageIcon(CONFIRMED, false);
+    public static final ImageIcon jaime =
+            ImageUtilities.loadImageIcon(JAIME, false);
     
     // SceneViewer 32x32
    
