@@ -38,6 +38,7 @@ import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.TangentBinormalGenerator;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,10 @@ public final class NormalViewState extends BaseAppState {
                 "Common/Materials/VertexColor.j3m");
 
         for (final Geometry geometry : geometries) {
+            if(geometry.getMesh().getBuffer(Type.Normal) == null) {
+                continue;
+            }
+            
             final Geometry debug = new Geometry(geometry.getName(),
                     TangentBinormalGenerator.genNormalLines(geometry.getMesh(),
                             normalLength));
