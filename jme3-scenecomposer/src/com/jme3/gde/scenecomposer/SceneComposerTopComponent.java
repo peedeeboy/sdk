@@ -649,10 +649,10 @@ public final class SceneComposerTopComponent extends TopComponent implements
         org.openide.awt.Mnemonics.setLocalizedText(jLabel6, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jLabel6.text")); // NOI18N
 
         jButton2.setIcon(Icons.play);
-        org.openide.awt.Mnemonics.setLocalizedText(jButton2, org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.text")); // NOI18N
         jButton2.setToolTipText(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.toolTipText")); // NOI18N
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton2.setLabel(org.openide.util.NbBundle.getMessage(SceneComposerTopComponent.class, "SceneComposerTopComponent.jButton2.label")); // NOI18N
         jButton2.setMargin(new java.awt.Insets(2, 2, 2, 2));
         jButton2.setMaximumSize(new java.awt.Dimension(32, 32));
         jButton2.setMinimumSize(new java.awt.Dimension(32, 32));

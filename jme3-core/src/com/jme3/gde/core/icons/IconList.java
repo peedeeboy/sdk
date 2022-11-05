@@ -54,6 +54,7 @@ public class IconList {
     public static final String FILTER = ICONS_PATH + "ice-iris.svg";
     public static final String FONT = ICONS_PATH + "font.svg";
     public static final String LIGHT_BULB = ICONS_PATH + "light-bulb.svg";
+    public static final String LIGHT_BULB_YELLOW = ICONS_PATH + "light-bulb-yellow.svg";
     public static final String LIGHT_BULB_OFF = ICONS_PATH + "light-bulb-off.svg";
     public static final String CONFIRMED = ICONS_PATH + "confirmed.svg";
     public static final String WARNING = ICONS_PATH + "interdiction.svg";
@@ -73,7 +74,7 @@ public class IconList {
     public static final String NODE = ICONS_PATH + "family-tree.svg";
     public static final String IMPORTANT = ICONS_PATH + "files.svg";
     public static final String BONE = ICONS_PATH + "bone.svg";
-    public static final String TRACK = ICONS_PATH + "track.svg";
+    public static final String TRACK = ICONS_PATH + "railway.svg";
     public static final String MESH = ICONS_PATH + "wireframe-globe.svg";
     public static final String GEOMETRY = ICONS_PATH + "cube.svg";
     public static final String VEHICLE = ICONS_PATH + "race-car.svg";
@@ -197,6 +198,8 @@ public class IconList {
             ImageUtilities.loadImageIcon(CONFIRMED, false);
     public static final ImageIcon jaime =
             ImageUtilities.loadImageIcon(JAIME, false);
+    public static final ImageIcon lightYellow =
+            ImageUtilities.loadImageIcon(LIGHT_BULB_YELLOW, false);
     
     // SceneViewer 32x32
    
