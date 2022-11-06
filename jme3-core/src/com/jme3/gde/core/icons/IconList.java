@@ -63,7 +63,7 @@ public class IconList {
     public static final String ANIM_CONTROL = ICONS_PATH + "film-spool.svg";
     public static final String ANIM = ICONS_PATH + "film-strip.svg";
     public static final String SKELETON = ICONS_PATH + "skeleton.svg";
-    public static final String PLAY = ICONS_PATH + "play.svg";
+    public static final String PLAY = ICONS_PATH + "play-button.svg";
     public static final String PICTURE = ICONS_PATH + "mona-lisa.svg";
     public static final String INFO = ICONS_PATH + "info.svg";
     public static final String INFO_GREEN = ICONS_PATH + "info_green.svg";
