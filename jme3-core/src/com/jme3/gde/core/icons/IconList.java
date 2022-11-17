@@ -87,6 +87,7 @@ public class IconList {
     public static final String EYE = ICONS_PATH + "eye.svg";
     public static final String EYE_GREEN = ICONS_PATH + "eye-green.svg";
     public static final String EYE_OFF = ICONS_PATH + "sight-disabled.svg";
+    public static final String EYE_OFF_GREEN = ICONS_PATH + "sight-disabled-green.svg";
     public static final String MOTION_EVENT = ICONS_PATH + "run.svg";
     public static final String TERRAIN = ICONS_PATH + "terrain.svg";
     public static final String PBR_SKY = ICONS_PATH + "sun-cloud.svg";
@@ -210,7 +211,7 @@ public class IconList {
     public static final ImageIcon light =
             ImageUtilities.loadImageIcon(LIGHT_BULB, false);
     public static final ImageIcon eyeOff =
-            ImageUtilities.loadImageIcon(EYE_OFF, false);
+            ImageUtilities.loadImageIcon(EYE_OFF_GREEN, false);
     public static final ImageIcon eyeGreen =
             ImageUtilities.loadImageIcon(EYE_GREEN, false);
     public static final ImageIcon enablePbrEnvironment =
