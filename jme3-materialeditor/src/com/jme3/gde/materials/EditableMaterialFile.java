@@ -248,15 +248,14 @@ public class EditableMaterialFile {
                                 if (prop == null) {
                                     prop = new MaterialProperty();
                                     prop.setName(propName);
+                                    // property with set value
+                                    if (defLine.contains(":")) {
+                                        prop.setValue(defLine.split(":")[1]);
+                                    } else {
+                                        prop.setValue("");
+                                    }
                                     materialParameters.put(prop.getName(), prop);
                                 }
-                                // property with set value
-                                if (defLine.contains(":")) {
-                                    prop.setValue(defLine.split(":")[1]);
-                                } else {
-                                    prop.setValue("");
-                                }
-
                                 prop.setType(string);
                             }
                         }
