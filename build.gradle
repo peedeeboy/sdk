@@ -318,7 +318,7 @@ task copyProjectLibs(dependsOn: [configurations.corelibs, configurations.testdat
             if(isJmeDep(dep.name)){
                 copy {
                     from dep
-                    into "jme3-project-testdata/release/libs/"
+                    into "jme3-project-testdata/release/modules/ext/"
                     rename ("jme3-testdata(.*)", "jme3-testdata.jar")
                 }
             }
