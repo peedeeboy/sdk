@@ -135,7 +135,7 @@ public class ExternalChangeScanner implements AssetDataPropertyChangeListener,
                 JPanel panel = new JPanel();
                 panel.setLayout(new BorderLayout());
                 panel.add(new JLabel("Original file for "
-                                + assetDataObject.getName() + " changed\nTry "
+                                + assetDataObject.getName() + " changed\n Try "
                                 + "and reapply data to j3o file?"), BorderLayout.NORTH);
                 JCheckBox rememberSelectionBox = new JCheckBox("Remember selection");
                 rememberSelectionBox.setSelected(savedOption != null);
