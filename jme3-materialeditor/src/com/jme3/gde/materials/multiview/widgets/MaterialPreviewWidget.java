@@ -129,13 +129,13 @@ public class MaterialPreviewWidget extends javax.swing.JPanel {
         jToolBar1.add(jSeparator1);
 
         togglePbrEnvButton.setIcon(IconList.lightYellow);
-        togglePbrEnvButton.setToolTipText(org.openide.util.NbBundle.getMessage(MaterialPreviewWidget.class, "MaterialPreviewWidget.toolTipText")); // NOI18N
+        togglePbrEnvButton.setToolTipText(org.openide.util.NbBundle.getMessage(MaterialPreviewWidget.class, "MaterialPreviewWidget.togglePbrEnvButton.toolTipText")); // NOI18N
         togglePbrEnvButton.setFocusable(false);
         togglePbrEnvButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        togglePbrEnvButton.setLabel(org.openide.util.NbBundle.getMessage(MaterialPreviewWidget.class, "MaterialPreviewWidget.label")); // NOI18N
+        togglePbrEnvButton.setLabel(org.openide.util.NbBundle.getMessage(MaterialPreviewWidget.class, "MaterialPreviewWidget.togglePbrEnvButton.label")); // NOI18N
         togglePbrEnvButton.setMaximumSize(new java.awt.Dimension(26, 24));
         togglePbrEnvButton.setMinimumSize(new java.awt.Dimension(26, 24));
-        togglePbrEnvButton.setName(""); // NOI18N
+        togglePbrEnvButton.setName("togglePbrEnvButton"); // NOI18N
         togglePbrEnvButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         togglePbrEnvButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
