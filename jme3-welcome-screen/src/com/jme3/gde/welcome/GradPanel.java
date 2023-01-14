@@ -5,6 +5,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 /**
  *
@@ -18,10 +19,18 @@ public class GradPanel extends JPanel {
         int w = getWidth();
         int h = getHeight();
         Graphics2D g2d = (Graphics2D) grphcs;
-        GradientPaint gp = new GradientPaint(
-                0, 0, Color.WHITE,
-                0, h, Color.LIGHT_GRAY);
-
+        
+        GradientPaint gp;
+        if (UIManager.getBoolean("nb.dark.theme")) {
+            gp = new GradientPaint(
+                    0, 0, Color.DARK_GRAY,
+                    0, h, Color.GRAY);
+        } else {
+            gp = new GradientPaint(
+                    0, 0, Color.WHITE,
+                    0, h, Color.LIGHT_GRAY);
+        }
+       
         g2d.setPaint(gp);
         g2d.fillRect(0, 0, w, h);
     }
