@@ -210,12 +210,12 @@ public class ProjectAssetManager extends DesktopAssetManager {
                     logger.info(fo.toURL().toExternalForm());
                     if (!fo.equals(getAssetFolder())) {
                             fo.addRecursiveListener(listener);
-                            logger.log(Level.INFO, "Add classpath:{0}", fo);
+                            logger.log(Level.FINE, "Add classpath:{0}", fo);
                             classPathItems.add(new ClassPathItem(fo, listener));
                             urls.add(fo.toURL());
                         }
                     if (fo.toURL().toExternalForm().startsWith("jar")) {
-                            logger.log(Level.INFO, "Add Gradle locator:{0}", fo.toURL());
+                            logger.log(Level.FINE, "Add Gradle locator:{0}", fo.toURL());
                             jarItems.add(fo);
                             registerLocator(fo.toURL().toExternalForm(),
                                     "com.jme3.asset.plugins.UrlLocator");
@@ -227,7 +227,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
             
             loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), getClass().getClassLoader());
             addClassLoader(loader);
-            logger.log(Level.INFO, "Updated {0} classpath entries and {1} url locators for project {2}", new Object[]{classPathItems.size(), jarItems.size(), project.toString()});
+            logger.log(Level.FINE, "Updated {0} classpath entries and {1} url locators for project {2}", new Object[]{classPathItems.size(), jarItems.size(), project.toString()});
         }
     }
     FileChangeListener listener = new FileChangeListener() {
@@ -524,19 +524,22 @@ public class ProjectAssetManager extends DesktopAssetManager {
             while (classPathItemsIter.hasNext()) {
                 ClassPathItem classPathItem = classPathItemsIter.next();
                 FileObject jarFile = classPathItem.object;
-                if(FileUtil.isArchiveFile(jarFile)) {
-                    FileObject jarFileRoot = FileUtil.getArchiveRoot(jarFile);
-                    Enumeration<FileObject> jarEntry = (Enumeration<FileObject>) jarFileRoot.getChildren(true);
-                    while (jarEntry.hasMoreElements()) {
-                        FileObject jarEntryAsset = jarEntry.nextElement();
-                        if (jarEntryAsset.getExt().equalsIgnoreCase(suffix)) {
-                            if (!jarEntryAsset.getPath().startsWith("/")) {
-                                list.add(jarEntryAsset.getPath());
-                            }
+                
+                // Gradle projects don't know that the dependency is a Jar file
+                if (FileUtil.isArchiveFile(jarFile)) {
+                    jarFile = FileUtil.getArchiveRoot(jarFile);
+                }
+
+                Enumeration<FileObject> jarEntry = (Enumeration<FileObject>) jarFile.getChildren(true);
+                while (jarEntry.hasMoreElements()) {
+                    FileObject jarEntryAsset = jarEntry.nextElement();
+                    if (jarEntryAsset.getExt().equalsIgnoreCase(suffix)) {
+                        if (!jarEntryAsset.getPath().startsWith("/")) {
+                            list.add(jarEntryAsset.getPath());
                         }
                     }
                 }
-                
+
             }
             return list;
         }

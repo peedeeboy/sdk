@@ -40,7 +40,7 @@ import org.netbeans.spi.project.ProjectServiceProvider;
 import org.openide.util.Lookup;
 
 /**
- * Hook that fires after a Gradle JME project has been build and requests
+ * Hook that fires after a Gradle JME project has been built and requests
  * the ProjectAssetManager to update its ClassLoader (e.g. in case new
  * dependencies have been added)
  * 
