@@ -23,14 +23,13 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.control.Control;
 import com.jme3.util.TangentBinormalGenerator;
+import com.jme3.util.mikktspace.MikktspaceTangentGenerator;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -335,29 +334,28 @@ public class SceneEditorController implements NodeListener {
     public void doCreateTangents(Spatial selected) {
         if (selected instanceof Geometry) {
             Geometry geom = (Geometry) selected;
-            Mesh mesh = geom.getMesh();
-            if (mesh != null) {
-                TangentBinormalGenerator.generate(mesh);
-                createTrangentsUndo(mesh);
-            }
+            MikktspaceTangentGenerator.generate(geom);
+            createTangentsUndo(geom);
         }
     }
 
-    private void createTrangentsUndo(final Mesh mesh) {
-        if (mesh != null) {
-            Lookup.getDefault().lookup(SceneUndoRedoManager.class).addEdit(this, new AbstractUndoableSceneEdit() {
-
-                @Override
-                public void sceneUndo() throws CannotUndoException {
-                    mesh.clearBuffer(Type.Tangent);
-                }
-
-                @Override
-                public void sceneRedo() throws CannotRedoException {
-                    TangentBinormalGenerator.generate(mesh);
-                }
-            });
+    private void createTangentsUndo(final Geometry geometry) {
+        if (geometry == null) {
+            return;
         }
+
+        Lookup.getDefault().lookup(SceneUndoRedoManager.class).addEdit(this, new AbstractUndoableSceneEdit() {
+
+            @Override
+            public void sceneUndo() throws CannotUndoException {
+                geometry.getMesh().clearBuffer(Type.Tangent);
+            }
+
+            @Override
+            public void sceneRedo() throws CannotRedoException {
+                TangentBinormalGenerator.generate(geometry);
+            }
+        });
     }
 
     public void createPhysicsMeshForSelectedSpatial() {

@@ -34,27 +34,18 @@ package com.jme3.gde.core.sceneexplorer.nodes.actions.impl;
 import com.jme3.gde.core.sceneexplorer.nodes.AbstractSceneExplorerNode;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeGeometry;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.AbstractToolAction;
-import com.jme3.gde.core.sceneexplorer.nodes.actions.AbstractToolWizardAction;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.ToolAction;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer.Type;
-import com.jme3.util.TangentBinormalGenerator;
-import java.awt.Component;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JComponent;
-import org.openide.DialogDisplayer;
-import org.openide.WizardDescriptor;
-import org.openide.nodes.Node;
+import com.jme3.util.mikktspace.MikktspaceTangentGenerator;
 
 /**
  *
  * @author normenhansen
  */
 @org.openide.util.lookup.ServiceProvider(service = ToolAction.class)
-public class GenerateTangentsTool extends AbstractToolWizardAction {
+public class GenerateTangentsTool extends AbstractToolAction {
 
     public GenerateTangentsTool() {
         name = "Generate Tangents";
@@ -75,55 +66,18 @@ public class GenerateTangentsTool extends AbstractToolWizardAction {
         }
     }
 
+    @Override
     public Class<?> getNodeClass() {
         return JmeGeometry.class;
     }
 
     @Override
-    protected Object showWizard(Node node) {
-         List<WizardDescriptor.Panel<WizardDescriptor>> panels = new ArrayList<WizardDescriptor.Panel<WizardDescriptor>>();
-        panels.add(new GenerateTangentsWizardPanel1());
-        for (int i = 0; i < panels.size(); i++) {
-            Component c = panels.get(i).getComponent();
-            if (c instanceof JComponent) { // assume Swing components
-                JComponent jc = (JComponent) c;
-                jc.putClientProperty(WizardDescriptor.PROP_CONTENT_SELECTED_INDEX, i);
-                jc.putClientProperty(WizardDescriptor.PROP_AUTO_WIZARD_STYLE, true);
-                jc.putClientProperty(WizardDescriptor.PROP_CONTENT_DISPLAYED, true);
-                jc.putClientProperty(WizardDescriptor.PROP_CONTENT_NUMBERED, true);
-            }
-        }
-        WizardDescriptor wiz = new WizardDescriptor(new WizardDescriptor.ArrayIterator<WizardDescriptor>(panels));
-        // {0} will be replaced by WizardDesriptor.Panel.getComponent().getName()
-        wiz.setTitleFormat(new MessageFormat("{0}"));
-        wiz.setTitle("Generate tangents for this model");
-        if (DialogDisplayer.getDefault().notify(wiz) == WizardDescriptor.FINISH_OPTION) {
-            // do something
-            return wiz;
-        } 
-        return null;
-    }
-
-    @Override
-    protected Object doApplyTool(AbstractSceneExplorerNode rootNode, Object settings) {
-        WizardDescriptor wiz = (WizardDescriptor)settings;
+    protected Object doApplyTool(AbstractSceneExplorerNode rootNode) {
         Geometry geom = rootNode.getLookup().lookup(Geometry.class);
-        boolean splitMirrored = (Boolean)wiz.getProperties().get("splitMirrored");
-        
-        Mesh mesh = geom.getMesh();
-        Mesh keptMesh = null;
-        if (mesh != null) {
-            if(splitMirrored){
-                keptMesh  = mesh.deepClone();
-            }
-            TangentBinormalGenerator.generate(geom, splitMirrored);
-            
-        }
-        if(keptMesh == null){
-            return splitMirrored;
-        }else{
-            return keptMesh;
-        }
+
+        MikktspaceTangentGenerator.generate(geom);
+
+        return false;
     }
 
 }
