@@ -126,20 +126,12 @@ public enum PhysicsLibrary implements TemplateLibrary {
         this.isCoreJmeLibrary = isCoreJmeLibrary;
     }
 
-    /**
-     * Get the label for this Physics Library.
-     *
-     * @return the label for this Physics Library.
-     */
+    @Override
     public String getLabel() {
         return label;
     }
 
-    /**
-     * Get the long description for this Physics Library.
-     *
-     * @return the long description for this Physics Library.
-     */
+    @Override
     public String getDescription() {
         return description;
     }

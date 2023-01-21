@@ -37,6 +37,20 @@ package com.jme3.gde.templates.gradledesktop.options;
 public interface TemplateLibrary extends MavenArtifact {
 
     /**
+     * Get the label for this library.
+     *
+     * @return the label for this library.
+     */
+    public String getLabel();
+
+    /**
+     * Get the long description for this library.
+     *
+     * @return the long description for this library.
+     */
+    public String getDescription();
+
+    /**
      * Is this a Core jMonkeyEngine library?
      *
      * @return true if this is a core jMonkeyEngine library

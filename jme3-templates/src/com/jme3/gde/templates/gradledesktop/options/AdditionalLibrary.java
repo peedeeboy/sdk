@@ -162,20 +162,12 @@ public enum AdditionalLibrary implements TemplateLibrary {
         this.isCoreJmeLibrary = isCoreJmeLibrary;
     }
 
-    /**
-     * Get the label for this Additional Library.
-     *
-     * @return the label for this Additional Library.
-     */
+    @Override
     public String getLabel() {
         return label;
     }
 
-    /**
-     * Get the long description for this Additional Library.
-     *
-     * @return the long description for this Additional Library.
-     */
+    @Override
     public String getDescription() {
         return description;
     }

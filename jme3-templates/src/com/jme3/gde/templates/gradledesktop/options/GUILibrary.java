@@ -127,20 +127,12 @@ public enum GUILibrary implements TemplateLibrary {
         this.isCoreJmeLibrary = isCoreJmeLibrary;
     }
 
-    /**
-     * Get the label for this GUI Library.
-     *
-     * @return the label for this GUI Library.
-     */
+    @Override
     public String getLabel() {
         return label;
     }
 
-    /**
-     * Get the long description for this GUI Library.
-     *
-     * @return the long description for this GUI Library.
-     */
+    @Override
     public String getDescription() {
         return description;
     }

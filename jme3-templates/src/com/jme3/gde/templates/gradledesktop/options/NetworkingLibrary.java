@@ -130,20 +130,12 @@ public enum NetworkingLibrary implements TemplateLibrary {
         this.isCoreJmeLibrary = isCoreJmeLibrary;
     }
 
-    /**
-     * Get the label for this Networking Library.
-     *
-     * @return the label for this Networking Library.
-     */
+    @Override
     public String getLabel() {
         return label;
     }
 
-    /**
-     * Get the long description for this Networking Library.
-     *
-     * @return the long description for this Networking Library.
-     */
+    @Override
     public String getDescription() {
         return description;
     }
