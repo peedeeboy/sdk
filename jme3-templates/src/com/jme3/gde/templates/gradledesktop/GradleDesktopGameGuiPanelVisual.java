@@ -50,7 +50,7 @@ import org.openide.awt.Mnemonics;
 import org.openide.util.NbBundle;
 
 /**
- * UI Compoment for the New Gradle Game Wizard GUI panel.
+ * UI Component for the New Gradle Game Wizard GUI panel.
  *
  * @author peedeeboy
  */

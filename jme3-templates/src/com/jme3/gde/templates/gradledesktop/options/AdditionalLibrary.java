@@ -65,45 +65,53 @@ import org.openide.util.NbBundle;
  *
  * @author peedeeboy
  */
-public enum AdditionalLibrary {
+public enum AdditionalLibrary implements TemplateLibrary {
 
     JME3_EFFECTS("jMonkeyEngine Effects (jme3-effects)",
             NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.jme3-effects.description"),
-            "org.jmonkeyengine:jme3-effects", true),
+            "org.jmonkeyengine", "jme3-effects",
+            null, true),
     JME3_TERRAIN("jMonkeyEngine TerraMonkey (jme3-terrain)",
             NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.jme3-terrain.description"),
-            "org.jmonkeyengine:jme3-terrain", true),
+            "org.jmonkeyengine", "jme3-terrain",
+            null, true),
     JME3_TESTDATA("jMonkeyEngine Test Data (jme3-testdata)",
             NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.jme3-testdata.description"),
-            "org.jmonkeyengine:jme3-testdata", true),
+            "org.jmonkeyengine", "jme3-testdata",
+            null, true),
     JME3_VR("jMonkeyEngine Virtual Reality (jme3-vr)",
             NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.jme3-vr.description"),
-            "org.jmonkeyengine:jme3-vr", true),
+            "org.jmonkeyengine", "jme3-vr",
+            null, true),
     HEART("Heart Library", NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.heart.description"),
-            "com.github.stephengold:Heart:8.1.0", false),
+            "com.github.stephengold", "Heart",
+            "8.1.0", false),
     PARTICLE_MONKEY("Particle Monkey",
             NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.particlemonkey.description"),
-            "com.github.Jeddic:particlemonkey:1.0.2", false),
+            "com.github.Jeddic", "particlemonkey",
+            "1.0.2", false),
     SHADERBLOW_EX("ShaderBlowEx", NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.shaderblowex.description"),
-            "com.github.polincdev:ShaderBlowEx:master-SNAPSHOT", false),
+            "com.github.polincdev", "ShaderBlowEx",
+            "master-SNAPSHOT", false),
     SIO2("SiO2", NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.sio2.description"),
-            "com.simsilica:sio2:1.7.0", false),
+            "com.simsilica", "sio2",
+            "1.7.0", false),
     ZAY_ES("Zay-ES Entity Component System",
             NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.zayes.description"),
-            "com.simsilica:zay-es:1.4.0", false),
+            "com.simsilica", "zay-es", "1.4.0", false),
     ZAY_ES_NET("Zay-ES-Net Networking Extension",
             NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.zayesnet.description"),
-            "com.simsilica:zay-es-net:1.5.0", false),;
+            "com.simsilica", "zay-es-net", "1.5.0", false);
 
     /**
      * The name of the library. This will be displayed in the jComboBox in the
@@ -116,13 +124,17 @@ public enum AdditionalLibrary {
      */
     private final String description;
     /**
-     * Gradle artifact string. If this is <strong>not</strong> a core JME
-     * library, then the artifact string should include the version number. If
-     * the library <strong>is</strong> a core JME library, then the version
-     * should be omitted, as they jMonkeyEngine version will be appended
-     * automatically by the template.
+     * Maven artifact ID
      */
-    private final String artifact;
+    private final String artifactId;
+    /**
+     * Maven group ID
+     */
+    private final String groupId;
+    /**
+     * Default artifact version to be used
+     */
+    private final String defaultVersion;
     /**
      * Is this library a core jMonkeyEngine library? True if the library is a
      * part of jMonkeyengine, false if it is 3rd party.
@@ -134,14 +146,19 @@ public enum AdditionalLibrary {
      *
      * @param label The name of the library.
      * @param description Long description of the library.
-     * @param artifact Gradle artifact string.
+     * @param groupId Maven group ID.
+     * @param artifactId Maven artifact ID.
+     * @param defaultVersion Default version is used if no version info is found
+     * from Maven
      * @param isCoreJmeLibrary Is this library a core jMonkeyEngine library?
      */
-    AdditionalLibrary(String label, String description, String artifact,
-            boolean isCoreJmeLibrary) {
+    AdditionalLibrary(String label, String description, String groupId,
+            String artifactId, String defaultVersion, boolean isCoreJmeLibrary) {
         this.label = label;
         this.description = description;
-        this.artifact = artifact;
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.defaultVersion = defaultVersion;
         this.isCoreJmeLibrary = isCoreJmeLibrary;
     }
 
@@ -164,24 +181,6 @@ public enum AdditionalLibrary {
     }
 
     /**
-     * Get the Gradle artifact string.
-     *
-     * @return the Gradle artifact string.
-     */
-    public String getArtifact() {
-        return artifact;
-    }
-
-    /**
-     * Is this a Core jMonkeyEngine library?
-     *
-     * @return true if this is a core jMonkeyEngine library.
-     */
-    public boolean getIsCoreJmeLibrary() {
-        return isCoreJmeLibrary;
-    }
-
-    /**
      * Override the <code>toString()</code> method to return the label, so that
      * this enum will display nicely in a jComboBox.
      *
@@ -190,5 +189,29 @@ public enum AdditionalLibrary {
     @Override
     public String toString() {
         return label;
+    }
+
+    public String getDefaultVersion() {
+        return defaultVersion;
+    }
+
+    @Override
+    public String getGroupId() {
+        return groupId;
+    }
+
+    @Override
+    public String getArtifactId() {
+        return artifactId;
+    }
+
+    @Override
+    public boolean getIsCoreJmeLibrary() {
+        return isCoreJmeLibrary;
+    }
+
+    @Override
+    public String getVersion() {
+        return defaultVersion;
     }
 }

@@ -47,36 +47,36 @@ dependencies {
   
   // GUI Library
   <#if guiLibrary.isCoreJmeLibrary == true>
-  implementation "${guiLibrary.artifact}:$jmeVer"
+  implementation "${guiLibrary.groupId}:${guiLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${guiLibrary.artifact}"
+  implementation "${guiLibrary.groupId}:${guiLibrary.artifactId}:${guiLibrary.version}"
   </#if>
   </#if>
   <#if physicsLibrary.label != "">
   
   // Physics Library
   <#if physicsLibrary.isCoreJmeLibrary == true>
-  implementation "${physicsLibrary.artifact}:$jmeVer"
+  implementation "${physicsLibrary.groupId}:${physicsLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${physicsLibrary.artifact}"
+  implementation "${physicsLibrary.groupId}:${physicsLibrary.artifactId}:${physicsLibrary.version}"
   </#if>
   </#if>
   <#if networkingLibrary.label != "">
   
   // Networking Library
   <#if networkingLibrary.isCoreJmeLibrary == true>
-  implementation "${networkingLibrary.artifact}:$jmeVer"
+  implementation "${networkingLibrary.groupId}:${networkingLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${networkingLibrary.artifact}"
+  implementation "${networkingLibrary.groupId}:${networkingLibrary.artifactId}:${networkingLibrary.version}"
   </#if>
   </#if>
 
   // Additional Libraries
   <#list additionalLibraries as additionalLibrary>
   <#if additionalLibrary.isCoreJmeLibrary == true>
-  implementation "${additionalLibrary.artifact}:$jmeVer"
+  implementation "${additionalLibrary.groupId}:${additionalLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${additionalLibrary.artifact}"
+  implementation "${additionalLibrary.groupId}:${additionalLibrary.artifactId}:${additionalLibrary.version}"
   </#if>
   </#list>
 
