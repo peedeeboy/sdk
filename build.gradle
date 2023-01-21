@@ -14,11 +14,11 @@ if (!hasProperty('mainClass')) {
 }
 
 repositories {
+	mavenCentral()
     maven { url "https://jitpack.io" }
     maven {
         url "https://maven.google.com/"
     }
-    mavenCentral()
 }
 
 configurations {
@@ -43,7 +43,7 @@ dependencies {
     corelibs dep("org.jmonkeyengine:jme3-lwjgl:$jmeVersion-$jmeVersionTag", true, true)
     corelibs dep("org.jmonkeyengine:jme3-effects:$jmeVersion-$jmeVersionTag", true, true)
     corelibs dep("org.jmonkeyengine:jme3-blender:3.3.2-stable", false, false) // Pin Pointed until jme3-blender has a dedicated release or support is phased out.
-    optlibs dep("com.github.stephengold:Minie:6.0.0", false, false) // replacement for bullet-native
+    optlibs dep("com.github.stephengold:Minie:7.1.0", false, false) // replacement for bullet-native
     corelibs dep(fileTree("lib"), false, false)
     corelibs dep("org.jmonkeyengine:jme3-jogg:$jmeVersion-$jmeVersionTag", true, true)
 
@@ -57,7 +57,7 @@ dependencies {
     optlibs dep("org.jmonkeyengine:jme3-ios:$jmeVersion-$jmeVersionTag", true, true)
     optlibs dep("org.jmonkeyengine:jme3-android-native:$jmeVersion-$jmeVersionTag", true, true)
     optlibs dep("org.jmonkeyengine:jme3-lwjgl3:$jmeVersion-$jmeVersionTag", true, true)
-    optlibs dep("com.github.stephengold:Heart:8.1.0", true, true)
+    optlibs dep("com.github.stephengold:Heart:8.2.0", true, true)
     optlibs dep("com.github.stephengold:Wes:0.7.2", true, true)
     testdatalibs dep("org.jmonkeyengine:jme3-testdata:$jmeVersion-$jmeVersionTag", false, false)
     examplelibs dep("org.jmonkeyengine:jme3-examples:$jmeVersion-$jmeVersionTag", false, true)
