@@ -70,7 +70,7 @@ public enum NetworkingLibrary implements TemplateLibrary {
             null, false),
     SPIDERMONKEY("SpiderMonkey", NbBundle.getMessage(NetworkingLibrary.class,
             "networkinglibrary.spidermonkey.description"),
-            "org.jmonkeyengine", "jme3-networking",
+            null, "jme3-networking",
             null, true),
     MONKEYNETTY("MonkeyNetty", NbBundle.getMessage(NetworkingLibrary.class,
             "networkinglibrary.monkeynetty.description"),
@@ -153,7 +153,7 @@ public enum NetworkingLibrary implements TemplateLibrary {
 
     @Override
     public String getGroupId() {
-        return groupId;
+        return isCoreJmeLibrary ? JME_GROUP_ID : groupId;
     }
 
     @Override

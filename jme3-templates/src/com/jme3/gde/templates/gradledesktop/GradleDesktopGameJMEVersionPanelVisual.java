@@ -33,7 +33,8 @@
 package com.jme3.gde.templates.gradledesktop;
 
 import com.jme3.gde.templates.gradledesktop.options.JMEVersion;
-import com.jme3.gde.templates.gradledesktop.options.LWJGLVersion;
+import com.jme3.gde.templates.gradledesktop.options.LWJGLLibrary;
+import com.jme3.gde.templates.gradledesktop.options.TemplateLibrary;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -124,19 +125,16 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
     }
 
     private void updateLWJGLdescription() {
-        LWJGLVersion lwjglVersion = (LWJGLVersion) lwjglComboBox
-                .getSelectedItem();
+        TemplateLibrary lwjglVersion = lwjglComboBox.getItemAt(lwjglComboBox.getSelectedIndex());
         lwjglTextArea.setText(lwjglVersion.getDescription());
     }
 
     protected void store(WizardDescriptor d) {
         String jmeVersion = jmeVersionComboBox.getSelectedItem().toString();
-        LWJGLVersion lwjglVersion = (LWJGLVersion) lwjglComboBox
-                .getSelectedItem();
-        String lwjglArtifact = lwjglVersion.getArtifact();
+        TemplateLibrary lwjglLibrary = lwjglComboBox.getItemAt(lwjglComboBox.getSelectedIndex());
 
         d.putProperty("jmeVersion", jmeVersion);
-        d.putProperty("lwjglArtifact", lwjglArtifact);
+        d.putProperty("lwjglLibrary", lwjglLibrary);
     }
 
     /**
@@ -184,7 +182,7 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
         lwjglVersionLabel.setLabelFor(lwjglComboBox);
         Mnemonics.setLocalizedText(lwjglVersionLabel, NbBundle.getMessage(GradleDesktopGameJMEVersionPanelVisual.class, "GradleDesktopGameJMEVersionPanelVisual.lwjglVersionLabel.text")); // NOI18N
 
-        lwjglComboBox.setModel(new DefaultComboBoxModel(LWJGLVersion.values()));
+        lwjglComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(LWJGLLibrary.values()));
         lwjglComboBox.setMaximumSize(new Dimension(100, 25));
         lwjglComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -257,7 +255,7 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
     JScrollPane jmeVersionDescriptionScrollPane;
     JTextPane jmeVersionDescriptionTextPane;
     JLabel jmeVersionLabel;
-    JComboBox<String> lwjglComboBox;
+    JComboBox<TemplateLibrary> lwjglComboBox;
     JScrollPane lwjglDescriptionScrollPane;
     JTextArea lwjglTextArea;
     JLabel lwjglVersionLabel;

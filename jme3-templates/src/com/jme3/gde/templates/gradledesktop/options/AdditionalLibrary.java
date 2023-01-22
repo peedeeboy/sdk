@@ -70,22 +70,22 @@ public enum AdditionalLibrary implements TemplateLibrary {
     JME3_EFFECTS("jMonkeyEngine Effects (jme3-effects)",
             NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.jme3-effects.description"),
-            "org.jmonkeyengine", "jme3-effects",
+            null, "jme3-effects",
             null, true),
     JME3_TERRAIN("jMonkeyEngine TerraMonkey (jme3-terrain)",
             NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.jme3-terrain.description"),
-            "org.jmonkeyengine", "jme3-terrain",
+            null, "jme3-terrain",
             null, true),
     JME3_TESTDATA("jMonkeyEngine Test Data (jme3-testdata)",
             NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.jme3-testdata.description"),
-            "org.jmonkeyengine", "jme3-testdata",
+            null, "jme3-testdata",
             null, true),
     JME3_VR("jMonkeyEngine Virtual Reality (jme3-vr)",
             NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.jme3-vr.description"),
-            "org.jmonkeyengine", "jme3-vr",
+            null, "jme3-vr",
             null, true),
     HEART("Heart Library", NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.heart.description"),
@@ -189,7 +189,7 @@ public enum AdditionalLibrary implements TemplateLibrary {
 
     @Override
     public String getGroupId() {
-        return groupId;
+        return isCoreJmeLibrary ? JME_GROUP_ID : groupId;
     }
 
     @Override

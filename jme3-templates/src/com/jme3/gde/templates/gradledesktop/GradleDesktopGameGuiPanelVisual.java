@@ -34,6 +34,7 @@ package com.jme3.gde.templates.gradledesktop;
 import com.jme3.gde.templates.gradledesktop.options.GUILibrary;
 import com.jme3.gde.templates.gradledesktop.options.NetworkingLibrary;
 import com.jme3.gde.templates.gradledesktop.options.PhysicsLibrary;
+import com.jme3.gde.templates.gradledesktop.options.TemplateLibrary;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
@@ -56,39 +57,36 @@ import org.openide.util.NbBundle;
  */
 public class GradleDesktopGameGuiPanelVisual extends JPanel {
 
-    private final GradleDesktopGameGuiPanel panel;
-
     /**
      * Creates new form GradleDesktopGameGuiPanelVisual
      */
     public GradleDesktopGameGuiPanelVisual(GradleDesktopGameGuiPanel panel) {
         initComponents();
+
         updateGuiLibraryDescription();
         updatePhysicsLibraryDescription();
         updateNetworkingLibraryDescription();
-
-        this.panel = panel;
     }
 
     private void updateGuiLibraryDescription() {
-        GUILibrary selectedGuiLibrary = (GUILibrary) guiComboBox.getSelectedItem();
+        TemplateLibrary selectedGuiLibrary = guiComboBox.getItemAt(guiComboBox.getSelectedIndex());
         guiDescriptionTextArea.setText(selectedGuiLibrary.getDescription());
     }
 
     private void updatePhysicsLibraryDescription() {
-        PhysicsLibrary selectedPhysicsLibrary = (PhysicsLibrary) physicsEngineComboBox.getSelectedItem();
+        TemplateLibrary selectedPhysicsLibrary = physicsEngineComboBox.getItemAt(physicsEngineComboBox.getSelectedIndex());
         physicsEngineDescriptionTextArea.setText(selectedPhysicsLibrary.getDescription());
     }
 
     private void updateNetworkingLibraryDescription() {
-        NetworkingLibrary selectedNetworkingLibrary = (NetworkingLibrary) networkingComboBox.getSelectedItem();
+        TemplateLibrary selectedNetworkingLibrary = networkingComboBox.getItemAt(networkingComboBox.getSelectedIndex());
         networkingDescriptionTextArea.setText(selectedNetworkingLibrary.getDescription());
     }
 
     protected void store(WizardDescriptor d) {
-        GUILibrary selectedGuiLibrary = (GUILibrary) guiComboBox.getSelectedItem();
-        PhysicsLibrary selectedPhysicsLibrary = (PhysicsLibrary) physicsEngineComboBox.getSelectedItem();
-        NetworkingLibrary selectedNetworkingLibrary = (NetworkingLibrary) networkingComboBox.getSelectedItem();
+        TemplateLibrary selectedGuiLibrary = guiComboBox.getItemAt(guiComboBox.getSelectedIndex());
+        TemplateLibrary selectedPhysicsLibrary = physicsEngineComboBox.getItemAt(physicsEngineComboBox.getSelectedIndex());
+        TemplateLibrary selectedNetworkingLibrary = networkingComboBox.getItemAt(networkingComboBox.getSelectedIndex());
 
         d.putProperty("guiLibrary", selectedGuiLibrary);
         d.putProperty("physicsLibrary", selectedPhysicsLibrary);
@@ -122,7 +120,7 @@ public class GradleDesktopGameGuiPanelVisual extends JPanel {
         guiLabel.setLabelFor(guiComboBox);
         Mnemonics.setLocalizedText(guiLabel, NbBundle.getMessage(GradleDesktopGameGuiPanelVisual.class, "GradleDesktopGameGuiPanelVisual.guiLabel.text")); // NOI18N
 
-        guiComboBox.setModel(new DefaultComboBoxModel(GUILibrary.values()));
+        guiComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(GUILibrary.values()));
         guiComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 guiComboBoxActionPerformed(evt);
@@ -139,7 +137,7 @@ public class GradleDesktopGameGuiPanelVisual extends JPanel {
         physicsEngineLabel.setLabelFor(physicsEngineComboBox);
         Mnemonics.setLocalizedText(physicsEngineLabel, NbBundle.getMessage(GradleDesktopGameGuiPanelVisual.class, "GradleDesktopGameGuiPanelVisual.physicsEngineLabel.text")); // NOI18N
 
-        physicsEngineComboBox.setModel(new DefaultComboBoxModel(PhysicsLibrary.values()));
+        physicsEngineComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(PhysicsLibrary.values()));
         physicsEngineComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 physicsEngineComboBoxActionPerformed(evt);
@@ -156,7 +154,7 @@ public class GradleDesktopGameGuiPanelVisual extends JPanel {
         networkingLabel.setLabelFor(networkingComboBox);
         Mnemonics.setLocalizedText(networkingLabel, NbBundle.getMessage(GradleDesktopGameGuiPanelVisual.class, "GradleDesktopGameGuiPanelVisual.networkingLabel.text")); // NOI18N
 
-        networkingComboBox.setModel(new DefaultComboBoxModel(NetworkingLibrary.values()));
+        networkingComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(NetworkingLibrary.values()));
         networkingComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 networkingComboBoxActionPerformed(evt);
@@ -239,17 +237,17 @@ public class GradleDesktopGameGuiPanelVisual extends JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JComboBox<String> guiComboBox;
+    private JComboBox<TemplateLibrary> guiComboBox;
     private JScrollPane guiDescriptionScrollPane;
     private JTextArea guiDescriptionTextArea;
     private JLabel guiLabel;
     private JSeparator jSeparator1;
     private JSeparator jSeparator2;
-    private JComboBox<String> networkingComboBox;
+    private JComboBox<TemplateLibrary> networkingComboBox;
     private JScrollPane networkingDescriptionScrollPane;
     private JTextArea networkingDescriptionTextArea;
     private JLabel networkingLabel;
-    private JComboBox<String> physicsEngineComboBox;
+    private JComboBox<TemplateLibrary> physicsEngineComboBox;
     private JScrollPane physicsEngineDescriptionScrollPane;
     private JTextArea physicsEngineDescriptionTextArea;
     private JLabel physicsEngineLabel;

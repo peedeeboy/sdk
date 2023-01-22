@@ -71,7 +71,7 @@ public enum GUILibrary implements TemplateLibrary {
             null, false),
     NIFTY("Nifty", NbBundle.getMessage(GUILibrary.class, 
             "guilibrary.nifty.description"),
-            "org.jmonkeyengine", "jme3-niftygui",
+            null, "jme3-niftygui",
             null, true),
     LEMUR("Lemur", NbBundle.getMessage(GUILibrary.class,
             "guilibrary.lemur.description"),
@@ -150,7 +150,7 @@ public enum GUILibrary implements TemplateLibrary {
 
     @Override
     public String getGroupId() {
-        return groupId;
+        return isCoreJmeLibrary ? JME_GROUP_ID : groupId;
     }
 
     @Override

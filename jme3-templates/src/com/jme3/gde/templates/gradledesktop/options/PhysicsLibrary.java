@@ -70,7 +70,7 @@ public enum PhysicsLibrary implements TemplateLibrary {
             null, false),
     JBULLET("jBullet", NbBundle.getMessage(GUILibrary.class,
             "physicslibrary.jbullet.description"),
-            "org.jmonkeyengine", "jme3-jbullet",
+            null, "jme3-jbullet",
             null, true),
     MINIE("Minie", NbBundle.getMessage(PhysicsLibrary.class,
             "physicslibrary.minie.description"),
@@ -149,7 +149,7 @@ public enum PhysicsLibrary implements TemplateLibrary {
 
     @Override
     public String getGroupId() {
-        return groupId;
+        return isCoreJmeLibrary ? JME_GROUP_ID : groupId;
     }
 
     @Override

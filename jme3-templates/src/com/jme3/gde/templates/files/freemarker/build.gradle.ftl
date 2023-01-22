@@ -38,7 +38,11 @@ dependencies {
   // Core JME
   implementation "org.jmonkeyengine:jme3-core:$jmeVer"
   implementation "org.jmonkeyengine:jme3-desktop:$jmeVer"
-  implementation "${lwjglArtifact}:$jmeVer"
+  <#if lwjglLibrary.isCoreJmeLibrary == true>
+  implementation "${lwjglLibrary.groupId}:${lwjglLibrary.artifactId}:$jmeVer"
+  <#else>
+  implementation "${lwjglLibrary.groupId}:${lwjglLibrary.artifactId}:${lwjglLibrary.version}"
+  </#if>
 
   // Suppress errors / warnings building in SDK
   implementation "org.jmonkeyengine:jme3-jogg:$jmeVer"

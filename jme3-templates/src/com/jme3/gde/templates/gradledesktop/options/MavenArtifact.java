@@ -36,6 +36,8 @@ package com.jme3.gde.templates.gradledesktop.options;
  */
 public interface MavenArtifact {
 
+    String JME_GROUP_ID = "org.jmonkeyengine";
+
     /**
      * Get the Maven group ID
      *
