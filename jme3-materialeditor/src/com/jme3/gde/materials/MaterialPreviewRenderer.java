@@ -22,7 +22,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
-import com.jme3.util.TangentBinormalGenerator;
+import com.jme3.util.mikktspace.MikktspaceTangentGenerator;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
@@ -63,21 +63,22 @@ public class MaterialPreviewRenderer implements SceneListener {
         Sphere sphMesh = new Sphere(32, 32, 2.5f);
         sphMesh.setTextureMode(Sphere.TextureMode.Projected);
         sphMesh.updateGeometry(32, 32, 2.5f, false, false);
-        Logger log = Logger.getLogger(TangentBinormalGenerator.class.getName());
+        Logger log = Logger.getLogger(MikktspaceTangentGenerator.class.getName());
         log.setLevel(Level.SEVERE);
-        TangentBinormalGenerator.generate(sphMesh);
         sphere = new Geometry("previewSphere", sphMesh);
         sphere.setLocalRotation(new Quaternion().fromAngleAxis(FastMath.QUARTER_PI, Vector3f.UNIT_X));
+        MikktspaceTangentGenerator.generate(sphere);
 
         Box boxMesh = new Box(1.75f, 1.75f, 1.75f);
-        TangentBinormalGenerator.generate(boxMesh);
         box = new Geometry("previewBox", boxMesh);
         box.setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.DEG_TO_RAD * 30, Vector3f.UNIT_X).multLocal(new Quaternion().fromAngleAxis(FastMath.QUARTER_PI, Vector3f.UNIT_Y)));
+        MikktspaceTangentGenerator.generate(box);
 
         Quad quadMesh = new Quad(4.5f, 4.5f);
-        TangentBinormalGenerator.generate(quadMesh);
         quad = new Geometry("previewQuad", quadMesh);
         quad.setLocalTranslation(new Vector3f(-2.25f, -2.25f, 0));
+        MikktspaceTangentGenerator.generate(quad);
+
         currentGeom = sphere;
         init = true;
     }
