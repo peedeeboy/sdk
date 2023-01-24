@@ -76,8 +76,14 @@ public class MavenApiVersionChecker implements MavenVersionChecker {
         queryParams.put("wt", "json");
 
         try {
-            return callApi(queryParams, SearchResult.class).thenApply((result) -> result.response.docs.stream().map((doc) -> doc.v).collect(Collectors.toList()));
-        } catch (Exception ex) {
+            return callApi(queryParams, SearchResult.class).thenApply((result) -> {
+                if (result == null) {
+                    return null;
+                }
+
+                return result.response.docs.stream().map((doc) -> doc.v).collect(Collectors.toList());
+            });
+        } catch (InterruptedException | ExecutionException ex) {
             throw new RuntimeException("Failed to get version info!", ex);
         }
     }
@@ -89,8 +95,14 @@ public class MavenApiVersionChecker implements MavenVersionChecker {
         queryParams.put("wt", "json");
 
         try {
-            return callApi(queryParams, SearchResult.class).thenApply((result) -> result.response.docs.get(0).latestVersion);
-        } catch (Exception ex) {
+            return callApi(queryParams, SearchResult.class).thenApply((result) -> {
+                if (result == null) {
+                    return null;
+                }
+
+                return result.response.docs.get(0).latestVersion;
+            });
+        } catch (InterruptedException | ExecutionException ex) {
             throw new RuntimeException("Failed to get latest version info!", ex);
         }
     }
@@ -106,7 +118,13 @@ public class MavenApiVersionChecker implements MavenVersionChecker {
                 .build();
 
         CompletableFuture<T> result = client.sendAsync(request, BodyHandlers.ofString())
-                .thenApply((t) -> gson.fromJson(t.body(), clazz));
+                .thenApply((t) -> {
+                    if (t.statusCode() != 200) {
+                        return null;
+                    }
+
+                    return gson.fromJson(t.body(), clazz);
+                });
 
         return result;
     }
