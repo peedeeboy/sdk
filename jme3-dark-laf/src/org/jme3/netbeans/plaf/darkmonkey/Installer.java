@@ -12,6 +12,8 @@ import org.openide.util.NbPreferences;
 
 public class Installer extends ModuleInstall {
 
+    private static boolean isFirstInstallation = false;
+    
     @Override
     public void restored() {
         DarkMonkeyLookAndFeel darkMonkeyLaf = new DarkMonkeyLookAndFeel();
@@ -36,8 +38,10 @@ public class Installer extends ModuleInstall {
         };
         DMUtils.loadFontsFromJar(this, fontsToLoad);
         
-        EditorSettings setting = org.netbeans.modules.editor.settings.storage.api.EditorSettings.getDefault();
-        setting.setCurrentFontColorProfile("Dark Monkey");
+        if(isFirstInstallation) {
+            EditorSettings setting = org.netbeans.modules.editor.settings.storage.api.EditorSettings.getDefault();
+            setting.setCurrentFontColorProfile("Dark Monkey");
+        }
     }
 
     @Override
@@ -47,6 +51,7 @@ public class Installer extends ModuleInstall {
         if (LaF == null) {
             /* Did the user already set a LaF? */
             NbPreferences.root().node("laf").put("laf", "com.formdev.flatlaf.FlatDarkLaf"); // Set Flatlaf Dark as default LaF
+            isFirstInstallation = true;
         }
     }
 
