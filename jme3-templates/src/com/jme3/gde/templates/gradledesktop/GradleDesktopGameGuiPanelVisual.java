@@ -31,9 +31,6 @@
  */
 package com.jme3.gde.templates.gradledesktop;
 
-import com.jme3.gde.templates.gradledesktop.options.GUILibrary;
-import com.jme3.gde.templates.gradledesktop.options.NetworkingLibrary;
-import com.jme3.gde.templates.gradledesktop.options.PhysicsLibrary;
 import com.jme3.gde.templates.gradledesktop.options.TemplateLibrary;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -120,7 +117,7 @@ public class GradleDesktopGameGuiPanelVisual extends JPanel {
         guiLabel.setLabelFor(guiComboBox);
         Mnemonics.setLocalizedText(guiLabel, NbBundle.getMessage(GradleDesktopGameGuiPanelVisual.class, "GradleDesktopGameGuiPanelVisual.guiLabel.text")); // NOI18N
 
-        guiComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(GUILibrary.values()));
+        guiComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(CachedOptionsContainer.getInstance().getGuiLibraries().toArray(new TemplateLibrary[0])));
         guiComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 guiComboBoxActionPerformed(evt);
@@ -137,7 +134,7 @@ public class GradleDesktopGameGuiPanelVisual extends JPanel {
         physicsEngineLabel.setLabelFor(physicsEngineComboBox);
         Mnemonics.setLocalizedText(physicsEngineLabel, NbBundle.getMessage(GradleDesktopGameGuiPanelVisual.class, "GradleDesktopGameGuiPanelVisual.physicsEngineLabel.text")); // NOI18N
 
-        physicsEngineComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(PhysicsLibrary.values()));
+        physicsEngineComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(CachedOptionsContainer.getInstance().getPhysicsLibraries().toArray(new TemplateLibrary[0])));
         physicsEngineComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 physicsEngineComboBoxActionPerformed(evt);
@@ -154,7 +151,7 @@ public class GradleDesktopGameGuiPanelVisual extends JPanel {
         networkingLabel.setLabelFor(networkingComboBox);
         Mnemonics.setLocalizedText(networkingLabel, NbBundle.getMessage(GradleDesktopGameGuiPanelVisual.class, "GradleDesktopGameGuiPanelVisual.networkingLabel.text")); // NOI18N
 
-        networkingComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(NetworkingLibrary.values()));
+        networkingComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(CachedOptionsContainer.getInstance().getNetworkingLibraries().toArray(new TemplateLibrary[0])));
         networkingComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 networkingComboBoxActionPerformed(evt);

@@ -95,7 +95,7 @@
     <Component class="javax.swing.JComboBox" name="guiComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new DefaultComboBoxModel&lt;TemplateLibrary&gt;(GUILibrary.values())" type="code"/>
+          <Connection code="new DefaultComboBoxModel&lt;TemplateLibrary&gt;(CachedOptionsContainer.getInstance().getGuiLibraries().toArray(new TemplateLibrary[0]))" type="code"/>
         </Property>
       </Properties>
       <Events>
@@ -138,7 +138,7 @@
     <Component class="javax.swing.JComboBox" name="physicsEngineComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new DefaultComboBoxModel&lt;TemplateLibrary&gt;(PhysicsLibrary.values())" type="code"/>
+          <Connection code="new DefaultComboBoxModel&lt;TemplateLibrary&gt;(CachedOptionsContainer.getInstance().getPhysicsLibraries().toArray(new TemplateLibrary[0]))" type="code"/>
         </Property>
       </Properties>
       <Events>
@@ -181,7 +181,7 @@
     <Component class="javax.swing.JComboBox" name="networkingComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="new DefaultComboBoxModel&lt;TemplateLibrary&gt;(NetworkingLibrary.values())" type="code"/>
+          <Connection code="new DefaultComboBoxModel&lt;TemplateLibrary&gt;(CachedOptionsContainer.getInstance().getNetworkingLibraries().toArray(new TemplateLibrary[0]))" type="code"/>
         </Property>
       </Properties>
       <Events>

@@ -32,7 +32,6 @@
 
 package com.jme3.gde.templates.gradledesktop;
 
-import com.jme3.gde.templates.gradledesktop.options.AdditionalLibrary;
 import com.jme3.gde.templates.gradledesktop.options.TemplateLibrary;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -81,11 +80,13 @@ public class GradleDesktopGameAdditionalLibrariesPanelVisual extends JPanel
     }
 
     private void populateLibraryTable() {
-        int noRows = AdditionalLibrary.values().length;
+        List<TemplateLibrary> libraries = CachedOptionsContainer.getInstance().getAdditionalLibraries();
+
+        int noRows = libraries.size();
         Object[][] tableData = new Object[noRows][2];
 
         int row = 0;
-        for (TemplateLibrary library : AdditionalLibrary.values()) {
+        for (TemplateLibrary library : libraries) {
             tableData[row][0] = Boolean.FALSE;
             tableData[row][1] = library;
             row++;
