@@ -86,6 +86,9 @@ public class GradleDesktopGameWizardIterator implements WizardDescriptor./*Progr
     private static final String TEMPLATE_BUILDFILE = "com/jme3/gde/templates/files/freemarker/build.gradle.ftl";
     
     public GradleDesktopGameWizardIterator() {
+
+        // Initiate the options getting...
+        CachedOptionsContainer.getInstance();
     }
 
     public static GradleDesktopGameWizardIterator createIterator() {
