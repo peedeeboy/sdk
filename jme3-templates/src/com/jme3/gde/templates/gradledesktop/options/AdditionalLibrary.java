@@ -183,10 +183,6 @@ public enum AdditionalLibrary implements TemplateLibrary {
         return label;
     }
 
-    public String getDefaultVersion() {
-        return defaultVersion;
-    }
-
     @Override
     public String getGroupId() {
         return isCoreJmeLibrary ? JME_GROUP_ID : groupId;
