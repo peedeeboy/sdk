@@ -39,10 +39,8 @@ import com.jme3.gde.templates.gradledesktop.options.TemplateLibrary;
 import com.jme3.gde.templates.utils.mavensearch.MavenApiVersionChecker;
 import com.jme3.gde.templates.utils.mavensearch.MavenVersionChecker;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,10 +55,10 @@ public class CachedOptionsContainer {
 
     private static final Logger logger = Logger.getLogger(CachedOptionsContainer.class.getName());
 
-    private SortedMap<TemplateLibrary, CompletableFuture<String>> additionalLibraries;
-    private SortedMap<TemplateLibrary, CompletableFuture<String>> guiLibraries;
-    private SortedMap<TemplateLibrary, CompletableFuture<String>> networkingLibraries;
-    private SortedMap<TemplateLibrary, CompletableFuture<String>> physicsLibraries;
+    private List<TemplateLibrary> additionalLibraries;
+    private List<TemplateLibrary> guiLibraries;
+    private List<TemplateLibrary> networkingLibraries;
+    private List<TemplateLibrary> physicsLibraries;
 
     private CachedOptionsContainer() {
         initialize();
@@ -86,84 +84,76 @@ public class CachedOptionsContainer {
         physicsLibraries = initLibaries(mavenVersionChecker, PhysicsLibrary.values());
     }
 
-    private SortedMap<TemplateLibrary, CompletableFuture<String>> initLibaries(MavenVersionChecker mavenVersionChecker, TemplateLibrary[] libraries) {
-        SortedMap<TemplateLibrary, CompletableFuture<String>> libs = new TreeMap<>();
+    private List<TemplateLibrary> initLibaries(MavenVersionChecker mavenVersionChecker, TemplateLibrary[] libraries) {
+        List<TemplateLibrary> libs = new ArrayList<>(libraries.length);
         for (TemplateLibrary templateLibrary : libraries) {
-            libs.put(templateLibrary, mavenVersionChecker.getLatestVersion(templateLibrary.getGroupId(), templateLibrary.getArtifactId()));
-        }
+            libs.add(new TemplateLibrary() {
 
-        return libs;
-    }
-
-    public List<TemplateLibrary> getAdditionalLibraries() {
-        return getLibraries(additionalLibraries);
-    }
-
-    public List<TemplateLibrary> getGuiLibraries() {
-        return getLibraries(guiLibraries);
-    }
-
-    public List<TemplateLibrary> getNetworkingLibraries() {
-        return getLibraries(networkingLibraries);
-    }
-
-    public List<TemplateLibrary> getPhysicsLibraries() {
-        return getLibraries(physicsLibraries);
-    }
-
-    private List<TemplateLibrary> getLibraries(SortedMap<TemplateLibrary, CompletableFuture<String>> libraries) {
-        List<TemplateLibrary> results = new ArrayList<>(libraries.size());
-
-        for (Map.Entry<TemplateLibrary, CompletableFuture<String>> entry : libraries.entrySet()) {
-            results.add(new TemplateLibrary() {
+                private final CompletableFuture<String> latestVersion = mavenVersionChecker.getLatestVersion(templateLibrary.getGroupId(), templateLibrary.getArtifactId());
 
                 @Override
                 public String getLabel() {
-                    return entry.getKey().getLabel();
+                    return templateLibrary.getLabel();
                 }
 
                 @Override
                 public String getDescription() {
-                    return entry.getKey().getDescription();
+                    return templateLibrary.getDescription();
                 }
 
                 @Override
                 public boolean getIsCoreJmeLibrary() {
-                    return entry.getKey().getIsCoreJmeLibrary();
+                    return templateLibrary.getIsCoreJmeLibrary();
                 }
 
                 @Override
                 public String getGroupId() {
-                    return entry.getKey().getGroupId();
+                    return templateLibrary.getGroupId();
                 }
 
                 @Override
                 public String getArtifactId() {
-                    return entry.getKey().getArtifactId();
+                    return templateLibrary.getArtifactId();
                 }
 
                 @Override
                 public String getVersion() {
                     try {
-                        return entry.getValue().getNow(entry.getKey().getVersion());
+                        return latestVersion.getNow(templateLibrary.getVersion());
                     } catch (Exception e) {
                         logger.log(Level.WARNING, e,
                                 () -> String.format("Failed to acquire version information for Maven artifact {0}:{1}", new Object[]{getGroupId(), getArtifactId()}));
-                        entry.getValue().obtrudeValue(entry.getKey().getVersion());
+                        latestVersion.obtrudeValue(templateLibrary.getVersion());
 
-                        return entry.getKey().getVersion();
+                        return templateLibrary.getVersion();
                     }
                 }
 
                 @Override
                 public String toString() {
-                    return entry.getKey().getLabel();
+                    return templateLibrary.getLabel();
                 }
 
             });
         }
 
-        return results;
+        return Collections.unmodifiableList(libs);
+    }
+
+    public List<TemplateLibrary> getAdditionalLibraries() {
+        return additionalLibraries;
+    }
+
+    public List<TemplateLibrary> getGuiLibraries() {
+        return guiLibraries;
+    }
+
+    public List<TemplateLibrary> getNetworkingLibraries() {
+        return networkingLibraries;
+    }
+
+    public List<TemplateLibrary> getPhysicsLibraries() {
+        return physicsLibraries;
     }
 
 }
