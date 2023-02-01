@@ -157,79 +157,90 @@ public class ProjectAssetManager extends DesktopAssetManager {
 
     private void loadClassLoader() {
         Sources sources = ProjectUtils.getSources(project);
-        if (sources != null) {
-            if (loader != null) {
-                removeClassLoader(loader);
-            }
-            SourceGroup[] groups = sources.getSourceGroups(JavaProjectConstants.SOURCES_TYPE_JAVA);
-            List<URL> urls = new LinkedList<URL>();
-            for (SourceGroup sourceGroup : groups) {
-                ClassPath path = ClassPath.getClassPath(sourceGroup.getRootFolder(), ClassPath.EXECUTE);
-                if (path != null) {
-                    classPaths.add(path);
-                    path.addPropertyChangeListener(classPathListener);
-                    FileObject[] roots = path.getRoots();
-                    for (FileObject fileObject : roots) {
-                        if (!fileObject.equals(getAssetFolder())) {
-                            fileObject.addRecursiveListener(listener);
-                            logger.log(Level.FINE, "Add classpath:{0}", fileObject);
-                            classPathItems.add(new ClassPathItem(fileObject, listener));
-                            urls.add(fileObject.toURL());
-                        }
-                        if (fileObject.toURL().toExternalForm().startsWith("jar")) {
-                            logger.log(Level.FINE, "Add locator:{0}", fileObject.toURL());
-                            jarItems.add(fileObject);
-                            registerLocator(fileObject.toURL().toExternalForm(),
-                                    "com.jme3.asset.plugins.UrlLocator");
-                        }
-                    }
-                }
-            }
-            
-            // Gradle
-            FileObject rootDir = FileUtil.toFileObject(GradleBaseProject.get(project).getRootDir());
-            Set<File> runtimeFiles = new HashSet<>();
-            try {
-                Project rootPrj = ProjectManager.getDefault().findProject(rootDir);
-                GradleJavaProject rootGjp = GradleJavaProject.get(rootPrj);
-                for(GradleJavaSourceSet sourceSet : rootGjp.getSourceSets().values()) {
-                    if(sourceSet.getName().equals("main")) {
-                        runtimeFiles = sourceSet.getRuntimeClassPath();
-                    }
-                }           
-            } catch (IOException ex) { 
-                Exceptions.printStackTrace(ex);
-            } catch (IllegalArgumentException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-            
-            for(File file : runtimeFiles) {
-                // logger.info(file.getName() + " : "  + file.getAbsolutePath());
-                FileObject fo = FileUtil.toFileObject(file);
-                if(fo != null && !fo.isFolder()) {
-                    logger.info(fo.toURL().toExternalForm());
-                    if (!fo.equals(getAssetFolder())) {
-                            fo.addRecursiveListener(listener);
-                            logger.log(Level.FINE, "Add classpath:{0}", fo);
-                            classPathItems.add(new ClassPathItem(fo, listener));
-                            urls.add(fo.toURL());
-                        }
-                    if (fo.toURL().toExternalForm().startsWith("jar")) {
-                            logger.log(Level.FINE, "Add Gradle locator:{0}", fo.toURL());
-                            jarItems.add(fo);
-                            registerLocator(fo.toURL().toExternalForm(),
-                                    "com.jme3.asset.plugins.UrlLocator");
-                        }
-                }
-                
-                
-            }
-            
-            loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), getClass().getClassLoader());
-            addClassLoader(loader);
-            logger.log(Level.FINE, "Updated {0} classpath entries and {1} url locators for project {2}", new Object[]{classPathItems.size(), jarItems.size(), project.toString()});
+        if (sources == null) {
+            return;
         }
+
+        if (loader != null) {
+            removeClassLoader(loader);
+        }
+        SourceGroup[] groups = sources.getSourceGroups(JavaProjectConstants.SOURCES_TYPE_JAVA);
+        List<URL> urls = new LinkedList<URL>();
+        for (SourceGroup sourceGroup : groups) {
+            ClassPath path = ClassPath.getClassPath(sourceGroup.getRootFolder(), ClassPath.EXECUTE);
+            if (path == null) {
+                continue;
+            }
+
+            classPaths.add(path);
+            path.addPropertyChangeListener(classPathListener);
+            FileObject[] roots = path.getRoots();
+            for (FileObject fileObject : roots) {
+                if (!fileObject.equals(getAssetFolder())) {
+                    fileObject.addRecursiveListener(listener);
+                    logger.log(Level.FINE, "Add classpath:{0}", fileObject);
+                    classPathItems.add(new ClassPathItem(fileObject, listener));
+                    urls.add(fileObject.toURL());
+                }
+                if (fileObject.toURL().toExternalForm().startsWith("jar")) {
+                    logger.log(Level.FINE, "Add locator:{0}", fileObject.toURL());
+                    jarItems.add(fileObject);
+                    registerLocator(fileObject.toURL().toExternalForm(),
+                            "com.jme3.asset.plugins.UrlLocator");
+                }
+            }
+        }
+
+        // Gradle
+        GradleBaseProject gradleProject = GradleBaseProject.get(project);
+        if (gradleProject == null) {
+
+            // Not a Gradle project
+            return;
+        }
+
+        FileObject rootDir = FileUtil.toFileObject(gradleProject.getRootDir());
+        Set<File> runtimeFiles = new HashSet<>();
+        try {
+            Project rootPrj = ProjectManager.getDefault().findProject(rootDir);
+            GradleJavaProject rootGjp = GradleJavaProject.get(rootPrj);
+            for (GradleJavaSourceSet sourceSet : rootGjp.getSourceSets().values()) {
+                if (sourceSet.getName().equals("main")) {
+                    runtimeFiles = sourceSet.getRuntimeClassPath();
+                }
+            }
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (IllegalArgumentException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+
+        for (File file : runtimeFiles) {
+            // logger.info(file.getName() + " : "  + file.getAbsolutePath());
+            FileObject fo = FileUtil.toFileObject(file);
+            if (fo != null && !fo.isFolder()) {
+                logger.info(fo.toURL().toExternalForm());
+                if (!fo.equals(getAssetFolder())) {
+                    fo.addRecursiveListener(listener);
+                    logger.log(Level.FINE, "Add classpath:{0}", fo);
+                    classPathItems.add(new ClassPathItem(fo, listener));
+                    urls.add(fo.toURL());
+                }
+                if (fo.toURL().toExternalForm().startsWith("jar")) {
+                    logger.log(Level.FINE, "Add Gradle locator:{0}", fo.toURL());
+                    jarItems.add(fo);
+                    registerLocator(fo.toURL().toExternalForm(),
+                            "com.jme3.asset.plugins.UrlLocator");
+                }
+            }
+
+        }
+
+        loader = new URLClassLoader(urls.toArray(URL[]::new), getClass().getClassLoader());
+        addClassLoader(loader);
+        logger.log(Level.FINE, "Updated {0} classpath entries and {1} url locators for project {2}", new Object[]{classPathItems.size(), jarItems.size(), project.toString()});
     }
+
     FileChangeListener listener = new FileChangeListener() {
         public void fileFolderCreated(FileEvent fe) {
             fireChange(fe);
@@ -258,6 +269,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
             updateClassLoader();
         }
     };
+
     private PropertyChangeListener classPathListener = new PropertyChangeListener() {
         public void propertyChange(PropertyChangeEvent evt) {
             logger.log(Level.FINE, "Classpath event: {0}", evt);
@@ -349,9 +361,8 @@ public class ProjectAssetManager extends DesktopAssetManager {
         }
         synchronized (classPathItems) {
             // TODO I need to find out if classPathItems contains all jars added to a project
-            Iterator<ClassPathItem> classPathItemsIter = classPathItems.iterator();
-            while (classPathItemsIter.hasNext()) {
-                ClassPathItem classPathItem = classPathItemsIter.next();
+
+            for (ClassPathItem classPathItem : classPathItems) {
                 FileObject jarFile = classPathItem.object;
 
                 Enumeration<FileObject> jarEntry = (Enumeration<FileObject>) jarFile.getChildren(true);
