@@ -54,7 +54,7 @@ package com.jme3.gde.templates.gradledesktop.options;
  *
  * @author peedeeboy
  */
-public enum JMEVersion {
+public enum JMEVersion implements LibraryVersion {
 
     JME_3_5_2("3.5.2-stable",
             "/com/jme3/gde/templates/files/patchnotes/352-stable.html"),
@@ -70,6 +70,8 @@ public enum JMEVersion {
             "/com/jme3/gde/templates/files/patchnotes/332-stable.html"),
     JME_3_3_0("3.3.0-stable",
             "/com/jme3/gde/templates/files/patchnotes/330-stable.html");
+
+    public static final String JME_ARTIFACT_ID = "core";
 
     /**
      * Name of the jMonkeyEngine version. This should match the Maven/Gradle
@@ -121,6 +123,26 @@ public enum JMEVersion {
      */
     @Override
     public String toString() {
+        return label;
+    }
+
+    @Override
+    public String getPatchNotes() {
+        return patchNotesPath;
+    }
+
+    @Override
+    public String getGroupId() {
+        return MavenArtifact.JME_GROUP_ID;
+    }
+
+    @Override
+    public String getArtifactId() {
+        return "core";
+    }
+
+    @Override
+    public String getVersion() {
         return label;
     }
 }

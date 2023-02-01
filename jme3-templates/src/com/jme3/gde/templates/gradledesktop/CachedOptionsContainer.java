@@ -33,6 +33,9 @@ package com.jme3.gde.templates.gradledesktop;
 
 import com.jme3.gde.templates.gradledesktop.options.AdditionalLibrary;
 import com.jme3.gde.templates.gradledesktop.options.GUILibrary;
+import com.jme3.gde.templates.gradledesktop.options.JMEVersion;
+import com.jme3.gde.templates.gradledesktop.options.LibraryVersion;
+import com.jme3.gde.templates.gradledesktop.options.MavenArtifact;
 import com.jme3.gde.templates.gradledesktop.options.NetworkingLibrary;
 import com.jme3.gde.templates.gradledesktop.options.PhysicsLibrary;
 import com.jme3.gde.templates.gradledesktop.options.TemplateLibrary;
@@ -55,6 +58,7 @@ public class CachedOptionsContainer {
 
     private static final Logger logger = Logger.getLogger(CachedOptionsContainer.class.getName());
 
+    private List<LibraryVersion> jmeVersions;
     private List<TemplateLibrary> additionalLibraries;
     private List<TemplateLibrary> guiLibraries;
     private List<TemplateLibrary> networkingLibraries;
@@ -78,6 +82,7 @@ public class CachedOptionsContainer {
     private void initialize() {
         MavenVersionChecker mavenVersionChecker = new MavenApiVersionChecker();
 
+        jmeVersions = initVersions(mavenVersionChecker, MavenArtifact.JME_GROUP_ID, JMEVersion.JME_ARTIFACT_ID);
         additionalLibraries = initLibaries(mavenVersionChecker, AdditionalLibrary.values());
         guiLibraries = initLibaries(mavenVersionChecker, GUILibrary.values());
         networkingLibraries = initLibaries(mavenVersionChecker, NetworkingLibrary.values());
@@ -161,6 +166,10 @@ public class CachedOptionsContainer {
 
     public List<TemplateLibrary> getPhysicsLibraries() {
         return physicsLibraries;
+    }
+
+    private List<LibraryVersion> initVersions(MavenVersionChecker mavenVersionChecker, String groupId, String artifactId) {
+        return Collections.emptyList();
     }
 
 }
