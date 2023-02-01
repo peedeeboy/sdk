@@ -120,7 +120,7 @@ public class MavenApiVersionChecker implements MavenVersionChecker {
         CompletableFuture<T> result = client.sendAsync(request, BodyHandlers.ofString())
                 .thenApply((t) -> {
                     if (t.statusCode() != 200) {
-                        return null;
+                        throw new MavenVersionCheckException("Calling " + encodedURL + " not OK. API response " + t.statusCode() + "!");
                     }
 
                     return gson.fromJson(t.body(), clazz);
