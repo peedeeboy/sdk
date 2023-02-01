@@ -89,7 +89,22 @@ public class CachedOptionsContainer {
         for (TemplateLibrary templateLibrary : libraries) {
             libs.add(new TemplateLibrary() {
 
-                private final CompletableFuture<String> latestVersion = mavenVersionChecker.getLatestVersion(templateLibrary.getGroupId(), templateLibrary.getArtifactId());
+                private final CompletableFuture<String> latestVersion = (getGroupId() == null || getArtifactId() == null)
+                        ? null : mavenVersionChecker.getLatestVersion(templateLibrary.getGroupId(), templateLibrary.getArtifactId())
+                                .whenComplete((result, exception) -> {
+
+                            if (exception != null) {
+                                logger.log(Level.WARNING, exception,
+                                        () -> String.format("Failed to acquire version information for Maven artifact %s:%s", new Object[]{getGroupId(), getArtifactId()}));
+                            } else if (result == null) {
+                                logger.log(Level.WARNING,
+                                        () -> String.format("Failed to acquire version information for Maven artifact %s:%s", new Object[]{getGroupId(), getArtifactId()}));
+                            } else {
+                                version = result;
+                            }
+                        });
+
+                private String version;
 
                 @Override
                 public String getLabel() {
@@ -118,15 +133,7 @@ public class CachedOptionsContainer {
 
                 @Override
                 public String getVersion() {
-                    try {
-                        return latestVersion.getNow(templateLibrary.getVersion());
-                    } catch (Exception e) {
-                        logger.log(Level.WARNING, e,
-                                () -> String.format("Failed to acquire version information for Maven artifact {0}:{1}", new Object[]{getGroupId(), getArtifactId()}));
-                        latestVersion.obtrudeValue(templateLibrary.getVersion());
-
-                        return templateLibrary.getVersion();
-                    }
+                    return version != null ? version : templateLibrary.getVersion();
                 }
 
                 @Override

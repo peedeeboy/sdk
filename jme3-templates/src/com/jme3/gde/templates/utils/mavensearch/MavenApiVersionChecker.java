@@ -77,7 +77,7 @@ public class MavenApiVersionChecker implements MavenVersionChecker {
 
         try {
             return callApi(queryParams, SearchResult.class).thenApply((result) -> {
-                if (result == null) {
+                if (result == null || result.response.docs.isEmpty()) {
                     return null;
                 }
 
@@ -96,7 +96,7 @@ public class MavenApiVersionChecker implements MavenVersionChecker {
 
         try {
             return callApi(queryParams, SearchResult.class).thenApply((result) -> {
-                if (result == null) {
+                if (result == null || result.response.docs.isEmpty()) {
                     return null;
                 }
 
