@@ -165,7 +165,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
             removeClassLoader(loader);
         }
         SourceGroup[] groups = sources.getSourceGroups(JavaProjectConstants.SOURCES_TYPE_JAVA);
-        List<URL> urls = new LinkedList<URL>();
+        List<URL> urls = new LinkedList<>();
         for (SourceGroup sourceGroup : groups) {
             ClassPath path = ClassPath.getClassPath(sourceGroup.getRootFolder(), ClassPath.EXECUTE);
             if (path == null) {
@@ -191,11 +191,18 @@ public class ProjectAssetManager extends DesktopAssetManager {
             }
         }
 
-        // Gradle
+        loadGradleClassLoader(urls);
+
+        loader = new URLClassLoader(urls.toArray(URL[]::new), getClass().getClassLoader());
+        addClassLoader(loader);
+        logger.log(Level.FINE, "Updated {0} classpath entries and {1} url locators for project {2}", new Object[]{classPathItems.size(), jarItems.size(), project.toString()});
+    }
+
+    private void loadGradleClassLoader(List<URL> urls) {
         GradleBaseProject gradleProject = GradleBaseProject.get(project);
         if (gradleProject == null) {
 
-            // Not a Gradle project
+            // Ant, Maven etc. project
             return;
         }
 
@@ -233,12 +240,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
                             "com.jme3.asset.plugins.UrlLocator");
                 }
             }
-
         }
-
-        loader = new URLClassLoader(urls.toArray(URL[]::new), getClass().getClassLoader());
-        addClassLoader(loader);
-        logger.log(Level.FINE, "Updated {0} classpath entries and {1} url locators for project {2}", new Object[]{classPathItems.size(), jarItems.size(), project.toString()});
     }
 
     FileChangeListener listener = new FileChangeListener() {
