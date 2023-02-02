@@ -71,6 +71,9 @@ public enum JMEVersion implements LibraryVersion {
     JME_3_3_0("3.3.0-stable",
             "/com/jme3/gde/templates/files/patchnotes/330-stable.html");
 
+    /**
+     * Default artifact ID for jME that we use to check i.e. versions from
+     */
     public static final String JME_ARTIFACT_ID = "core";
 
     /**
