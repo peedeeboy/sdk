@@ -44,7 +44,6 @@ import com.jme3.gde.templates.utils.mavensearch.MavenVersionChecker;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -94,19 +93,22 @@ public class CachedOptionsContainer {
         for (TemplateLibrary templateLibrary : libraries) {
             libs.add(new TemplateLibrary() {
 
-                private final CompletableFuture<String> latestVersion = (getGroupId() == null || getArtifactId() == null)
-                        ? null : mavenVersionChecker.getLatestVersion(templateLibrary.getGroupId(), templateLibrary.getArtifactId())
+                private String version;
+
+                {
+                    if (templateLibrary.getGroupId() != null && templateLibrary.getArtifactId() != null) {
+                        mavenVersionChecker.getLatestVersion(templateLibrary.getGroupId(), templateLibrary.getArtifactId())
                                 .whenComplete((result, exception) -> {
 
-                    if (exception != null || result == null) {
-                                logger.log(Level.WARNING, exception,
-                                        () -> String.format("Failed to acquire version information for Maven artifact %s (%s:%s)", new Object[]{getLabel(), getGroupId(), getArtifactId()}));
-                            } else {
-                                version = result;
-                            }
-                        });
-
-                private String version;
+                                    if (exception != null || result == null) {
+                                        logger.log(Level.WARNING, exception,
+                                                () -> String.format("Failed to acquire version information for Maven artifact %s (%s:%s)", new Object[]{getLabel(), getGroupId(), getArtifactId()}));
+                                    } else {
+                                        version = result;
+                                    }
+                                });
+                    }
+                }
 
                 @Override
                 public String getLabel() {
