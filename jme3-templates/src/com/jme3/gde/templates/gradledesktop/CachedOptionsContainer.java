@@ -98,12 +98,9 @@ public class CachedOptionsContainer {
                         ? null : mavenVersionChecker.getLatestVersion(templateLibrary.getGroupId(), templateLibrary.getArtifactId())
                                 .whenComplete((result, exception) -> {
 
-                            if (exception != null) {
+                    if (exception != null || result == null) {
                                 logger.log(Level.WARNING, exception,
-                                        () -> String.format("Failed to acquire version information for Maven artifact %s:%s", new Object[]{getGroupId(), getArtifactId()}));
-                            } else if (result == null) {
-                                logger.log(Level.WARNING,
-                                        () -> String.format("Failed to acquire version information for Maven artifact %s:%s", new Object[]{getGroupId(), getArtifactId()}));
+                                        () -> String.format("Failed to acquire version information for Maven artifact %s (%s:%s)", new Object[]{getLabel(), getGroupId(), getArtifactId()}));
                             } else {
                                 version = result;
                             }
