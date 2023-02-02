@@ -58,12 +58,12 @@ public class MavenApiVersionChecker implements MavenVersionChecker {
 
     private static final String API_URL = "https://search.maven.org/solrsearch/select";
 
-    private static final Gson gson;
+    private static final Gson GSON;
 
     static {
         JsonDeserializer<Instant> instantDeserializer = (jSon, typeOfT, context) -> jSon == null ? null : Instant.ofEpochMilli(jSon.getAsLong());
 
-        gson = new GsonBuilder()
+        GSON = new GsonBuilder()
                 .registerTypeAdapter(Instant.class, instantDeserializer).create();
     }
 
@@ -84,7 +84,7 @@ public class MavenApiVersionChecker implements MavenVersionChecker {
                 return result.response.docs.stream().map((doc) -> doc.v).collect(Collectors.toList());
             });
         } catch (InterruptedException | ExecutionException ex) {
-            throw new RuntimeException("Failed to get version info!", ex);
+            throw new MavenVersionCheckException("Failed to get version info!", ex);
         }
     }
 
@@ -103,7 +103,7 @@ public class MavenApiVersionChecker implements MavenVersionChecker {
                 return result.response.docs.get(0).latestVersion;
             });
         } catch (InterruptedException | ExecutionException ex) {
-            throw new RuntimeException("Failed to get latest version info!", ex);
+            throw new MavenVersionCheckException("Failed to get latest version info!", ex);
         }
     }
 
@@ -123,7 +123,7 @@ public class MavenApiVersionChecker implements MavenVersionChecker {
                         throw new MavenVersionCheckException("Calling " + encodedURL + " not OK. API response " + t.statusCode() + "!");
                     }
 
-                    return gson.fromJson(t.body(), clazz);
+            return GSON.fromJson(t.body(), clazz);
                 });
 
         return result;

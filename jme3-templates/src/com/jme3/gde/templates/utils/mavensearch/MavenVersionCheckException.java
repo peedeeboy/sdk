@@ -40,4 +40,8 @@ public class MavenVersionCheckException extends RuntimeException {
         super(message);
     }
 
+    public MavenVersionCheckException(String message, Exception cause) {
+        super(message, cause);
+    }
+
 }
