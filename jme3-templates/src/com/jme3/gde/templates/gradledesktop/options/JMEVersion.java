@@ -77,6 +77,12 @@ public enum JMEVersion implements LibraryVersion<JMEVersionInfo> {
     public static final String JME_ARTIFACT_ID = "jme3-core";
 
     /**
+     * Patch notes for versions that are not hard coded like versions in this
+     * class
+     */
+    public static final String DEFAULT_PATCH_NOTES_PATH = "/com/jme3/gde/templates/files/patchnotes/default.html";
+
+    /**
      * Name of the jMonkeyEngine version. This should match the Maven/Gradle
      * version.
      */

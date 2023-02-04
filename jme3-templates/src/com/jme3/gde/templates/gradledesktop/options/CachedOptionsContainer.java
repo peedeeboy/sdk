@@ -90,7 +90,8 @@ public class CachedOptionsContainer {
             jmeVersions = result;
         }, (version) -> {
             return new JMEVersionInfo(version);
-        });
+        },
+                JMEVersion.DEFAULT_PATCH_NOTES_PATH);
         additionalLibraries = initLibaries(mavenVersionChecker, AdditionalLibrary.values());
         guiLibraries = initLibaries(mavenVersionChecker, GUILibrary.values());
         networkingLibraries = initLibaries(mavenVersionChecker, NetworkingLibrary.values());
@@ -184,7 +185,7 @@ public class CachedOptionsContainer {
     private <T extends VersionInfo> List<LibraryVersion<T>> initVersions(MavenVersionChecker mavenVersionChecker, String groupId,
             String artifactId, String pattern, Comparator<LibraryVersion<T>> versionComparator,
             LibraryVersion<T>[] versions, Consumer<List<LibraryVersion<T>>> completedVersionsConsumer,
-            Function<String, T> versionInfoSupplier) {
+            Function<String, T> versionInfoSupplier, String defaultPatchNotes) {
         mavenVersionChecker.getAllVersions(groupId, artifactId).whenComplete((result, exception) -> {
 
             if (exception != null || result == null) {
@@ -194,7 +195,7 @@ public class CachedOptionsContainer {
                 return;
             }
 
-            initVersionList(result, pattern, versionComparator, versions, groupId, artifactId, completedVersionsConsumer, versionInfoSupplier);
+            initVersionList(result, pattern, versionComparator, versions, groupId, artifactId, completedVersionsConsumer, versionInfoSupplier, defaultPatchNotes);
         });
 
         return Collections.unmodifiableList(Arrays.asList(versions));
@@ -203,7 +204,7 @@ public class CachedOptionsContainer {
     private static <T extends VersionInfo> void initVersionList(List<String> result, String pattern,
             Comparator<LibraryVersion<T>> versionComparator, LibraryVersion<T>[] versions,
             String groupId, String artifactId, Consumer<List<LibraryVersion<T>>> completedVersionsConsumer,
-            Function<String, T> versionInfoSupplier) {
+            Function<String, T> versionInfoSupplier, String defaultPatchNotes) {
 
         // Filter the vesions list
         List<String> vList = result;
@@ -237,7 +238,7 @@ public class CachedOptionsContainer {
 
                 @Override
                 public String getPatchNotesPath() {
-                    return "lol";
+                    return defaultPatchNotes;
                 }
 
                 @Override
