@@ -129,11 +129,11 @@ public class MavenApiVersionChecker implements MavenVersionChecker {
         return result;
     }
 
-    private static String encodeValue(String value) {
+    private static String encodeValue(final String value) {
         try {
             return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException ex) {
-            throw new RuntimeException("Failed to encode value!", ex);
+            throw new MavenVersionCheckException("Failed to encode value!", ex);
         }
     }
 

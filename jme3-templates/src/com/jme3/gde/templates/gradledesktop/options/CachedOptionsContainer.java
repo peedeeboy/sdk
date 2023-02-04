@@ -98,7 +98,7 @@ public class CachedOptionsContainer {
         physicsLibraries = initLibaries(mavenVersionChecker, PhysicsLibrary.values());
     }
 
-    private List<TemplateLibrary> initLibaries(MavenVersionChecker mavenVersionChecker, TemplateLibrary[] libraries) {
+    private List<TemplateLibrary> initLibaries(final MavenVersionChecker mavenVersionChecker, TemplateLibrary[] libraries) {
         List<TemplateLibrary> libs = new ArrayList<>(libraries.length);
         for (TemplateLibrary templateLibrary : libraries) {
             libs.add(new TemplateLibrary() {
@@ -214,7 +214,7 @@ public class CachedOptionsContainer {
         }
 
         // Compile the results
-        SortedSet<LibraryVersion<T>> allVersions = new TreeSet<>(versionComparator);
+        final SortedSet<LibraryVersion<T>> allVersions = new TreeSet<>(versionComparator);
         allVersions.addAll(Arrays.asList(versions));
         for (String v : vList) {
             allVersions.add(new LibraryVersion<T>() {

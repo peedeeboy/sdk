@@ -34,6 +34,9 @@ package com.jme3.gde.templates.gradledesktop.options;
 /**
  * Represents version information that can be compared between each other (which
  * one is more new etc.)
+ *
+ * @param <T> The concrete class should be passed as type for correct comparable
+ * implementation
  */
 public interface VersionInfo<T extends VersionInfo> extends Comparable<T> {
 
