@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
 /**
  * jMonkeyEngine version information
  */
-public final class JMEVersionInfo implements Comparable<JMEVersionInfo> {
+public final class JMEVersionInfo implements VersionInfo<JMEVersionInfo> {
 
     private static final Pattern VERSION_PATTERN = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)-(.*)");
 

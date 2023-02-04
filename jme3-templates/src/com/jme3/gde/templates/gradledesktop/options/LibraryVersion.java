@@ -34,7 +34,7 @@ package com.jme3.gde.templates.gradledesktop.options;
 /**
  * Represents a Maven library version info (with patch notes)
  */
-public interface LibraryVersion extends MavenArtifact {
+public interface LibraryVersion<T extends VersionInfo> extends MavenArtifact {
 
     /**
      * Get the path to the .html file containing the Patch Notes for this
@@ -43,5 +43,7 @@ public interface LibraryVersion extends MavenArtifact {
      * @return the path to the .html file containing the Patch Notes
      */
     String getPatchNotesPath();
+
+    T getVersionInfo();
 
 }

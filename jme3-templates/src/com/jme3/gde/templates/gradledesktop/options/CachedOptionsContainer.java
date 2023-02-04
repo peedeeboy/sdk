@@ -31,15 +31,6 @@
  */
 package com.jme3.gde.templates.gradledesktop.options;
 
-import com.jme3.gde.templates.gradledesktop.options.AdditionalLibrary;
-import com.jme3.gde.templates.gradledesktop.options.GUILibrary;
-import com.jme3.gde.templates.gradledesktop.options.JMEVersion;
-import com.jme3.gde.templates.gradledesktop.options.JMEVersionComparator;
-import com.jme3.gde.templates.gradledesktop.options.LibraryVersion;
-import com.jme3.gde.templates.gradledesktop.options.MavenArtifact;
-import com.jme3.gde.templates.gradledesktop.options.NetworkingLibrary;
-import com.jme3.gde.templates.gradledesktop.options.PhysicsLibrary;
-import com.jme3.gde.templates.gradledesktop.options.TemplateLibrary;
 import com.jme3.gde.templates.utils.mavensearch.MavenApiVersionChecker;
 import com.jme3.gde.templates.utils.mavensearch.MavenVersionChecker;
 import java.util.ArrayList;
@@ -51,6 +42,7 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -66,7 +58,7 @@ public class CachedOptionsContainer {
 
     private static final Logger logger = Logger.getLogger(CachedOptionsContainer.class.getName());
 
-    private List<LibraryVersion> jmeVersions;
+    private List<LibraryVersion<JMEVersionInfo>> jmeVersions;
     private List<TemplateLibrary> additionalLibraries;
     private List<TemplateLibrary> guiLibraries;
     private List<TemplateLibrary> networkingLibraries;
@@ -90,8 +82,14 @@ public class CachedOptionsContainer {
     private void initialize() {
         MavenVersionChecker mavenVersionChecker = new MavenApiVersionChecker();
 
-        jmeVersions = initVersions(mavenVersionChecker, MavenArtifact.JME_GROUP_ID, JMEVersion.JME_ARTIFACT_ID, "-stable$", new JMEVersionComparator(), JMEVersion.values(), (result) -> {
+        jmeVersions = initVersions(mavenVersionChecker,
+                MavenArtifact.JME_GROUP_ID,
+                JMEVersion.JME_ARTIFACT_ID,
+                "-stable$", new JMEVersionComparator(),
+                JMEVersion.values(), (result) -> {
             jmeVersions = result;
+        }, (version) -> {
+            return new JMEVersionInfo(version);
         });
         additionalLibraries = initLibaries(mavenVersionChecker, AdditionalLibrary.values());
         guiLibraries = initLibaries(mavenVersionChecker, GUILibrary.values());
@@ -179,13 +177,14 @@ public class CachedOptionsContainer {
         return physicsLibraries;
     }
 
-    public List<LibraryVersion> getJmeVersions() {
+    public List<LibraryVersion<JMEVersionInfo>> getJmeVersions() {
         return jmeVersions;
     }
 
-    private List<LibraryVersion> initVersions(MavenVersionChecker mavenVersionChecker, String groupId,
-            String artifactId, String pattern, Comparator<LibraryVersion> versionComparator,
-            LibraryVersion[] versions, Consumer<List<LibraryVersion>> completedVersionsConsumer) {
+    private <T extends VersionInfo> List<LibraryVersion<T>> initVersions(MavenVersionChecker mavenVersionChecker, String groupId,
+            String artifactId, String pattern, Comparator<LibraryVersion<T>> versionComparator,
+            LibraryVersion<T>[] versions, Consumer<List<LibraryVersion<T>>> completedVersionsConsumer,
+            Function<String, T> versionInfoSupplier) {
         mavenVersionChecker.getAllVersions(groupId, artifactId).whenComplete((result, exception) -> {
 
             if (exception != null || result == null) {
@@ -195,13 +194,16 @@ public class CachedOptionsContainer {
                 return;
             }
 
-            initVersionList(result, pattern, versionComparator, versions, groupId, artifactId, completedVersionsConsumer);
+            initVersionList(result, pattern, versionComparator, versions, groupId, artifactId, completedVersionsConsumer, versionInfoSupplier);
         });
 
         return Collections.unmodifiableList(Arrays.asList(versions));
     }
 
-    private static void initVersionList(List<String> result, String pattern, Comparator<LibraryVersion> versionComparator, LibraryVersion[] versions, String groupId, String artifactId, Consumer<List<LibraryVersion>> completedVersionsConsumer) {
+    private static <T extends VersionInfo> void initVersionList(List<String> result, String pattern,
+            Comparator<LibraryVersion<T>> versionComparator, LibraryVersion<T>[] versions,
+            String groupId, String artifactId, Consumer<List<LibraryVersion<T>>> completedVersionsConsumer,
+            Function<String, T> versionInfoSupplier) {
 
         // Filter the vesions list
         List<String> vList = result;
@@ -211,10 +213,12 @@ public class CachedOptionsContainer {
         }
 
         // Compile the results
-        SortedSet<LibraryVersion> allVersions = new TreeSet<>(versionComparator);
+        SortedSet<LibraryVersion<T>> allVersions = new TreeSet<>(versionComparator);
         allVersions.addAll(Arrays.asList(versions));
         for (String v : vList) {
-            allVersions.add(new LibraryVersion() {
+            allVersions.add(new LibraryVersion<T>() {
+
+                private final T versionInfo = versionInfoSupplier.apply(v);
 
                 @Override
                 public String getGroupId() {
@@ -239,6 +243,11 @@ public class CachedOptionsContainer {
                 @Override
                 public String toString() {
                     return v;
+                }
+
+                @Override
+                public T getVersionInfo() {
+                    return versionInfo;
                 }
 
                 @Override

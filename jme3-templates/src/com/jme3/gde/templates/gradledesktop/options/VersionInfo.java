@@ -31,16 +31,10 @@
  */
 package com.jme3.gde.templates.gradledesktop.options;
 
-import java.util.Comparator;
-
 /**
- * Compares jME versions, sorts them in descending order (newest first)
+ * Represents version information that can be compared between each other (which
+ * one is more new etc.)
  */
-public class JMEVersionComparator implements Comparator<LibraryVersion<JMEVersionInfo>> {
-
-    @Override
-    public int compare(LibraryVersion o1, LibraryVersion o2) {
-        return -(o1.getVersionInfo().compareTo(o2.getVersionInfo()));
-    }
+public interface VersionInfo<T extends VersionInfo> extends Comparable<T> {
 
 }
