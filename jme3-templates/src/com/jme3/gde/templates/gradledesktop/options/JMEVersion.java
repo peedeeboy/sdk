@@ -74,7 +74,7 @@ public enum JMEVersion implements LibraryVersion {
     /**
      * Default artifact ID for jME that we use to check i.e. versions from
      */
-    public static final String JME_ARTIFACT_ID = "core";
+    public static final String JME_ARTIFACT_ID = "jme3-core";
 
     /**
      * Name of the jMonkeyEngine version. This should match the Maven/Gradle
@@ -108,12 +108,7 @@ public enum JMEVersion implements LibraryVersion {
         return label;
     }
 
-    /**
-     * Get the path to the .html file containing the Patch Notes for this
-     * jMonkeyEngine version.
-     *
-     * @return the path to the .html file containing the Patch Notes
-     */
+    @Override
     public String getPatchNotesPath() {
         return patchNotesPath;
     }
@@ -127,11 +122,6 @@ public enum JMEVersion implements LibraryVersion {
     @Override
     public String toString() {
         return label;
-    }
-
-    @Override
-    public String getPatchNotes() {
-        return patchNotesPath;
     }
 
     @Override

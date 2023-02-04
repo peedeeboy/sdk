@@ -117,7 +117,7 @@ public class GradleDesktopGameGuiPanelVisual extends JPanel {
         guiLabel.setLabelFor(guiComboBox);
         Mnemonics.setLocalizedText(guiLabel, NbBundle.getMessage(GradleDesktopGameGuiPanelVisual.class, "GradleDesktopGameGuiPanelVisual.guiLabel.text")); // NOI18N
 
-        guiComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(CachedOptionsContainer.getInstance().getGuiLibraries().toArray(new TemplateLibrary[0])));
+        guiComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(CachedOptionsContainer.getInstance().getGuiLibraries().toArray(TemplateLibrary[]::new)));
         guiComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 guiComboBoxActionPerformed(evt);
@@ -134,7 +134,7 @@ public class GradleDesktopGameGuiPanelVisual extends JPanel {
         physicsEngineLabel.setLabelFor(physicsEngineComboBox);
         Mnemonics.setLocalizedText(physicsEngineLabel, NbBundle.getMessage(GradleDesktopGameGuiPanelVisual.class, "GradleDesktopGameGuiPanelVisual.physicsEngineLabel.text")); // NOI18N
 
-        physicsEngineComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(CachedOptionsContainer.getInstance().getPhysicsLibraries().toArray(new TemplateLibrary[0])));
+        physicsEngineComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(CachedOptionsContainer.getInstance().getPhysicsLibraries().toArray(TemplateLibrary[]::new)));
         physicsEngineComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 physicsEngineComboBoxActionPerformed(evt);
@@ -151,7 +151,7 @@ public class GradleDesktopGameGuiPanelVisual extends JPanel {
         networkingLabel.setLabelFor(networkingComboBox);
         Mnemonics.setLocalizedText(networkingLabel, NbBundle.getMessage(GradleDesktopGameGuiPanelVisual.class, "GradleDesktopGameGuiPanelVisual.networkingLabel.text")); // NOI18N
 
-        networkingComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(CachedOptionsContainer.getInstance().getNetworkingLibraries().toArray(new TemplateLibrary[0])));
+        networkingComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(CachedOptionsContainer.getInstance().getNetworkingLibraries().toArray(TemplateLibrary[]::new)));
         networkingComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 networkingComboBoxActionPerformed(evt);

@@ -34,6 +34,7 @@ package com.jme3.gde.templates.gradledesktop;
 import com.jme3.gde.templates.gradledesktop.options.AdditionalLibrary;
 import com.jme3.gde.templates.gradledesktop.options.GUILibrary;
 import com.jme3.gde.templates.gradledesktop.options.JMEVersion;
+import com.jme3.gde.templates.gradledesktop.options.JMEVersionComparator;
 import com.jme3.gde.templates.gradledesktop.options.LibraryVersion;
 import com.jme3.gde.templates.gradledesktop.options.MavenArtifact;
 import com.jme3.gde.templates.gradledesktop.options.NetworkingLibrary;
@@ -42,10 +43,18 @@ import com.jme3.gde.templates.gradledesktop.options.TemplateLibrary;
 import com.jme3.gde.templates.utils.mavensearch.MavenApiVersionChecker;
 import com.jme3.gde.templates.utils.mavensearch.MavenVersionChecker;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Singleton that contains all the options. Tries to go online to get all the
@@ -81,7 +90,9 @@ public class CachedOptionsContainer {
     private void initialize() {
         MavenVersionChecker mavenVersionChecker = new MavenApiVersionChecker();
 
-        jmeVersions = initVersions(mavenVersionChecker, MavenArtifact.JME_GROUP_ID, JMEVersion.JME_ARTIFACT_ID);
+        jmeVersions = initVersions(mavenVersionChecker, MavenArtifact.JME_GROUP_ID, JMEVersion.JME_ARTIFACT_ID, "-stable$", new JMEVersionComparator(), JMEVersion.values(), (result) -> {
+            jmeVersions = result;
+        });
         additionalLibraries = initLibaries(mavenVersionChecker, AdditionalLibrary.values());
         guiLibraries = initLibaries(mavenVersionChecker, GUILibrary.values());
         networkingLibraries = initLibaries(mavenVersionChecker, NetworkingLibrary.values());
@@ -102,10 +113,11 @@ public class CachedOptionsContainer {
 
                                     if (exception != null || result == null) {
                                         logger.log(Level.WARNING, exception,
-                                                () -> String.format("Failed to acquire version information for Maven artifact %s (%s:%s)", new Object[]{getLabel(), getGroupId(), getArtifactId()}));
-                                    } else {
-                                        version = result;
-                                    }
+                                        () -> String.format("Failed to acquire version information for Maven artifact %s (%s:%s)", new Object[]{getLabel(), getGroupId(), getArtifactId()}));
+
+                                return;
+                            }
+                            version = result;
                                 });
                     }
                 }
@@ -167,8 +179,93 @@ public class CachedOptionsContainer {
         return physicsLibraries;
     }
 
-    private List<LibraryVersion> initVersions(MavenVersionChecker mavenVersionChecker, String groupId, String artifactId) {
-        return Collections.emptyList();
+    public List<LibraryVersion> getJmeVersions() {
+        return jmeVersions;
+    }
+
+    private List<LibraryVersion> initVersions(MavenVersionChecker mavenVersionChecker, String groupId,
+            String artifactId, String pattern, Comparator<LibraryVersion> versionComparator,
+            LibraryVersion[] versions, Consumer<List<LibraryVersion>> completedVersionsConsumer) {
+        mavenVersionChecker.getAllVersions(groupId, artifactId).whenComplete((result, exception) -> {
+
+            if (exception != null || result == null) {
+                logger.log(Level.WARNING, exception,
+                        () -> String.format("Failed to acquire version information for Maven artifact %s:%s", new Object[]{groupId, artifactId}));
+
+                return;
+            }
+
+            initVersionList(result, pattern, versionComparator, versions, groupId, artifactId, completedVersionsConsumer);
+        });
+
+        return Collections.unmodifiableList(Arrays.asList(versions));
+    }
+
+    private static void initVersionList(List<String> result, String pattern, Comparator<LibraryVersion> versionComparator, LibraryVersion[] versions, String groupId, String artifactId, Consumer<List<LibraryVersion>> completedVersionsConsumer) {
+
+        // Filter the vesions list
+        List<String> vList = result;
+        if (pattern != null) {
+            Pattern p = Pattern.compile(pattern);
+            vList = vList.stream().filter(p.asPredicate()).collect(Collectors.toList());
+        }
+
+        // Compile the results
+        SortedSet<LibraryVersion> allVersions = new TreeSet<>(versionComparator);
+        allVersions.addAll(Arrays.asList(versions));
+        for (String v : vList) {
+            allVersions.add(new LibraryVersion() {
+
+                @Override
+                public String getGroupId() {
+                    return groupId;
+                }
+
+                @Override
+                public String getArtifactId() {
+                    return artifactId;
+                }
+
+                @Override
+                public String getVersion() {
+                    return v;
+                }
+
+                @Override
+                public String getPatchNotesPath() {
+                    return "lol";
+                }
+
+                @Override
+                public String toString() {
+                    return v;
+                }
+
+                @Override
+                public int hashCode() {
+                    return Objects.hashCode(v);
+                }
+
+                @Override
+                public boolean equals(Object obj) {
+                    if (this == obj) {
+                        return true;
+                    }
+                    if (obj == null) {
+                        return false;
+                    }
+                    if (!(obj instanceof LibraryVersion)) {
+                        return false;
+                    }
+                    final LibraryVersion other = (LibraryVersion) obj;
+
+                    return Objects.equals(getVersion(), other.getVersion());
+                }
+
+            });
+        }
+
+        completedVersionsConsumer.accept(Collections.unmodifiableList(new ArrayList<>(allVersions)));
     }
 
 }
