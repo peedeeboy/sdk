@@ -206,7 +206,7 @@ public class CachedOptionsContainer {
             String groupId, String artifactId, Consumer<List<LibraryVersion<T>>> completedVersionsConsumer,
             Function<String, T> versionInfoSupplier, String defaultPatchNotes) {
 
-        // Filter the vesions list
+        // Filter the versions list
         List<String> vList = result;
         if (pattern != null) {
             Pattern p = Pattern.compile(pattern);
