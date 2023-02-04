@@ -98,7 +98,7 @@ public class CachedOptionsContainer {
         physicsLibraries = initLibaries(mavenVersionChecker, PhysicsLibrary.values());
     }
 
-    private List<TemplateLibrary> initLibaries(final MavenVersionChecker mavenVersionChecker, TemplateLibrary[] libraries) {
+    private static List<TemplateLibrary> initLibaries(final MavenVersionChecker mavenVersionChecker, TemplateLibrary[] libraries) {
         List<TemplateLibrary> libs = new ArrayList<>(libraries.length);
         for (TemplateLibrary templateLibrary : libraries) {
             libs.add(new TemplateLibrary() {
@@ -182,7 +182,29 @@ public class CachedOptionsContainer {
         return jmeVersions;
     }
 
-    private <T extends VersionInfo> List<LibraryVersion<T>> initVersions(MavenVersionChecker mavenVersionChecker, String groupId,
+    /**
+     * Initialize a version listing from Maven (and the given hard coded list)
+     *
+     * @param <T> the type of version information should be used in comparison
+     * @param mavenVersionChecker access to Maven version information
+     * @param groupId Maven group ID
+     * @param artifactId Maven artifact ID
+     * @param pattern pattern for version inclusion, may be null (all versions
+     * are accepted)
+     * @param versionComparator comparer used to compare the versions
+     * (duplicates and ordering)
+     * @param versions the hard coded list of versions, guaranteed to be
+     * included in the listing
+     * @param completedVersionsConsumer consumer for the versions listing that
+     * has been compiled from hard coded list and Maven version results. Only
+     * triggers if Maven version check is successful
+     * @param versionInfoSupplier supplier for the type of version data this
+     * library version scheme uses
+     * @param defaultPatchNotes for versions from Maven API, we don't get their
+     * release notes. Supply default patch notes
+     * @return returns a listing of hard coded versions immediately
+     */
+    private static <T extends VersionInfo> List<LibraryVersion<T>> initVersions(MavenVersionChecker mavenVersionChecker, String groupId,
             String artifactId, String pattern, Comparator<LibraryVersion<T>> versionComparator,
             LibraryVersion<T>[] versions, Consumer<List<LibraryVersion<T>>> completedVersionsConsumer,
             Function<String, T> versionInfoSupplier, String defaultPatchNotes) {
