@@ -31,49 +31,30 @@
  */
 package com.jme3.gde.templates.gradledesktop.options;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 /**
- * Represents version information that can be compared between each other (which
- * one is more new etc.)
- *
- * @param <T> The concrete class should be passed as type for correct comparable
- * implementation
+ * Simple version filter for getting the latest version of a library. Used i.e.
+ * if the versions come in many flavors.
  */
-public interface VersionInfo<T extends VersionInfo> extends Comparable<T> {
+class VersionFilter<T extends VersionInfo<T>> {
 
-    /**
-     * Get major version number. Maybe the only version indicator on some
-     * schemes
-     *
-     * @return major version number
-     */
-    int getMajor();
+    private final Function<String, T> versionInfoSupplier;
 
-    /**
-     * Get minor version number
-     *
-     * @return minor version number or <code>null</code> if not exists
-     */
-    Integer getMinor();
+    private final Predicate<T> versionInfoFilter;
 
-    /**
-     * Get release version number
-     *
-     * @return release version number or <code>null</code> if not exists
-     */
-    Integer getRelease();
+    public VersionFilter(Function<String, T> versionInfoSupplier, Predicate<T> versionInfoFilter) {
+        this.versionInfoSupplier = versionInfoSupplier;
+        this.versionInfoFilter = versionInfoFilter;
+    }
 
-    /**
-     * Get type version type identifier
-     *
-     * @return version type identifier or <code>null</code> if not exists
-     */
-    String getType();
+    public Function<String, T> getVersionInfoSupplier() {
+        return versionInfoSupplier;
+    }
 
-    /**
-     * Get the original or complete version string presentation
-     *
-     * @return version string presentation
-     */
-    String getVersionString();
+    public Predicate<T> getVersionInfoFilter() {
+        return versionInfoFilter;
+    }
 
 }

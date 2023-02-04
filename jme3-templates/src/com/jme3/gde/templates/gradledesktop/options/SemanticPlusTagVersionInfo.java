@@ -36,19 +36,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * jMonkeyEngine version information
+ * Versioning scheme like x.x.x and/or x.x.x+tag
  */
-public final class JMEVersionInfo implements VersionInfo<JMEVersionInfo> {
+public final class SemanticPlusTagVersionInfo implements VersionInfo<SemanticPlusTagVersionInfo> {
 
-    private static final Pattern VERSION_PATTERN = Pattern.compile("(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<release>\\d+)-(?<type>.*)");
+    private static final Pattern VERSION_PATTERN = Pattern.compile("(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<release>\\d+)\\+?(?<tag>.*)");
 
     private final int major;
     private final int minor;
     private final int release;
-    private final String type;
+    private final String tag;
     private final String versionString;
 
-    public JMEVersionInfo(String versionString) {
+    public SemanticPlusTagVersionInfo(String versionString) {
         this.versionString = versionString;
 
         Matcher m = VERSION_PATTERN.matcher(versionString);
@@ -56,12 +56,13 @@ public final class JMEVersionInfo implements VersionInfo<JMEVersionInfo> {
             this.major = Integer.parseInt(m.group("major"));
             this.minor = Integer.parseInt(m.group("minor"));
             this.release = Integer.parseInt(m.group("release"));
-            this.type = m.group("type");
+            String t = m.group("tag");
+            this.tag = t.isEmpty() ? null : t;
         } else {
             this.major = 0;
             this.minor = 0;
             this.release = 0;
-            this.type = "";
+            this.tag = null;
         }
     }
 
@@ -82,7 +83,7 @@ public final class JMEVersionInfo implements VersionInfo<JMEVersionInfo> {
 
     @Override
     public String getType() {
-        return type;
+        return tag;
     }
 
     @Override
@@ -91,7 +92,7 @@ public final class JMEVersionInfo implements VersionInfo<JMEVersionInfo> {
     }
 
     @Override
-    public int compareTo(JMEVersionInfo o) {
+    public int compareTo(SemanticPlusTagVersionInfo o) {
         int result = Integer.compare(major, o.major);
         if (result != 0) {
             return result;
@@ -105,7 +106,7 @@ public final class JMEVersionInfo implements VersionInfo<JMEVersionInfo> {
             return result;
         }
 
-        return Collator.getInstance().compare(type, o.type);
+        return Collator.getInstance().compare(tag != null ? tag : "", o.tag != null ? o.tag : "");
     }
 
 }

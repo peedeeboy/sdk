@@ -38,15 +38,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import static java.util.Map.entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Singleton that contains all the options. Tries to go online to get all the
@@ -57,6 +61,19 @@ public class CachedOptionsContainer {
     private static CachedOptionsContainer instance;
 
     private static final Logger logger = Logger.getLogger(CachedOptionsContainer.class.getName());
+
+    private static final Map<TemplateLibrary, VersionFilter> LIBRARY_VERSION_FILTERS = Map.ofEntries(
+            entry(PhysicsLibrary.MINIE, new VersionFilter<>((versionString) -> {
+                return new SemanticPlusTagVersionInfo(versionString);
+            }, (version) -> {
+                return version.getType() == null;
+            })),
+            entry(AdditionalLibrary.HEART, new VersionFilter<>((versionString) -> {
+                return new SemanticPlusTagVersionInfo(versionString);
+            }, (version) -> {
+                return version.getType() == null;
+            }))
+    );
 
     private List<LibraryVersion<JMEVersionInfo>> jmeVersions;
     private List<TemplateLibrary> additionalLibraries;
@@ -85,7 +102,10 @@ public class CachedOptionsContainer {
         jmeVersions = initVersions(mavenVersionChecker,
                 MavenArtifact.JME_GROUP_ID,
                 JMEVersion.JME_ARTIFACT_ID,
-                "-stable$", new JMEVersionComparator(),
+                (jmeVersion) -> {
+                    return "stable".equalsIgnoreCase(jmeVersion.getType());
+                },
+                new JMEVersionComparator(),
                 JMEVersion.values(), (result) -> {
             jmeVersions = result;
         }, (version) -> {
@@ -107,18 +127,44 @@ public class CachedOptionsContainer {
 
                 {
                     if (templateLibrary.getGroupId() != null && templateLibrary.getArtifactId() != null) {
-                        mavenVersionChecker.getLatestVersion(templateLibrary.getGroupId(), templateLibrary.getArtifactId())
-                                .whenComplete((result, exception) -> {
+                        if (LIBRARY_VERSION_FILTERS.containsKey(templateLibrary)) {
+                            mavenVersionChecker.getAllVersions(templateLibrary.getGroupId(), templateLibrary.getArtifactId())
+                                    .whenComplete((result, exception) -> {
+                                        if (exception != null || result == null) {
+                                            logMavenCheckFailure(exception);
 
-                                    if (exception != null || result == null) {
-                                        logger.log(Level.WARNING, exception,
-                                        () -> String.format("Failed to acquire version information for Maven artifact %s (%s:%s)", new Object[]{getLabel(), getGroupId(), getArtifactId()}));
+                                    return;
+                                }
 
-                                return;
-                            }
-                            version = result;
-                                });
+                                VersionFilter versionFilter = LIBRARY_VERSION_FILTERS.get(templateLibrary);
+                                Optional<VersionInfo> latestInfo = result.stream()
+                                        .map((versionString) -> {
+                                            return versionFilter.getVersionInfoSupplier().apply(versionString);
+                                        })
+                                        .filter(versionFilter.getVersionInfoFilter())
+                                        .max(Comparator.naturalOrder());
+                                if (latestInfo.isPresent()) {
+                                            version = latestInfo.get().getVersionString();
+                                        }
+                                    });
+                        } else {
+                            mavenVersionChecker.getLatestVersion(templateLibrary.getGroupId(), templateLibrary.getArtifactId())
+                                    .whenComplete((result, exception) -> {
+                                        if (exception != null || result == null) {
+                                            logMavenCheckFailure(exception);
+
+                                            return;
+                                        }
+
+                                        version = result;
+                                    });
+                        }
                     }
+                }
+
+                private void logMavenCheckFailure(Throwable exception) {
+                    logger.log(Level.WARNING, exception,
+                            () -> String.format("Failed to acquire version information for Maven artifact %s (%s:%s)", new Object[]{getLabel(), getGroupId(), getArtifactId()}));
                 }
 
                 @Override
@@ -189,8 +235,8 @@ public class CachedOptionsContainer {
      * @param mavenVersionChecker access to Maven version information
      * @param groupId Maven group ID
      * @param artifactId Maven artifact ID
-     * @param pattern pattern for version inclusion, may be null (all versions
-     * are accepted)
+     * @param versionFilter predicate for version inclusion, may be null (all
+     * versions are accepted)
      * @param versionComparator comparer used to compare the versions
      * (duplicates and ordering)
      * @param versions the hard coded list of versions, guaranteed to be
@@ -205,7 +251,7 @@ public class CachedOptionsContainer {
      * @return returns a listing of hard coded versions immediately
      */
     private static <T extends VersionInfo> List<LibraryVersion<T>> initVersions(MavenVersionChecker mavenVersionChecker, String groupId,
-            String artifactId, String pattern, Comparator<LibraryVersion<T>> versionComparator,
+            String artifactId, Predicate<T> versionFilter, Comparator<LibraryVersion<T>> versionComparator,
             LibraryVersion<T>[] versions, Consumer<List<LibraryVersion<T>>> completedVersionsConsumer,
             Function<String, T> versionInfoSupplier, String defaultPatchNotes) {
         mavenVersionChecker.getAllVersions(groupId, artifactId).whenComplete((result, exception) -> {
@@ -217,31 +263,29 @@ public class CachedOptionsContainer {
                 return;
             }
 
-            initVersionList(result, pattern, versionComparator, versions, groupId, artifactId, completedVersionsConsumer, versionInfoSupplier, defaultPatchNotes);
+            initVersionList(result, versionFilter, versionComparator, versions, groupId, artifactId, completedVersionsConsumer, versionInfoSupplier, defaultPatchNotes);
         });
 
         return Collections.unmodifiableList(Arrays.asList(versions));
     }
 
-    private static <T extends VersionInfo> void initVersionList(List<String> result, String pattern,
+    private static <T extends VersionInfo> void initVersionList(List<String> result, Predicate<T> versionFilter,
             Comparator<LibraryVersion<T>> versionComparator, LibraryVersion<T>[] versions,
             String groupId, String artifactId, Consumer<List<LibraryVersion<T>>> completedVersionsConsumer,
             Function<String, T> versionInfoSupplier, String defaultPatchNotes) {
 
         // Filter the versions list
-        List<String> vList = result;
-        if (pattern != null) {
-            Pattern p = Pattern.compile(pattern);
-            vList = vList.stream().filter(p.asPredicate()).collect(Collectors.toList());
+        Stream<T> versionStream = result.stream().map(versionInfoSupplier);
+        if (versionFilter != null) {
+            versionStream = versionStream.filter(versionFilter);
         }
+        List<T> versionInfoList = versionStream.collect(Collectors.toList());
 
         // Compile the results
         final SortedSet<LibraryVersion<T>> allVersions = new TreeSet<>(versionComparator);
         allVersions.addAll(Arrays.asList(versions));
-        for (String v : vList) {
+        for (T versionInfo : versionInfoList) {
             allVersions.add(new LibraryVersion<T>() {
-
-                private final T versionInfo = versionInfoSupplier.apply(v);
 
                 @Override
                 public String getGroupId() {
@@ -255,7 +299,7 @@ public class CachedOptionsContainer {
 
                 @Override
                 public String getVersion() {
-                    return v;
+                    return versionInfo.getVersionString();
                 }
 
                 @Override
@@ -265,7 +309,7 @@ public class CachedOptionsContainer {
 
                 @Override
                 public String toString() {
-                    return v;
+                    return getVersion();
                 }
 
                 @Override
@@ -275,7 +319,7 @@ public class CachedOptionsContainer {
 
                 @Override
                 public int hashCode() {
-                    return Objects.hashCode(v);
+                    return Objects.hashCode(versionInfo.getVersionString());
                 }
 
                 @Override
