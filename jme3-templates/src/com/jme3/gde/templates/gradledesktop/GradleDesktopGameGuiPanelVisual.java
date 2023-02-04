@@ -31,6 +31,7 @@
  */
 package com.jme3.gde.templates.gradledesktop;
 
+import com.jme3.gde.templates.gradledesktop.options.CachedOptionsContainer;
 import com.jme3.gde.templates.gradledesktop.options.TemplateLibrary;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

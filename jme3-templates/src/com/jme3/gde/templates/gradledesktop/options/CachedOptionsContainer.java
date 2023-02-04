@@ -29,7 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.jme3.gde.templates.gradledesktop;
+package com.jme3.gde.templates.gradledesktop.options;
 
 import com.jme3.gde.templates.gradledesktop.options.AdditionalLibrary;
 import com.jme3.gde.templates.gradledesktop.options.GUILibrary;

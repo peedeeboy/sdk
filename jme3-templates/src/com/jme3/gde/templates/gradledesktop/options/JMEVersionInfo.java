@@ -31,16 +31,68 @@
  */
 package com.jme3.gde.templates.gradledesktop.options;
 
-import java.util.Comparator;
+import java.text.Collator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Compares jME versions, sorts them in descending order (newest first)
+ * jMonkeyEngine version information
  */
-public class JMEVersionComparator implements Comparator<LibraryVersion> {
+public final class JMEVersionInfo implements Comparable<JMEVersionInfo> {
+
+    private static final Pattern VERSION_PATTERN = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)-(.*)");
+
+    private final int major;
+    private final int minor;
+    private final int release;
+    private final String type;
+
+    public JMEVersionInfo(String versionString) {
+        Matcher m = VERSION_PATTERN.matcher(versionString);
+        if (m.find()) {
+            this.major = Integer.parseInt(m.group(1));
+            this.minor = Integer.parseInt(m.group(2));
+            this.release = Integer.parseInt(m.group(3));
+            this.type = m.group(4);
+        } else {
+            this.major = 0;
+            this.minor = 0;
+            this.release = 0;
+            this.type = "";
+        }
+    }
+
+    public int getMajor() {
+        return major;
+    }
+
+    public int getMinor() {
+        return minor;
+    }
+
+    public int getRelease() {
+        return release;
+    }
+
+    public String getType() {
+        return type;
+    }
 
     @Override
-    public int compare(LibraryVersion o1, LibraryVersion o2) {
-        return -(new JMEVersionInfo(o1.getVersion()).compareTo(new JMEVersionInfo(o2.getVersion())));
+    public int compareTo(JMEVersionInfo o) {
+        int result = Integer.compare(major, o.major);
+        if (result != 0) {
+            return result;
+        }
+        result = Integer.compare(minor, o.minor);
+        if (result != 0) {
+            return result;
+        }
+        result = Integer.compare(release, o.release);
+        if (result != 0) {
+            return result;
+        }
+        return Collator.getInstance().compare(type, o.type);
     }
 
 }

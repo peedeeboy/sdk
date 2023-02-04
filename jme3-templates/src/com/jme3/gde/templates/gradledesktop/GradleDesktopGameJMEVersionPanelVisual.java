@@ -32,6 +32,7 @@
 
 package com.jme3.gde.templates.gradledesktop;
 
+import com.jme3.gde.templates.gradledesktop.options.CachedOptionsContainer;
 import com.jme3.gde.templates.gradledesktop.options.JMEVersion;
 import com.jme3.gde.templates.gradledesktop.options.LWJGLLibrary;
 import com.jme3.gde.templates.gradledesktop.options.LibraryVersion;

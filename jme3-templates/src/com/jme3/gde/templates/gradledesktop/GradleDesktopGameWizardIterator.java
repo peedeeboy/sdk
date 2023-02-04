@@ -31,6 +31,7 @@
  */
 package com.jme3.gde.templates.gradledesktop;
 
+import com.jme3.gde.templates.gradledesktop.options.CachedOptionsContainer;
 import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
