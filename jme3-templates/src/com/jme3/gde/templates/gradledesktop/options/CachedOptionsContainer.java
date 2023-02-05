@@ -163,7 +163,7 @@ public class CachedOptionsContainer {
                 }
 
                 private void logMavenCheckFailure(Throwable exception) {
-                    logger.log(Level.WARNING, exception,
+                    logger.log(Level.INFO, exception,
                             () -> String.format("Failed to acquire version information for Maven artifact %s (%s:%s)", new Object[]{getLabel(), getGroupId(), getArtifactId()}));
                 }
 
@@ -257,7 +257,7 @@ public class CachedOptionsContainer {
         mavenVersionChecker.getAllVersions(groupId, artifactId).whenComplete((result, exception) -> {
 
             if (exception != null || result == null) {
-                logger.log(Level.WARNING, exception,
+                logger.log(Level.INFO, exception,
                         () -> String.format("Failed to acquire version information for Maven artifact %s:%s", new Object[]{groupId, artifactId}));
 
                 return;
