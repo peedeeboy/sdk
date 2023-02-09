@@ -102,7 +102,7 @@ public enum NetworkingLibrary implements TemplateLibrary {
     /**
      * Default artifact version to be used
      */
-    private final String defaultVersion;
+    private final VersionInfo defaultVersion;
     /**
      * Is this library a core jMonkeyEngine library? True if the library is a
      * part of jMonkeyengine, false if it is 3rd party.
@@ -126,7 +126,7 @@ public enum NetworkingLibrary implements TemplateLibrary {
         this.description = description;
         this.groupId = groupId;
         this.artifactId = artifactId;
-        this.defaultVersion = defaultVersion;
+        this.defaultVersion = defaultVersion != null ? SemanticPlusTagVersionInfo.of(defaultVersion) : null;
         this.isCoreJmeLibrary = isCoreJmeLibrary;
     }
 
@@ -167,7 +167,7 @@ public enum NetworkingLibrary implements TemplateLibrary {
     }
 
     @Override
-    public String getVersion() {
+    public VersionInfo getVersionInfo() {
         return defaultVersion;
     }
 }

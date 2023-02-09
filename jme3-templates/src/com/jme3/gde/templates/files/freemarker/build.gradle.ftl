@@ -41,7 +41,7 @@ dependencies {
   <#if lwjglLibrary.isCoreJmeLibrary == true>
   implementation "${lwjglLibrary.groupId}:${lwjglLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${lwjglLibrary.groupId}:${lwjglLibrary.artifactId}:${lwjglLibrary.version}"
+  implementation "${lwjglLibrary.groupId}:${lwjglLibrary.artifactId}:${lwjglLibrary.versionInfo.versionString}"
   </#if>
 
   // Suppress errors / warnings building in SDK
@@ -53,7 +53,7 @@ dependencies {
   <#if guiLibrary.isCoreJmeLibrary == true>
   implementation "${guiLibrary.groupId}:${guiLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${guiLibrary.groupId}:${guiLibrary.artifactId}:${guiLibrary.version}"
+  implementation "${guiLibrary.groupId}:${guiLibrary.artifactId}:${guiLibrary.versionInfo.versionString}"
   </#if>
   </#if>
   <#if physicsLibrary.label != "">
@@ -62,7 +62,7 @@ dependencies {
   <#if physicsLibrary.isCoreJmeLibrary == true>
   implementation "${physicsLibrary.groupId}:${physicsLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${physicsLibrary.groupId}:${physicsLibrary.artifactId}:${physicsLibrary.version}"
+  implementation "${physicsLibrary.groupId}:${physicsLibrary.artifactId}:${physicsLibrary.versionInfo.versionString}"
   </#if>
   </#if>
   <#if networkingLibrary.label != "">
@@ -71,7 +71,7 @@ dependencies {
   <#if networkingLibrary.isCoreJmeLibrary == true>
   implementation "${networkingLibrary.groupId}:${networkingLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${networkingLibrary.groupId}:${networkingLibrary.artifactId}:${networkingLibrary.version}"
+  implementation "${networkingLibrary.groupId}:${networkingLibrary.artifactId}:${networkingLibrary.versionInfo.versionString}"
   </#if>
   </#if>
 
@@ -80,7 +80,7 @@ dependencies {
   <#if additionalLibrary.isCoreJmeLibrary == true>
   implementation "${additionalLibrary.groupId}:${additionalLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${additionalLibrary.groupId}:${additionalLibrary.artifactId}:${additionalLibrary.version}"
+  implementation "${additionalLibrary.groupId}:${additionalLibrary.artifactId}:${additionalLibrary.versionInfo.versionString}"
   </#if>
   </#list>
 

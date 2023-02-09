@@ -54,7 +54,7 @@ package com.jme3.gde.templates.gradledesktop.options;
  *
  * @author peedeeboy
  */
-public enum JMEVersion implements LibraryVersion<JMEVersionInfo> {
+public enum JMEVersion implements LibraryVersion {
 
     JME_3_5_2("3.5.2-stable",
             "/com/jme3/gde/templates/files/patchnotes/352-stable.html"),
@@ -93,7 +93,7 @@ public enum JMEVersion implements LibraryVersion<JMEVersionInfo> {
      */
     private final String patchNotesPath;
 
-    private final JMEVersionInfo versionInfo;
+    private final VersionInfo versionInfo;
 
     /**
      * Private constructor to create an instance of this enum.
@@ -105,7 +105,7 @@ public enum JMEVersion implements LibraryVersion<JMEVersionInfo> {
     JMEVersion(String label, String patchNotesPath) {
         this.label = label;
         this.patchNotesPath = patchNotesPath;
-        this.versionInfo = new JMEVersionInfo(label);
+        this.versionInfo = new SemanticPlusTagVersionInfo(label);
     }
 
     /**
@@ -144,12 +144,7 @@ public enum JMEVersion implements LibraryVersion<JMEVersionInfo> {
     }
 
     @Override
-    public String getVersion() {
-        return label;
-    }
-
-    @Override
-    public JMEVersionInfo getVersionInfo() {
+    public VersionInfo getVersionInfo() {
         return versionInfo;
     }
 }

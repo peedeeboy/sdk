@@ -34,19 +34,16 @@ package com.jme3.gde.templates.gradledesktop.options;
 /**
  * Represents version information that can be compared between each other (which
  * one is more new etc.)
- *
- * @param <T> The concrete class should be passed as type for correct comparable
- * implementation
  */
-public interface VersionInfo<T extends VersionInfo> extends Comparable<T> {
+public interface VersionInfo extends Comparable<VersionInfo> {
 
     /**
      * Get major version number. Maybe the only version indicator on some
      * schemes
      *
-     * @return major version number
+     * @return major version number or <code>null</code> if not exists
      */
-    int getMajor();
+    Integer getMajor();
 
     /**
      * Get minor version number

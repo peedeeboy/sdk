@@ -53,10 +53,10 @@ public interface MavenArtifact {
     String getArtifactId();
 
     /**
-     * Get the artifact version string
+     * Get the artifact version info
      *
-     * @return version string
+     * @return version info
      */
-    String getVersion();
+    VersionInfo getVersionInfo();
 
 }

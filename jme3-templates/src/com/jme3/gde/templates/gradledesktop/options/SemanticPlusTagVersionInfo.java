@@ -32,19 +32,25 @@
 package com.jme3.gde.templates.gradledesktop.options;
 
 import java.text.Collator;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Versioning scheme like x.x.x and/or x.x.x+tag
+ * Versioning scheme like x.x.x with or without a tag/type. Tries to parse
+ * versions as broadly and leniently as possible
  */
-public final class SemanticPlusTagVersionInfo implements VersionInfo<SemanticPlusTagVersionInfo> {
+public final class SemanticPlusTagVersionInfo implements VersionInfo {
 
-    private static final Pattern VERSION_PATTERN = Pattern.compile("(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<release>\\d+)\\+?(?<tag>.*)");
+    private static final Logger logger = Logger.getLogger(SemanticPlusTagVersionInfo.class.getName());
 
-    private final int major;
-    private final int minor;
-    private final int release;
+    private static final Pattern VERSION_PATTERN = Pattern.compile("(?<major>\\d+).?(?<minor>\\d*).?(?<release>\\d*)\\W?(?<tag>.*)");
+
+    private final Integer major;
+    private final Integer minor;
+    private final Integer release;
     private final String tag;
     private final String versionString;
 
@@ -53,21 +59,30 @@ public final class SemanticPlusTagVersionInfo implements VersionInfo<SemanticPlu
 
         Matcher m = VERSION_PATTERN.matcher(versionString);
         if (m.find()) {
-            this.major = Integer.parseInt(m.group("major"));
-            this.minor = Integer.parseInt(m.group("minor"));
-            this.release = Integer.parseInt(m.group("release"));
-            String t = m.group("tag");
-            this.tag = t.isEmpty() ? null : t;
+            String group = m.group("major");
+            this.major = group.isEmpty() ? null : Integer.valueOf(group);
+            group = m.group("minor");
+            this.minor = group.isEmpty() ? null : Integer.valueOf(group);
+            group = m.group("release");
+            this.release = group.isEmpty() ? null : Integer.valueOf(group);
+            group = m.group("tag");
+            this.tag = group.isEmpty() ? null : group;
         } else {
-            this.major = 0;
-            this.minor = 0;
-            this.release = 0;
+            this.major = null;
+            this.minor = null;
+            this.release = null;
             this.tag = null;
+
+            logger.log(Level.INFO, "Failed to parse version information from version string {0}", versionString);
         }
     }
 
+    public static VersionInfo of(String versionString) {
+        return new SemanticPlusTagVersionInfo(versionString);
+    }
+
     @Override
-    public int getMajor() {
+    public Integer getMajor() {
         return major;
     }
 
@@ -92,21 +107,51 @@ public final class SemanticPlusTagVersionInfo implements VersionInfo<SemanticPlu
     }
 
     @Override
-    public int compareTo(SemanticPlusTagVersionInfo o) {
-        int result = Integer.compare(major, o.major);
+    public int compareTo(VersionInfo o) {
+        int result = Integer.compare((getMajor() != null ? getMajor() : 0), (o.getMajor() != null ? o.getMajor() : 0));
         if (result != 0) {
             return result;
         }
-        result = Integer.compare(minor, o.minor);
+        result = Integer.compare((getMinor() != null ? getMinor() : 0), (o.getMinor() != null ? o.getMinor() : 0));
         if (result != 0) {
             return result;
         }
-        result = Integer.compare(release, o.release);
+        result = Integer.compare((getRelease() != null ? getRelease() : 0), (o.getRelease() != null ? o.getRelease() : 0));
         if (result != 0) {
             return result;
         }
 
-        return Collator.getInstance().compare(tag != null ? tag : "", o.tag != null ? o.tag : "");
+        result = Collator.getInstance().compare(getType() != null ? getType() : "", o.getType() != null ? o.getType() : "");
+        if (result != 0) {
+            return result;
+        }
+
+        return Collator.getInstance().compare(getVersionString(), o.getVersionString());
+    }
+
+    @Override
+    public String toString() {
+        return versionString;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.versionString);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof VersionInfo)) {
+            return false;
+        }
+        final VersionInfo other = (VersionInfo) obj;
+        return Objects.equals(this.versionString, other.getVersionString());
     }
 
 }

@@ -136,7 +136,7 @@ public enum LWJGLLibrary implements TemplateLibrary {
     }
 
     @Override
-    public String getVersion() {
+    public VersionInfo getVersionInfo() {
         return null;
     }
 }
