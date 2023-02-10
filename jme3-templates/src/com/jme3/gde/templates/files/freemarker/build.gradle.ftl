@@ -38,7 +38,11 @@ dependencies {
   // Core JME
   implementation "org.jmonkeyengine:jme3-core:$jmeVer"
   implementation "org.jmonkeyengine:jme3-desktop:$jmeVer"
-  implementation "${lwjglArtifact}:$jmeVer"
+  <#if lwjglLibrary.isCoreJmeLibrary == true>
+  implementation "${lwjglLibrary.groupId}:${lwjglLibrary.artifactId}:$jmeVer"
+  <#else>
+  implementation "${lwjglLibrary.groupId}:${lwjglLibrary.artifactId}:${lwjglLibrary.versionInfo.versionString}"
+  </#if>
 
   // Suppress errors / warnings building in SDK
   implementation "org.jmonkeyengine:jme3-jogg:$jmeVer"
@@ -47,36 +51,36 @@ dependencies {
   
   // GUI Library
   <#if guiLibrary.isCoreJmeLibrary == true>
-  implementation "${guiLibrary.artifact}:$jmeVer"
+  implementation "${guiLibrary.groupId}:${guiLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${guiLibrary.artifact}"
+  implementation "${guiLibrary.groupId}:${guiLibrary.artifactId}:${guiLibrary.versionInfo.versionString}"
   </#if>
   </#if>
   <#if physicsLibrary.label != "">
   
   // Physics Library
   <#if physicsLibrary.isCoreJmeLibrary == true>
-  implementation "${physicsLibrary.artifact}:$jmeVer"
+  implementation "${physicsLibrary.groupId}:${physicsLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${physicsLibrary.artifact}"
+  implementation "${physicsLibrary.groupId}:${physicsLibrary.artifactId}:${physicsLibrary.versionInfo.versionString}"
   </#if>
   </#if>
   <#if networkingLibrary.label != "">
   
   // Networking Library
   <#if networkingLibrary.isCoreJmeLibrary == true>
-  implementation "${networkingLibrary.artifact}:$jmeVer"
+  implementation "${networkingLibrary.groupId}:${networkingLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${networkingLibrary.artifact}"
+  implementation "${networkingLibrary.groupId}:${networkingLibrary.artifactId}:${networkingLibrary.versionInfo.versionString}"
   </#if>
   </#if>
 
   // Additional Libraries
   <#list additionalLibraries as additionalLibrary>
   <#if additionalLibrary.isCoreJmeLibrary == true>
-  implementation "${additionalLibrary.artifact}:$jmeVer"
+  implementation "${additionalLibrary.groupId}:${additionalLibrary.artifactId}:$jmeVer"
   <#else>
-  implementation "${additionalLibrary.artifact}"
+  implementation "${additionalLibrary.groupId}:${additionalLibrary.artifactId}:${additionalLibrary.versionInfo.versionString}"
   </#if>
   </#list>
 

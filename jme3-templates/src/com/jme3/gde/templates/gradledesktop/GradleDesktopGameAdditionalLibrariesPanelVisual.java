@@ -32,7 +32,8 @@
 
 package com.jme3.gde.templates.gradledesktop;
 
-import com.jme3.gde.templates.gradledesktop.options.AdditionalLibrary;
+import com.jme3.gde.templates.gradledesktop.options.CachedOptionsContainer;
+import com.jme3.gde.templates.gradledesktop.options.TemplateLibrary;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,11 +81,13 @@ public class GradleDesktopGameAdditionalLibrariesPanelVisual extends JPanel
     }
 
     private void populateLibraryTable() {
-        int noRows = AdditionalLibrary.values().length;
+        List<TemplateLibrary> libraries = CachedOptionsContainer.getInstance().getAdditionalLibraries();
+
+        int noRows = libraries.size();
         Object[][] tableData = new Object[noRows][2];
 
         int row = 0;
-        for (AdditionalLibrary library : AdditionalLibrary.values()) {
+        for (TemplateLibrary library : libraries) {
             tableData[row][0] = Boolean.FALSE;
             tableData[row][1] = library;
             row++;
@@ -107,8 +110,7 @@ public class GradleDesktopGameAdditionalLibrariesPanelVisual extends JPanel
         if (selectedRow == -1) {
             libraryDescriptionTextArea.setText("");
         } else {
-            AdditionalLibrary selectedLibrary = (AdditionalLibrary)
-                    additionalLibraryTable.getValueAt(selectedRow, 1);
+            TemplateLibrary selectedLibrary = (TemplateLibrary)                    additionalLibraryTable.getValueAt(selectedRow, 1);
             libraryDescriptionTextArea.setText(selectedLibrary
                     .getDescription());
         }
@@ -117,8 +119,8 @@ public class GradleDesktopGameAdditionalLibrariesPanelVisual extends JPanel
     protected void store(WizardDescriptor d) {
         AdditionalLibraryTableModel model = (AdditionalLibraryTableModel)
                 additionalLibraryTable.getModel();
-        List<AdditionalLibrary> selectedLibraries =
-                model.getSelectedLibraries();
+        List<TemplateLibrary> selectedLibraries
+                =                model.getSelectedLibraries();
 
         d.putProperty("additionalLibraries", selectedLibraries);
     }
@@ -202,7 +204,7 @@ public class GradleDesktopGameAdditionalLibrariesPanelVisual extends JPanel
                 case 0:
                     return Boolean.class;
                 case 1:
-                    return String.class;
+                    return TemplateLibrary.class;
                 default:
                     return super.getColumnClass(columnIndex);
             }
@@ -213,11 +215,11 @@ public class GradleDesktopGameAdditionalLibrariesPanelVisual extends JPanel
             return column == 0;
         }
 
-        public List<AdditionalLibrary> getSelectedLibraries() {
-            List<AdditionalLibrary> selectedLibraries = new ArrayList<>();
+        public List<TemplateLibrary> getSelectedLibraries() {
+            List<TemplateLibrary> selectedLibraries = new ArrayList<>();
             for (int i = 0; i < getRowCount(); i++) {
                 if ((Boolean) getValueAt(i, 0)) {
-                    selectedLibraries.add((AdditionalLibrary) getValueAt(i, 1));
+                    selectedLibraries.add((TemplateLibrary) getValueAt(i, 1));
                 }
             }
 

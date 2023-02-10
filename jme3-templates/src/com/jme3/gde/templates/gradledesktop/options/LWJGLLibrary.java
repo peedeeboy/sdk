@@ -59,12 +59,12 @@ import org.openide.util.NbBundle;
  *
  * @author peedeeboy
  */
-public enum LWJGLVersion {
+public enum LWJGLLibrary implements TemplateLibrary {
 
-    LWJGL_3("LWJGL 3.x", NbBundle.getMessage(LWJGLVersion.class,
-            "lwjgl.lwjgl3.description"), "org.jmonkeyengine:jme3-lwjgl3"),
-    LWJGL_2("LWJGL 2.x", NbBundle.getMessage(LWJGLVersion.class,
-            "lwjgl.lwjgl2.description"), "org.jmonkeyengine:jme3-lwjgl");
+    LWJGL_3("LWJGL 3.x", NbBundle.getMessage(LWJGLLibrary.class,
+            "lwjgl.lwjgl3.description"), "jme3-lwjgl3"),
+    LWJGL_2("LWJGL 2.x", NbBundle.getMessage(LWJGLLibrary.class,
+            "lwjgl.lwjgl2.description"), "jme3-lwjgl");
 
     /**
      * The name of the LWJGL library. This will be displayed in the jComboBox in
@@ -77,49 +77,36 @@ public enum LWJGLVersion {
      */
     private final String description;
     /**
-     * Gradle artifact string. This should exclude the jMonkeyEngine version, as
-     * this will be added by the template.
+     * Maven artifact ID
      */
-    private final String artifact;
+    private final String artifactId;
 
+    /**
     /**
      * Private constructor to create an instance of this enum.
      *
-     * @param label The name of the LWJGL library.
-     * @param description Long description of the LWJGL version.
-     * @param artifact Gradle artifact string.
+     * @param label The name of the library.
+     * @param description Long description of the library.
+     * @param groupId Maven group ID.
+     * @param artifactId Maven artifact ID.
+     * @param defaultVersion Default version is used if no version info is found
+     * from Maven
      */
-    LWJGLVersion(String label, String description, String artifact) {
+    LWJGLLibrary(String label, String description,
+            String artifactId) {
         this.label = label;
         this.description = description;
-        this.artifact = artifact;
+        this.artifactId = artifactId;
     }
 
-    /**
-     * Get the label for this LWJGL version.
-     *
-     * @return the label for this LWJGL version.
-     */
+    @Override
     public String getLabel() {
         return label;
     }
 
-    /**
-     * Get the long description for this LWJGL version.
-     *
-     * @return the long description for this LWJGL version.
-     */
+    @Override
     public String getDescription() {
         return description;
-    }
-
-    /**
-     * Get the Gradle artifact string.
-     *
-     * @return the Gradle artifact string.
-     */
-    public String getArtifact() {
-        return artifact;
     }
 
     /**
@@ -131,5 +118,25 @@ public enum LWJGLVersion {
     @Override
     public String toString() {
         return this.label;
+    }
+
+    @Override
+    public boolean getIsCoreJmeLibrary() {
+        return true;
+    }
+
+    @Override
+    public String getGroupId() {
+        return JME_GROUP_ID;
+    }
+
+    @Override
+    public String getArtifactId() {
+        return artifactId;
+    }
+
+    @Override
+    public VersionInfo getVersionInfo() {
+        return null;
     }
 }

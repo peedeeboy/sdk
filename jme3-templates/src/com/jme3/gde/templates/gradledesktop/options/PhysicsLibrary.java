@@ -63,16 +63,19 @@ import org.openide.util.NbBundle;
  *
  * @author peedeeboy
  */
-public enum PhysicsLibrary {
+public enum PhysicsLibrary implements TemplateLibrary {
 
     NONE("", NbBundle.getMessage(GUILibrary.class,
-            "physicslibrary.none.description"), "", false),
+            "physicslibrary.none.description"), null, null,
+            null, false),
     JBULLET("jBullet", NbBundle.getMessage(GUILibrary.class,
             "physicslibrary.jbullet.description"),
-            "org.jmonkeyengine:jme3-jbullet", true),
+            null, "jme3-jbullet",
+            null, true),
     MINIE("Minie", NbBundle.getMessage(PhysicsLibrary.class,
             "physicslibrary.minie.description"),
-            "com.github.stephengold:Minie:5.0.0", false);
+            "com.github.stephengold", "Minie",
+            "5.0.0", false);
 
     /**
      * The name of the library. This will be displayed in the jComboBox in the
@@ -85,13 +88,17 @@ public enum PhysicsLibrary {
      */
     private final String description;
     /**
-     * Gradle artifact string. If this is <strong>not</strong> a core JME
-     * library, then the artifact string should include the version number. If
-     * the library <strong>is</strong> a core JME library, then the version
-     * should be omitted, as they jMonkeyEngine version will be appended
-     * automatically by the template.
+     * Maven artifact ID
      */
-    private final String artifact;
+    private final String artifactId;
+    /**
+     * Maven group ID
+     */
+    private final String groupId;
+    /**
+     * Default artifact version to be used
+     */
+    private final VersionInfo defaultVersion;
     /**
      * Is this library a core jMonkeyEngine library? True if the library is a
      * part of jMonkeyengine, false if it is 3rd party.
@@ -103,51 +110,30 @@ public enum PhysicsLibrary {
      *
      * @param label The name of the library.
      * @param description Long description of the library.
-     * @param artifact Gradle artifact string.
+     * @param groupId Maven group ID.
+     * @param artifactId Maven artifact ID.
+     * @param defaultVersion Default version is used if no version info is found
+     * from Maven
      * @param isCoreJmeLibrary Is this library a core jMonkeyEngine library?
      */
-    PhysicsLibrary(String label, String description, String artifact,
-            boolean isCoreJmeLibrary) {
+    PhysicsLibrary(String label, String description, String groupId,
+            String artifactId, String defaultVersion, boolean isCoreJmeLibrary) {
         this.label = label;
         this.description = description;
-        this.artifact = artifact;
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.defaultVersion = defaultVersion != null ? SemanticPlusTagVersionInfo.of(defaultVersion) : null;
         this.isCoreJmeLibrary = isCoreJmeLibrary;
     }
 
-    /**
-     * Get the label for this Physics Library.
-     *
-     * @return the label for this Physics Library.
-     */
+    @Override
     public String getLabel() {
         return label;
     }
 
-    /**
-     * Get the long description for this Physics Library.
-     *
-     * @return the long description for this Physics Library.
-     */
+    @Override
     public String getDescription() {
         return description;
-    }
-
-    /**
-     * Get the Gradle artifact string.
-     *
-     * @return the Gradle artifact string.
-     */
-    public String getArtifact() {
-        return artifact;
-    }
-
-    /**
-     * Is this a Core jMonkeyEngine library?
-     *
-     * @return true if this is a core jMonkeyEngine library
-     */
-    public boolean getIsCoreJmeLibrary() {
-        return isCoreJmeLibrary;
     }
 
     /**
@@ -159,5 +145,25 @@ public enum PhysicsLibrary {
     @Override
     public String toString() {
         return this.label;
+    }
+
+    @Override
+    public String getGroupId() {
+        return isCoreJmeLibrary ? JME_GROUP_ID : groupId;
+    }
+
+    @Override
+    public String getArtifactId() {
+        return artifactId;
+    }
+
+    @Override
+    public boolean getIsCoreJmeLibrary() {
+        return isCoreJmeLibrary;
+    }
+
+    @Override
+    public VersionInfo getVersionInfo() {
+        return defaultVersion;
     }
 }

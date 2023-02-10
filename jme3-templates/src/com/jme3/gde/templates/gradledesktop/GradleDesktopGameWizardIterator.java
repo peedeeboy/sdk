@@ -31,7 +31,10 @@
  */
 package com.jme3.gde.templates.gradledesktop;
 
+import com.jme3.gde.templates.gradledesktop.options.CachedOptionsContainer;
 import java.awt.Component;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,7 +45,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -84,6 +87,9 @@ public class GradleDesktopGameWizardIterator implements WizardDescriptor./*Progr
     private static final String TEMPLATE_BUILDFILE = "com/jme3/gde/templates/files/freemarker/build.gradle.ftl";
     
     public GradleDesktopGameWizardIterator() {
+
+        // Initiate the options getting...
+        CachedOptionsContainer.getInstance();
     }
 
     public static GradleDesktopGameWizardIterator createIterator() {
@@ -127,7 +133,7 @@ public class GradleDesktopGameWizardIterator implements WizardDescriptor./*Progr
         File gradleBuildFile = new File(dirF, "build.gradle");
         Map<String, Object> buildFileBindings = new HashMap<>();
         buildFileBindings.put("jmeVersion", wiz.getProperty("jmeVersion"));
-        buildFileBindings.put("lwjglArtifact", wiz.getProperty("lwjglArtifact"));
+        buildFileBindings.put("lwjglLibrary", wiz.getProperty("lwjglLibrary"));
         buildFileBindings.put("guiLibrary", wiz.getProperty("guiLibrary"));
         buildFileBindings.put("physicsLibrary", wiz.getProperty("physicsLibrary"));
         buildFileBindings.put("networkingLibrary", wiz.getProperty("networkingLibrary"));
@@ -245,13 +251,10 @@ public class GradleDesktopGameWizardIterator implements WizardDescriptor./*Progr
         // Process template           
         try {
             FileObject targetFO = FileUtil.toFileObject(target);
-            Writer os = new OutputStreamWriter(targetFO.getOutputStream(), Charset.forName("UTF-8"));
-            engine.getContext().setWriter(os);
-            Reader is = new InputStreamReader(GradleDesktopGameWizardIterator.class.getResourceAsStream("/" + templateResourcePath));
-            engine.eval(is);
-            
-            os.close();
-            is.close();
+            try (Writer os = new BufferedWriter(new OutputStreamWriter(targetFO.getOutputStream(), StandardCharsets.UTF_8)); Reader is = new BufferedReader(new InputStreamReader(GradleDesktopGameWizardIterator.class.getResourceAsStream("/" + templateResourcePath)));) {
+                engine.getContext().setWriter(os);
+                engine.eval(is);
+            }
         } catch (IOException | ScriptException ex) {
                 throw new IOException(ex.getMessage(), ex);
         }

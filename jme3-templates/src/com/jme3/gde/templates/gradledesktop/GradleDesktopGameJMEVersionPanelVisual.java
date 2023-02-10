@@ -32,8 +32,11 @@
 
 package com.jme3.gde.templates.gradledesktop;
 
+import com.jme3.gde.templates.gradledesktop.options.CachedOptionsContainer;
 import com.jme3.gde.templates.gradledesktop.options.JMEVersion;
-import com.jme3.gde.templates.gradledesktop.options.LWJGLVersion;
+import com.jme3.gde.templates.gradledesktop.options.LWJGLLibrary;
+import com.jme3.gde.templates.gradledesktop.options.LibraryVersion;
+import com.jme3.gde.templates.gradledesktop.options.TemplateLibrary;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -54,6 +57,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.LayoutStyle;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.event.HyperlinkEvent;
 import org.openide.WizardDescriptor;
 import org.openide.awt.Mnemonics;
@@ -70,6 +75,8 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
     private static final Logger LOGGER = Logger.getLogger(
             GradleDesktopGameJMEVersionPanel.class.getName());
 
+    private boolean jmeVersionsInitialized = false;
+
     /**
      * Creates new form GradleDesktopGameJMEVersion
      */
@@ -77,6 +84,33 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
             GradleDesktopGameJMEVersionPanel panel) {
         initComponents();
         additionalComponentConfiguration();
+
+        addAncestorListener(new AncestorListener() {
+
+            @Override
+            public void ancestorAdded(AncestorEvent event) {
+
+                // Refresh the jME version selection
+                Object selection = jmeVersionComboBox.getSelectedItem();
+                jmeVersionComboBox.setModel(new DefaultComboBoxModel<>(CachedOptionsContainer.getInstance().getJmeVersions().toArray(LibraryVersion[]::new)));
+                if (selection != null && jmeVersionsInitialized) {
+                    jmeVersionComboBox.setSelectedItem(selection);
+                }
+
+                jmeVersionsInitialized = true;
+            }
+
+            @Override
+            public void ancestorRemoved(AncestorEvent event) {
+
+            }
+
+            @Override
+            public void ancestorMoved(AncestorEvent event) {
+
+            }
+
+        });
 
         loadPatchNotes();
         updateLWJGLdescription();
@@ -109,8 +143,7 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
     }
 
     private void loadPatchNotes() {
-        JMEVersion jmeVersionSelected = (JMEVersion) jmeVersionComboBox
-                .getSelectedItem();
+        LibraryVersion jmeVersionSelected = jmeVersionComboBox.getItemAt(jmeVersionComboBox.getSelectedIndex());
         try {
             URL patchNotesURL = GradleDesktopGameJMEVersionPanelVisual.class
                     .getResource(jmeVersionSelected.getPatchNotesPath());
@@ -124,19 +157,16 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
     }
 
     private void updateLWJGLdescription() {
-        LWJGLVersion lwjglVersion = (LWJGLVersion) lwjglComboBox
-                .getSelectedItem();
+        TemplateLibrary lwjglVersion = lwjglComboBox.getItemAt(lwjglComboBox.getSelectedIndex());
         lwjglTextArea.setText(lwjglVersion.getDescription());
     }
 
     protected void store(WizardDescriptor d) {
         String jmeVersion = jmeVersionComboBox.getSelectedItem().toString();
-        LWJGLVersion lwjglVersion = (LWJGLVersion) lwjglComboBox
-                .getSelectedItem();
-        String lwjglArtifact = lwjglVersion.getArtifact();
+        TemplateLibrary lwjglLibrary = lwjglComboBox.getItemAt(lwjglComboBox.getSelectedIndex());
 
         d.putProperty("jmeVersion", jmeVersion);
-        d.putProperty("lwjglArtifact", lwjglArtifact);
+        d.putProperty("lwjglLibrary", lwjglLibrary);
     }
 
     /**
@@ -163,7 +193,7 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
         jmeVersionLabel.setLabelFor(jmeVersionComboBox);
         Mnemonics.setLocalizedText(jmeVersionLabel, NbBundle.getMessage(GradleDesktopGameJMEVersionPanelVisual.class, "GradleDesktopGameJMEVersionPanelVisual.jmeVersionLabel.text")); // NOI18N
 
-        jmeVersionComboBox.setModel(new DefaultComboBoxModel(JMEVersion.values()));
+        jmeVersionComboBox.setModel(new DefaultComboBoxModel<LibraryVersion>(JMEVersion.values()));
         jmeVersionComboBox.setMaximumSize(new Dimension(100, 25));
         jmeVersionComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -184,7 +214,7 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
         lwjglVersionLabel.setLabelFor(lwjglComboBox);
         Mnemonics.setLocalizedText(lwjglVersionLabel, NbBundle.getMessage(GradleDesktopGameJMEVersionPanelVisual.class, "GradleDesktopGameJMEVersionPanelVisual.lwjglVersionLabel.text")); // NOI18N
 
-        lwjglComboBox.setModel(new DefaultComboBoxModel(LWJGLVersion.values()));
+        lwjglComboBox.setModel(new DefaultComboBoxModel<TemplateLibrary>(LWJGLLibrary.values()));
         lwjglComboBox.setMaximumSize(new Dimension(100, 25));
         lwjglComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -253,11 +283,11 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     JSeparator jSeparator1;
-    JComboBox<String> jmeVersionComboBox;
+    JComboBox<LibraryVersion> jmeVersionComboBox;
     JScrollPane jmeVersionDescriptionScrollPane;
     JTextPane jmeVersionDescriptionTextPane;
     JLabel jmeVersionLabel;
-    JComboBox<String> lwjglComboBox;
+    JComboBox<TemplateLibrary> lwjglComboBox;
     JScrollPane lwjglDescriptionScrollPane;
     JTextArea lwjglTextArea;
     JLabel lwjglVersionLabel;

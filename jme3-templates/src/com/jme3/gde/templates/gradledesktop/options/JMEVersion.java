@@ -54,7 +54,7 @@ package com.jme3.gde.templates.gradledesktop.options;
  *
  * @author peedeeboy
  */
-public enum JMEVersion {
+public enum JMEVersion implements LibraryVersion {
 
     JME_3_5_2("3.5.2-stable",
             "/com/jme3/gde/templates/files/patchnotes/352-stable.html"),
@@ -72,6 +72,17 @@ public enum JMEVersion {
             "/com/jme3/gde/templates/files/patchnotes/330-stable.html");
 
     /**
+     * Default artifact ID for jME that we use to check i.e. versions from
+     */
+    public static final String JME_ARTIFACT_ID = "jme3-core";
+
+    /**
+     * Patch notes for versions that are not hard coded like versions in this
+     * class
+     */
+    public static final String DEFAULT_PATCH_NOTES_PATH = "/com/jme3/gde/templates/files/patchnotes/default.html";
+
+    /**
      * Name of the jMonkeyEngine version. This should match the Maven/Gradle
      * version.
      */
@@ -81,6 +92,8 @@ public enum JMEVersion {
      * Engine.
      */
     private final String patchNotesPath;
+
+    private final VersionInfo versionInfo;
 
     /**
      * Private constructor to create an instance of this enum.
@@ -92,6 +105,7 @@ public enum JMEVersion {
     JMEVersion(String label, String patchNotesPath) {
         this.label = label;
         this.patchNotesPath = patchNotesPath;
+        this.versionInfo = new SemanticPlusTagVersionInfo(label);
     }
 
     /**
@@ -103,12 +117,7 @@ public enum JMEVersion {
         return label;
     }
 
-    /**
-     * Get the path to the .html file containing the Patch Notes for this
-     * jMonkeyEngine version.
-     *
-     * @return the path to the .html file containing the Patch Notes
-     */
+    @Override
     public String getPatchNotesPath() {
         return patchNotesPath;
     }
@@ -122,5 +131,20 @@ public enum JMEVersion {
     @Override
     public String toString() {
         return label;
+    }
+
+    @Override
+    public String getGroupId() {
+        return MavenArtifact.JME_GROUP_ID;
+    }
+
+    @Override
+    public String getArtifactId() {
+        return "core";
+    }
+
+    @Override
+    public VersionInfo getVersionInfo() {
+        return versionInfo;
     }
 }
