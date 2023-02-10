@@ -108,15 +108,15 @@ public final class SemanticPlusTagVersionInfo implements VersionInfo {
 
     @Override
     public int compareTo(VersionInfo o) {
-        int result = Integer.compare((getMajor() != null ? getMajor() : 0), (o.getMajor() != null ? o.getMajor() : 0));
+        int result = compareVersionDigit(getMajor(), o.getMajor());
         if (result != 0) {
             return result;
         }
-        result = Integer.compare((getMinor() != null ? getMinor() : 0), (o.getMinor() != null ? o.getMinor() : 0));
+        result = compareVersionDigit(getMinor(), o.getMinor());
         if (result != 0) {
             return result;
         }
-        result = Integer.compare((getRelease() != null ? getRelease() : 0), (o.getRelease() != null ? o.getRelease() : 0));
+        result = compareVersionDigit(getRelease(), o.getRelease());
         if (result != 0) {
             return result;
         }
@@ -127,6 +127,14 @@ public final class SemanticPlusTagVersionInfo implements VersionInfo {
         }
 
         return Collator.getInstance().compare(getVersionString(), o.getVersionString());
+    }
+
+    private int compareVersionDigit(Integer versionDigit1, Integer versionDigit2) {
+        if (versionDigit1 == null || versionDigit2 == null) {
+            return 0;
+        }
+
+        return Integer.compare(versionDigit1, versionDigit2);
     }
 
     @Override
