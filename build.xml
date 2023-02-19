@@ -222,7 +222,7 @@
             </and>
             <then>
                 <echo message="No platform specified, building all platforms"/>
-                <property name="generate.installer.for.platforms" value="windows-x86 windows-x64 linux-x86 linux-x64 macosx"/>
+                <property name="generate.installer.for.platforms" value="windows-x86 windows-x64 linux-x64 macosx"/>
             </then>
             <else>
                 <if>
