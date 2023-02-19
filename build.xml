@@ -37,9 +37,7 @@
         <property name="jdkhome.string" value='#jdkhome="/path/to/jdk"'/>
         <copy file="${harness.dir}/etc/app.conf" tofile="build/launcher/etc/${app.name}.conf" overwrite="true">
             <filterchain>
-                <replacestring from="$${branding.token}" to="${branding.token}"/>
-                <replacestring from="$${APPNAME}/dev" to="$${APPNAME}/${app.version}"/>
-                <replacestring from="-J-Xmx64m" to="${run.args.extra}"/>
+                <replacestring from="$${branding.token}" to="${branding.token} ${run.args.extra}"/>
                 <replacestring from='#jdkhome="/path/to/jdk"' to ='${jdkhome.string}'/>
             </filterchain>
         </copy>
