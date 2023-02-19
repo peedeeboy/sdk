@@ -31,6 +31,12 @@ project(":assets") {
             }
         }
     }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
 }
 
 dependencies {
@@ -92,4 +98,14 @@ jar {
     manifest {
         attributes 'Main-Class': "$mainClassName"
     }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+wrapper {
+    gradleVersion = '7.6'
 }
