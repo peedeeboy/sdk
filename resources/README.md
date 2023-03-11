@@ -41,3 +41,5 @@ It's simply like this: Once your resolution is too large (like the 500x350px of 
 Just place the `about.png` and the `splash.gif` (though animation doesn't seem to be supported out of the box) inside `branding/core/core.jar/org/netbeans/core/startup/`. There you will also find the `Bundle.properties` which is responsible for the SDK Naming and the Splash Settings (Width, Height, Colors)  
 
 In `branding/modules/org-netbeans-core.jar/org/netbeans/core/ui/Bundle.properties` you will find the stuff needed to adjust the About Dialog (the html code displayed)
+
+The font used in the splash is "Foo" and "Foo-Regular"
