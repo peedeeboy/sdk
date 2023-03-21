@@ -179,7 +179,7 @@ task createBaseXml(dependsOn: configurations.corelibs) {
         jmeJarFiles.each{jarFile ->
             ZipFile file = new ZipFile(jarFile)
             file.entries().each { entry ->
-                if(entry.name.endsWith('.class')){
+                if(!entry.name.startsWith('META-INF') && entry.name.endsWith('.class')){
                     // TODO: "/" works on windows?
                     def pathPart = entry.name.substring(0, Math.max(0, entry.name.lastIndexOf('/')))
                     def classPath = pathPart.replace('/','.');
@@ -195,7 +195,7 @@ task createBaseXml(dependsOn: configurations.corelibs) {
         externalJarFiles.each{jarFile ->
             ZipFile file = new ZipFile(jarFile)
             file.entries().each { entry ->
-                if(entry.name.endsWith('.class')){
+                if(!entry.name.startsWith('META-INF') && entry.name.endsWith('.class')){
                     // TODO: "/" works on windows?
                     def pathPart = entry.name.substring(0, Math.max(0, entry.name.lastIndexOf('/')))
                     def classPath = pathPart.replace('/','.');
