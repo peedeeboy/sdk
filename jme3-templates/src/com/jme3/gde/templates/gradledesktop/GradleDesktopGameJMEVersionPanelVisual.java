@@ -96,6 +96,7 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
                 if (selection != null && jmeVersionsInitialized) {
                     jmeVersionComboBox.setSelectedItem(selection);
                 }
+                jmeVersionChanged();
 
                 jmeVersionsInitialized = true;
             }
@@ -114,6 +115,10 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
 
         loadPatchNotes();
         updateLWJGLdescription();
+    }
+    
+    private void jmeVersionChanged() {
+        loadPatchNotes();
     }
 
     private void additionalComponentConfiguration() {
@@ -278,7 +283,7 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
     }//GEN-LAST:event_lwjglComboBoxActionPerformed
 
     private void jmeVersionComboBoxActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jmeVersionComboBoxActionPerformed
-        loadPatchNotes();
+        jmeVersionChanged();
     }//GEN-LAST:event_jmeVersionComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
