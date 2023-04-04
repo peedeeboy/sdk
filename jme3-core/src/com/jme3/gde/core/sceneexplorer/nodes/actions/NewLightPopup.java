@@ -48,6 +48,7 @@ import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import java.awt.event.ActionEvent;
 import java.util.concurrent.Callable;
@@ -88,7 +89,11 @@ public class NewLightPopup extends AbstractAction implements Presenter.Popup {
         result.add(new JMenuItem(new AddDirectionalAction()));
         result.add(new JMenuItem(new AddPointAction()));
         result.add(new JMenuItem(new AddSpotAction()));
-        result.add(new JMenuItem(new AddProbeAction()));
+        // FIXME: This is a work around due to issue #176: Scene graph is not properly updated for rendering
+        // Something happens in LightProbeFactory
+        if(node instanceof Node) {
+            result.add(new JMenuItem(new AddProbeAction()));
+        }
 
         return result;
     }
