@@ -921,7 +921,7 @@ private void jToggleSelectGeomActionPerformed(java.awt.event.ActionEvent evt) {/
         // This is called, when the spinner of the near plane has been changed.
         float near = ((float)jSlider1.getValue() / 1000f);
         float spin = (Float)jSpinner1.getValue();
-        float fov = (Float) fovSpinner.getValue();
+        float fov = (int) fovSpinner.getValue();
         // Prevent an endless loop of state changes and don't change the slider when the spinner
         // has gone out of range, since this would lead to the slider's StateChanged overwriting the spinner again.
         // but we want the spinner to be a free-form field
