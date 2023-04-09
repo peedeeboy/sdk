@@ -165,12 +165,10 @@ function unpack_windows {
     find . -exec chmod u+w {} \; # Make all file writable to allow uninstaller's cleaner to remove file    
     
     find . -type f \( -name "*.exe" -o -name "*.dll" \) -exec chmod u+rwx {} \; # Make them executable
-
-    find . -type f -name "*.pack" | while read eachFile; do
-        echo ">> Unpacking $eachFile ...";
-        unpack200 $eachFile ${eachFile%.pack}.jar;
-        rm $eachFile;
-    done
+    
+    # Insert fake unpack200.exe
+    # See https://github.com/jMonkeyEngine/sdk/issues/491
+    touch bin/unpack200.exe
     
     cd ../
 
@@ -246,13 +244,6 @@ function compile_other {
     if [ ! -f "$unzipsfxname" ]; then
         echo "No unzipsfx for platform $1-$3 found at $unzipsfxname, cannot continue"
         exit 1
-    fi
-
-    echo "> Creating SFX JDK package $name"
-    if [ -f "$1-$2/jre/lib/rt.jar" ]; then # Already packed?
-        echo "> PACK200 rt.jar"
-        pack200 -J-Xmx1024m $1-$2/jre/lib/rt.jar.pack.gz $1-$2/jre/lib/rt.jar
-        rm -rf $1-$2/jre/lib/rt.jar
     fi
 
     echo "> Zipping JDK"
