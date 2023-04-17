@@ -74,7 +74,7 @@ public enum NetworkingLibrary implements TemplateLibrary {
             null, true),
     MONKEYNETTY("MonkeyNetty", NbBundle.getMessage(NetworkingLibrary.class,
             "networkinglibrary.monkeynetty.description"),
-            "io.tlf.monkeynetty", "monkey-netty",
+            "com.github.tlf30", "monkey-netty",
             "0.1.1", false),
     SIMETHEREAL("SimEthereal", NbBundle.getMessage(NetworkingLibrary.class,
             "networkinglibrary.simethereal.description"),
