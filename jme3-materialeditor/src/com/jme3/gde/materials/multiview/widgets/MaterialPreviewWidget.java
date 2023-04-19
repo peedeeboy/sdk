@@ -37,7 +37,6 @@
 package com.jme3.gde.materials.multiview.widgets;
 
 import com.jme3.gde.core.assets.ProjectAssetManager;
-import com.jme3.gde.core.icons.IconList;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.scene.SceneRequest;
 import com.jme3.gde.materials.MaterialPreviewRenderer;

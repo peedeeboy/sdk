@@ -40,18 +40,18 @@ public class FloatPanel extends MaterialPropertyWidget {
 
         setMinimumSize(new java.awt.Dimension(100, 27));
 
-        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setPreferredSize(new java.awt.Dimension(159, 27));
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(FloatPanel.class, "FloatPanel.jLabel1.text")); // NOI18N
         jLabel1.setMaximumSize(new java.awt.Dimension(300, 16));
+        jLabel1.setMinimumSize(new java.awt.Dimension(10, 17));
         jToolBar1.add(jLabel1);
         jToolBar1.add(filler1);
 
         jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 1.0f));
         jSpinner1.setMaximumSize(new java.awt.Dimension(100, 23));
-        jSpinner1.setMinimumSize(new java.awt.Dimension(100, 23));
+        jSpinner1.setMinimumSize(new java.awt.Dimension(30, 23));
         jSpinner1.setPreferredSize(new java.awt.Dimension(100, 23));
         jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {

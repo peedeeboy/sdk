@@ -39,8 +39,8 @@ public class TextPanel extends MaterialPropertyWidget {
         jPanel1 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
 
-        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
+        jToolBar1.setAlignmentY(0.5F);
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(TextPanel.class, "TextPanel.jLabel1.text")); // NOI18N
         jLabel1.setPreferredSize(new java.awt.Dimension(100, 16));
@@ -53,7 +53,7 @@ public class TextPanel extends MaterialPropertyWidget {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 5, Short.MAX_VALUE)
+            .addGap(0, 4, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -64,6 +64,7 @@ public class TextPanel extends MaterialPropertyWidget {
 
         jTextField1.setText(org.openide.util.NbBundle.getMessage(TextPanel.class, "TextPanel.jTextField1.text")); // NOI18N
         jTextField1.setMaximumSize(new java.awt.Dimension(200, 2147483647));
+        jTextField1.setMinimumSize(new java.awt.Dimension(34, 23));
         jTextField1.setPreferredSize(new java.awt.Dimension(200, 28));
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

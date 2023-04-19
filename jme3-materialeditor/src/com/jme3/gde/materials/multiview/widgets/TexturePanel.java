@@ -122,10 +122,11 @@ public class TexturePanel extends MaterialPropertyWidget {
         texturePreview = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(32767, 45));
+        setMinimumSize(new java.awt.Dimension(80, 0));
         setPreferredSize(new java.awt.Dimension(467, 45));
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(TexturePanel.class, "TexturePanel.jLabel1.text")); // NOI18N
-        jLabel1.setMinimumSize(new java.awt.Dimension(70, 14));
+        jLabel1.setMinimumSize(new java.awt.Dimension(20, 14));
         jLabel1.setPreferredSize(new java.awt.Dimension(100, 16));
 
         jPanel1.setPreferredSize(new java.awt.Dimension(10, 0));
@@ -134,7 +135,7 @@ public class TexturePanel extends MaterialPropertyWidget {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 10, Short.MAX_VALUE)
+            .addGap(0, 4, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,9 +210,9 @@ public class TexturePanel extends MaterialPropertyWidget {
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 238, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 238, Short.MAX_VALUE)))
+                    .addGap(0, 232, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 4, Short.MAX_VALUE)
+                    .addGap(0, 231, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

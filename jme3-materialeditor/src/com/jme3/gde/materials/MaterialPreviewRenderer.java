@@ -46,7 +46,6 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RendererException;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
@@ -59,8 +58,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 /**
- * Handles rendering of materials in preview widgets of Material and Shader Node editor.
- * 
+ * Handles rendering of materials in preview widgets of Material and Shader Node
+ * editor.
+ *
  * @author Nehon
  */
 public class MaterialPreviewRenderer implements SceneListener {
@@ -108,14 +108,14 @@ public class MaterialPreviewRenderer implements SceneListener {
         quad = new Geometry("previewQuad", quadMesh);
         quad.setLocalTranslation(new Vector3f(-2.25f, -2.25f, 0));
         MikktspaceTangentGenerator.generate(quad);
-        
+
         teapot = (Geometry) SceneApplication.getApplication().getAssetManager()
                 .loadModel("Models/Teapot/Teapot.obj");
         teapot.scale(3.5f);
         teapot.rotate(FastMath.PI, -FastMath.QUARTER_PI * 0.5f, -0.0f);
         teapot.setLocalTranslation(new Vector3f(-0.5f, 1.75f, 0));
         MikktspaceTangentGenerator.generate(teapot);
-        
+
         currentGeom = sphere;
         init = true;
     }
@@ -125,19 +125,14 @@ public class MaterialPreviewRenderer implements SceneListener {
         if (!init) {
             init();
         }
-        exec.execute(new Runnable() {
-
-            @Override
-            public void run() {
-                MaterialKey key = new MaterialKey(assetManager.getRelativeAssetPath(materialFileName));
-                assetManager.deleteFromCache(key);
-                Material mat = assetManager.loadAsset(key);
-                if (mat != null) {
-                    showMaterial(mat);
-                }
+        exec.execute(() -> {
+            MaterialKey key = new MaterialKey(assetManager.getRelativeAssetPath(materialFileName));
+            assetManager.deleteFromCache(key);
+            Material mat = assetManager.loadAsset(key);
+            if (mat != null) {
+                showMaterial(mat);
             }
         });
-        
 
     }
 
@@ -149,46 +144,36 @@ public class MaterialPreviewRenderer implements SceneListener {
         if (!init) {
             init();
         }
-        SceneApplication.getApplication().enqueue(new Callable<Material>() {
-
-            @Override
-            public Material call() throws Exception {
-                if (techniqueName != null) {
-                    try {
-                        m.selectTechnique(techniqueName, SceneApplication.getApplication().getRenderManager());
-                    } catch (Exception e) {
-                        //
-                    }
+        SceneApplication.getApplication().enqueue(() -> {
+            if (techniqueName != null) {
+                try {
+                    m.selectTechnique(techniqueName, SceneApplication.getApplication().getRenderManager());
+                } catch (Exception e) {
+                    //
                 }
-                final Material mat = reloadMaterial(m);
-                if (mat != null) {
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            currentMaterial = mat;
-                            currentGeom.setMaterial(mat);
-                            try {
-                                if (currentGeom.getMaterial() != null) {
-                                    PreviewRequest request = new PreviewRequest(MaterialPreviewRenderer.this, currentGeom, label.getWidth(), label.getHeight());
-                                    request.getCameraRequest().setLocation(new Vector3f(0, 0, 7));
-                                    request.getCameraRequest().setLookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
-                                    SceneApplication.getApplication().createPreview(request);
-                                }
-                            } catch (Exception e) {
-                                java.awt.EventQueue.invokeLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        label.setIcon(Icons.error);
-                                    }
-                                });
-                                smartLog("Error rendering material{0}", e.getMessage());
-                            }
-                        }
-                    });
-
-                }
-                return mat;
             }
+            final Material mat = reloadMaterial(m);
+            if (mat != null) {
+                java.awt.EventQueue.invokeLater(() -> {
+                    currentMaterial = mat;
+                    currentGeom.setMaterial(mat);
+                    try {
+                        if (currentGeom.getMaterial() != null) {
+                            PreviewRequest request = new PreviewRequest(MaterialPreviewRenderer.this, currentGeom, label.getWidth(), label.getHeight());
+                            request.getCameraRequest().setLocation(new Vector3f(0, 0, 7));
+                            request.getCameraRequest().setLookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
+                            SceneApplication.getApplication().createPreview(request);
+                        }
+                    } catch (Exception e) {
+                        java.awt.EventQueue.invokeLater(() -> {
+                            label.setIcon(Icons.error);
+                        });
+                        smartLog("Error rendering material{0}", e.getMessage());
+                    }
+                });
+
+            }
+            return mat;
         });
     }
 
@@ -209,7 +194,7 @@ public class MaterialPreviewRenderer implements SceneListener {
 
             //creating a dummy mat with the mat def of the mat to reload
             dummy = new Material(mat.getMaterialDef());
-        
+
             for (MatParam matParam : mat.getParams()) {
                 dummy.setParam(matParam.getName(), matParam.getVarType(), matParam.getValue());
             }
@@ -231,12 +216,7 @@ public class MaterialPreviewRenderer implements SceneListener {
             //Logger.getLogger(MaterialDebugAppState.class.getName()).log(Level.SEVERE, e.getMessage());
             smartLog("{0}", e.getMessage());
 
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    label.setIcon(Icons.error);
-                }
-            });
+            java.awt.EventQueue.invokeLater(() -> label.setIcon(Icons.error));
             return null;
         } catch (NullPointerException npe) {
             //utterly bad, but for some reason I get random NPE here and can't figure out why so to avoid bigger issues, I just catch it.
@@ -282,11 +262,8 @@ public class MaterialPreviewRenderer implements SceneListener {
     public void previewCreated(PreviewRequest request) {
         if (request.getRequester() == this) {
             final ImageIcon icon = new ImageIcon(request.getImage());
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    label.setIcon(icon);
-                }
+            java.awt.EventQueue.invokeLater(() -> {
+                label.setIcon(icon);
             });
             previewRequested = false;
         }
@@ -296,15 +273,16 @@ public class MaterialPreviewRenderer implements SceneListener {
         SceneApplication.getApplication().removeSceneListener(this);
         exec.shutdownNow();
     }
-    
-    public boolean isPreviewRequested(){
+
+    public boolean isPreviewRequested() {
         return previewRequested;
     }
-    
+
     /**
-     * A more lightweight refresh than showMaterials that doesn't rebuild the material
+     * A more lightweight refresh than showMaterials that doesn't rebuild the
+     * material
      */
-    public void refreshOnly(){
+    public void refreshOnly() {
         previewRequested = true;
         SceneApplication.getApplication().enqueue((Callable<Object>) () -> {
             if (currentGeom.getMaterial() != null) {
@@ -316,5 +294,5 @@ public class MaterialPreviewRenderer implements SceneListener {
             return null;
         });
     }
-    
+
 }

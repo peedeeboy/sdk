@@ -49,15 +49,19 @@ public class ColorPanel extends MaterialPropertyWidget {
         jSeparator1 = new javax.swing.JSeparator();
 
         setMaximumSize(new java.awt.Dimension(32767, 35));
+        setMinimumSize(new java.awt.Dimension(20, 0));
         setPreferredSize(new java.awt.Dimension(430, 35));
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(ColorPanel.class, "ColorPanel.jLabel1.text")); // NOI18N
+        jLabel1.setMinimumSize(new java.awt.Dimension(20, 17));
         jLabel1.setPreferredSize(new java.awt.Dimension(100, 16));
 
+        jPanel2.setMinimumSize(new java.awt.Dimension(80, 0));
         jPanel2.setPreferredSize(new java.awt.Dimension(377, 40));
 
         rLabel.setText(org.openide.util.NbBundle.getMessage(ColorPanel.class, "ColorPanel.rLabel.text")); // NOI18N
         rLabel.setMaximumSize(new java.awt.Dimension(110, 2147483647));
+        rLabel.setMinimumSize(new java.awt.Dimension(30, 23));
         rLabel.setNextFocusableComponent(gLabel);
         rLabel.setPreferredSize(new java.awt.Dimension(110, 28));
         rLabel.setVerifyInputWhenFocusTarget(false);
@@ -77,6 +81,7 @@ public class ColorPanel extends MaterialPropertyWidget {
 
         gLabel.setText(org.openide.util.NbBundle.getMessage(ColorPanel.class, "ColorPanel.gLabel.text")); // NOI18N
         gLabel.setMaximumSize(new java.awt.Dimension(110, 2147483647));
+        gLabel.setMinimumSize(new java.awt.Dimension(30, 23));
         gLabel.setNextFocusableComponent(bLabel);
         gLabel.setPreferredSize(new java.awt.Dimension(110, 28));
         gLabel.addActionListener(new java.awt.event.ActionListener() {
@@ -95,6 +100,7 @@ public class ColorPanel extends MaterialPropertyWidget {
 
         bLabel.setText(org.openide.util.NbBundle.getMessage(ColorPanel.class, "ColorPanel.bLabel.text")); // NOI18N
         bLabel.setMaximumSize(new java.awt.Dimension(110, 2147483647));
+        bLabel.setMinimumSize(new java.awt.Dimension(30, 23));
         bLabel.setNextFocusableComponent(aLabel);
         bLabel.setPreferredSize(new java.awt.Dimension(110, 28));
         bLabel.addActionListener(new java.awt.event.ActionListener() {
@@ -120,6 +126,7 @@ public class ColorPanel extends MaterialPropertyWidget {
         aLabel.setText(org.openide.util.NbBundle.getMessage(ColorPanel.class, "ColorPanel.aLabel.text")); // NOI18N
         aLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         aLabel.setMaximumSize(new java.awt.Dimension(110, 2147483647));
+        aLabel.setMinimumSize(new java.awt.Dimension(30, 23));
         aLabel.setPreferredSize(new java.awt.Dimension(110, 28));
         aLabel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,23 +161,23 @@ public class ColorPanel extends MaterialPropertyWidget {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(colorPreview, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addComponent(colorPreview, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(rLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(gLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(aLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(aLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,7 +186,7 @@ public class ColorPanel extends MaterialPropertyWidget {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(jLabel4)
                 .addComponent(jLabel5)
-                .addComponent(rLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(rLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(gLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(bLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(aLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -194,9 +201,9 @@ public class ColorPanel extends MaterialPropertyWidget {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );

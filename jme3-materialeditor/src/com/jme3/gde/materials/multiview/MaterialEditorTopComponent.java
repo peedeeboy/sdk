@@ -169,6 +169,7 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
 
         texturesAndColorsPane.addTab(org.openide.util.NbBundle.getMessage(MaterialEditorTopComponent.class, "MaterialEditorTopComponent.jScrollPane3.TabConstraints.tabTitle"), jScrollPane3); // NOI18N
 
+        jTabbedPane3.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         jTabbedPane3.setMinimumSize(new java.awt.Dimension(380, 355));
         jTabbedPane3.setPreferredSize(new java.awt.Dimension(500, 355));
 
@@ -180,7 +181,6 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
 
         jTabbedPane3.addTab(org.openide.util.NbBundle.getMessage(MaterialEditorTopComponent.class, "MaterialEditorTopComponent.jScrollPane2.TabConstraints.tabTitle_1"), jScrollPane2); // NOI18N
 
-        jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
 
         jPanel3.setPreferredSize(new java.awt.Dimension(0, 21));
@@ -215,7 +215,7 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
             }
         });
         jToolBar2.add(jComboBox1);
-        jToolBar3.setFloatable(false);
+
         jToolBar3.setRollover(true);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(140, 21));
@@ -256,7 +256,8 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
             }
         });
 
-        additionalRenderStatePane.setMinimumSize(new java.awt.Dimension(150, 100));
+        additionalRenderStatePane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        additionalRenderStatePane.setMinimumSize(new java.awt.Dimension(100, 100));
         additionalRenderStatePane.setPreferredSize(new java.awt.Dimension(380, 355));
 
         jScrollPane10.setBorder(null);
@@ -273,13 +274,13 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
             .addGroup(editorPanelLayout.createSequentialGroup()
                 .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(materialPreviewWidget1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTabbedPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE))
+                    .addComponent(jTabbedPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(editorPanelLayout.createSequentialGroup()
-                        .addComponent(texturesAndColorsPane, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(texturesAndColorsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(additionalRenderStatePane, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                        .addComponent(additionalRenderStatePane, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
                         .addContainerGap(12, Short.MAX_VALUE))
                     .addGroup(editorPanelLayout.createSequentialGroup()
                         .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
