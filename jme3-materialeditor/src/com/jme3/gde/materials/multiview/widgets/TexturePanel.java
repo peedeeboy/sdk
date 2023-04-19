@@ -32,14 +32,21 @@ import java.util.logging.Logger;
  */
 public class TexturePanel extends MaterialPropertyWidget {
 
-    private final TexturePropertyEditor editor;
-    private final ProjectAssetManager manager;
+    private TexturePropertyEditor editor;
+    private ProjectAssetManager manager;
     private boolean flip = false;
     private boolean repeat = false;
     protected String textureName = null; // always enclosed with ""
     private TexturePreview texPreview;
     private final ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
 
+    /**
+     * Used by tests
+     */
+    protected TexturePanel() {
+        
+    }
+    
     /**
      * Creates new form SelectionPanel
      */
@@ -67,12 +74,14 @@ public class TexturePanel extends MaterialPropertyWidget {
         }
     }
 
-    private String extractTextureName(String textureName) {
+    // visible for tests
+    protected String extractTextureName(String textureName) {
         final String[] textureNameComponents = textureName.split("\"");
         return textureNameComponents[textureNameComponents.length - 1];
     }
 
-    private void updateFlipRepeat() {
+    // visible for tests
+    protected void updateFlipRepeat() {
         String propertyValue = property.getValue();
         propertyValue = propertyValue.replaceFirst(textureName, "");
         if (flip && !propertyValue.contains("Flip ")) {
