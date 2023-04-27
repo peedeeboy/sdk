@@ -37,7 +37,6 @@ public class IntPanel extends MaterialPropertyWidget {
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(32767, 0));
         jSpinner1 = new javax.swing.JSpinner();
 
-        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setPreferredSize(new java.awt.Dimension(159, 27));
 
@@ -49,7 +48,7 @@ public class IntPanel extends MaterialPropertyWidget {
         jSpinner1.setModel(new javax.swing.SpinnerNumberModel());
         jSpinner1.setAlignmentX(1.0F);
         jSpinner1.setMaximumSize(new java.awt.Dimension(100, 23));
-        jSpinner1.setMinimumSize(new java.awt.Dimension(100, 23));
+        jSpinner1.setMinimumSize(new java.awt.Dimension(40, 23));
         jSpinner1.setPreferredSize(new java.awt.Dimension(100, 23));
         jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
