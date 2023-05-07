@@ -44,6 +44,9 @@ dependencies {
   // Core JME
   implementation "org.jmonkeyengine:jme3-core:$jmeVer"
   implementation "org.jmonkeyengine:jme3-desktop:$jmeVer"
+  <#if jmeVersion.versionInfo.major gt 3 || (jmeVersion.versionInfo.major == 3 && jmeVersion.versionInfo.minor gte 6 )>
+  implementation "org.jmonkeyengine:jme3-awt-dialogs:$jmeVer"
+  </#if>
   <#if lwjglLibrary.isCoreJmeLibrary == true>
   implementation "${lwjglLibrary.groupId}:${lwjglLibrary.artifactId}:$jmeVer"
   <#else>
