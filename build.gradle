@@ -40,6 +40,7 @@ dependencies {
 
     corelibs dep("org.jmonkeyengine:jme3-core:$jmeVersion-$jmeVersionTag", true, true)
     corelibs dep("org.jmonkeyengine:jme3-desktop:$jmeVersion-$jmeVersionTag", true, true)
+	corelibs dep("org.jmonkeyengine:jme3-awt-dialogs:$jmeVersion-$jmeVersionTag", true, true)
     corelibs dep("org.jmonkeyengine:jme3-lwjgl:$jmeVersion-$jmeVersionTag", true, true)
     corelibs dep("org.jmonkeyengine:jme3-effects:$jmeVersion-$jmeVersionTag", true, true)
     corelibs dep("org.jmonkeyengine:jme3-blender:3.3.2-stable", false, false) // Pin Pointed until jme3-blender has a dedicated release or support is phased out.
