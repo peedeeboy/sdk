@@ -167,7 +167,7 @@ public class GradleDesktopGameJMEVersionPanelVisual extends JPanel {
     }
 
     protected void store(WizardDescriptor d) {
-        String jmeVersion = jmeVersionComboBox.getSelectedItem().toString();
+        LibraryVersion jmeVersion = jmeVersionComboBox.getItemAt(jmeVersionComboBox.getSelectedIndex());
         TemplateLibrary lwjglLibrary = lwjglComboBox.getItemAt(lwjglComboBox.getSelectedIndex());
 
         d.putProperty("jmeVersion", jmeVersion);
