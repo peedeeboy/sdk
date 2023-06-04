@@ -31,7 +31,7 @@ If you don't know whether your system is 64 bits (x64) or 32 bits (x86), you can
 After the SDK is up and running. A good starting point is to look at the jME examples. Under *File | New project | JME3 Tests* you can create a new project, populated with the jME build in examples. You can freely mess around with these and try out stuff. Your changes can always be reverted by simply creating a new *JME3 Tests* project. Once you are all comfortable and ready to embark on your own exciting journey, *File | New project | Basic game (with Gradle)* is the recommended starting point.
 
 ## Building the SDK
-Building the SDK is an easy process basically, but it depends on what kind of distribution you want to build.
+Building the SDK is an easy process basically, but it depends on what kind of distribution you want to build. Currently the SDK requires __JDK 17__ to build.
 You also have to know that the build process changes from time to time, so have a look at the `.github/workflows/gradle.yml` file, or related, you will see how we build our releases then.  
 
 Technically the gradle task `buildSdk` is the main task which builds the sdk (Invoking `./gradlew buildSdk` or `gradlew.bat buildSdk` on Windows).
@@ -57,7 +57,7 @@ __If you want to build the platform installers (On Windows -> without having ant
 __If you want to debug the SDK inside an IDE:__   
     See above. You want to open the SDK as Netbeans Project from within Netbeans (you can use the nb in `netbeans/`) and you can then treat it as regular project with the difference that there are several subproject.
 
-A note about the `netbeans/` folder: To save bandwidth `buildSdk` downloads netbeans once to said folder and uses it over and over again. Even when the download URL is changed (i.e. when you update the netbeans version), you have to delete the netbeans folder and remove it from any cache (`Travis!`), so it can be reloaded.
+A note about the `netbeans/` folder: To save bandwidth `buildSdk` downloads netbeans once to said folder and uses it over and over again. Even when the download URL is changed (i.e. when you update the Netbeans version), you have to delete the netbeans folder and remove it from any cache so it can be reloaded.
 
 ## Developing/Contributing
 First of all, I suggest you to take a look at [docs/](https://github.com/jMonkeyEngine/sdk/tree/master/docs). Those docs are a loose collection of things I came across during development, but they prevent you from re-doing the same experiences. 
