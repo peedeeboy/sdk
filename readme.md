@@ -1,7 +1,7 @@
-# jMonkeyEngine Software Development Kit (SDK) [![Build Status](https://travis-ci.org/jMonkeyEngine/sdk.svg?branch=master)](https://travis-ci.org/jMonkeyEngine/sdk)
+# jMonkeyEngine Software Development Kit (SDK) [![Build Status](https://github.com/jMonkeyEngine/sdk/actions/workflows/gradle.yml/badge.svg)](../../actions)
 
 Welcome to the repository of the jMonkeyEngine Software Development Kit (SDK).
-This SDK simplifies developing 3D Applications with the jMonkeyEngine. It contains everything ever needed to develop a full application.  
+This SDK simplifies developing 3D Applications with the jMonkeyEngine (jME). It contains everything ever needed to develop a full application.  
   
 Our SDK (or jmonkeyplatform) is based on the Netbeans IDE but includes additional features like:
 -  A Scene Editor (SceneExplorer: Preview your scene, adjust all positions, add `Controls` and `AppStates` (WYSIWYG) and then just save the scene)
@@ -16,9 +16,7 @@ Our SDK (or jmonkeyplatform) is based on the Netbeans IDE but includes additiona
 and many more!  
 
 It is important to know that the SDK is not coupled with the engine itself, so if you have issues which are unrelated to the IDE, report them [here](https://github.com/jMonkeyEngine/jmonkeyengine).
-This however also means, that the SDK can have a different pace than the engine (at the time of writing, the SDK is on 3.1.0-stable whereas the engine team is already working on 3.2) but you can nonetheless work on a different engine version than the one which is bundled.
-
-__!!! Note: You are currently watching the master branch which is the active development for JMonkeyEngine 3.2. For the current release candidate, see the v3.1 branch! !!!__
+This however also means, that the SDK can have a different pace than the engine but you can nonetheless work on a different engine version than the one which is bundled. For your own projects, you should consider using Gradle build system which also gives you flexibility on choosing any jMonkeyEngine version. More on this later.
 
 ## Getting Started / Downloading the SDK
 Just have a look at our [releases](https://github.com/jMonkeyEngine/sdk/releases) section.
@@ -26,17 +24,15 @@ There you can download the version you desire. The SDK will generally follow the
 plus some suffixes for different SDK releases on the same engine version.
 
 There are multiple files from which you can choose:  
-You can take the platform agnostic `jmonkeyplatform.zip` which contains the full SDK able to be run on "any" (X86/x86_64) platform (Windows, Mac OS, Linux) however it lacks the jdk as well as blender.  
+You can take the platform agnostic `jmonkeyplatform.zip` which contains the full SDK able to be run on "any" (X86/x86_64) platform (Windows, Mac OS, Linux) however it lacks the jdk as well as Blender.  
 Thus the prefered download is `jmonkeyplatform-windows-x64.exe` which essentially __is__ `jmonkeyplatform.zip` and the correct version of the JDK and Blender (hence the ~250MiB size increase).  
 If you don't know whether your system is 64 bits (x64) or 32 bits (x86), you can type `uname -i` on Linux or look into the system informations (right click on Computer->Properties) on Windows.
 
-__Note:__ The Tag `stable` is refering to 3.0-stable, which is an ancient version. You should not start any new projects based of 3.0 but use 3.1 instead. Also the tag is pointing to the wrong commit since we had to re-upload those files but the repo doesn't really contain any 3.0 commits anymore.
+After the SDK is up and running. A good starting point is to look at the jME examples. Under *File | New project | JME3 Tests* you can create a new project, populated with the jME build in examples. You can freely mess around with these and try out stuff. Your changes can always be reverted by simply creating a new *JME3 Tests* project. Once you are all comfortable and ready to embark on your own exciting journey, *File | New project | Basic game (with Gradle)* is the recommended starting point.
 
 ## Building the SDK
 Building the SDK is an easy process basically, but it depends on what kind of distribution you want to build.
-You also have to know that the build process changes from time to time, so have a look at the `.travis.yml` file, or related, you will see how we build our releases then.  
-
-__Note:__ Currently, the SDK has to build the engine on it's own, because not all needed dependencies are in mavenCentral/jCenter. Thus you have to call `build_engine.sh` first on a Linux System, Inside your Windows-Git-Shell or you can manually checkout the [jMonkeyEngine](https://github.com/jMonkeyEngine/jmonkeyengine) repository and then invoke `gradlew.bat -PbuildJavaDoc=true install`. This will add _all_ jMonkeyEngine Libraries into your local maven "server".
+You also have to know that the build process changes from time to time, so have a look at the `.github/workflows/gradle.yml` file, or related, you will see how we build our releases then.  
 
 Technically the gradle task `buildSdk` is the main task which builds the sdk (Invoking `./gradlew buildSdk` or `gradlew.bat buildSdk` on Windows).
 
@@ -48,14 +44,14 @@ __If you want to build the platform agnostic zip:__
 
 __If you want to build the platform installers (like we do):__   
     call `./download-jdks.sh`, `./gradlew buildSdk` and then `ant build-installers`
-    You have to install ant for this to work (for linux consult the internet, for mac os look into homebrew).
-    Note that this takes a long time (more than one hour), because a huge amount of data is compressed and such.
+    You have to install ant for this to work (for Linux consult the internet, for Mac OS look into homebrew).
+    Note that this might take a long time, because a huge amount of data is compressed and such.
     
 __If you want to build the platform installers (On Windows -> without having ant):__   
     See above. You can bypass ant by declaring a gradle task, just like it has been done for run. There, the gradle included ant will be used).
     Alternatively you can launch netbeans in `netbeans/`, open the SDK as Netbeans Project Collection and select __package as__:
     ![Package as...](http://i.imgur.com/5V2uBHf.png).
-    Note that you still have to download and unpack the jdks somehow, which is a cumbersome process, which is why it is discouraged to
+    Note that you still have to download and unpack the JDKs somehow, which is a cumbersome process, which is why it is discouraged to
     build the installers on Windows (Linux and Mac OS are supported).
     
 __If you want to debug the SDK inside an IDE:__   
@@ -70,11 +66,4 @@ Basically the only tricky thing is how we handle custom entries in the SceneExpl
 Just take a look at the `Motion Event Pull Request`, which should've been added around `March 2016`, there you can see what was needed to add MotionEvents to the SDK.
 
 Other than that, we are more than happy to help, even if your addition is incomplete. Make sure you use the Netbeans formatting, obvious variable naming and commented and especially documented code, though.
-Before you open an issue, make sure that it is not an engine bug, but a real sdk bug. If you are uncertain whether it is a real bug or misuse, you can either open an issue or ask [on the hub](https://hub.jmonkeyengine.org) using the `Troubleshooting | jmonkeyplatform` category.
-
-## Issues when building
-__Could not find `jme3.1.0-stable`__ :  
-    When you occur this issue, you have to go back to the engine build step and see how the engine is called. Technically the engine version is collected out from git tags, or called SNAPSHOT. Then there are cases where this recognition fails. For example when the SDK has a tag but the engine is snapshot. Then take a look at `build.gradle` in the sdk repo. It contains a field called `ext.jmeVersion` or something, where you can specify the version.
-    
-__Could not find `jme3-jbullet`__ :  
-    jBullet is not part of jCenter, which means you forgot to build the engine first. See above.
+Before you open an issue, make sure that it is not an engine bug, but a real SDK bug. If you are uncertain whether it is a real bug or misuse, you can either open an issue or ask [on the hub](https://hub.jmonkeyengine.org) using the `Troubleshooting | jmonkeyplatform` category.
