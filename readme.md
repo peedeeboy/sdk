@@ -66,4 +66,4 @@ Basically the only tricky thing is how we handle custom entries in the SceneExpl
 Just take a look at the `Motion Event Pull Request`, which should've been added around `March 2016`, there you can see what was needed to add MotionEvents to the SDK.
 
 Other than that, we are more than happy to help, even if your addition is incomplete. Make sure you use the Netbeans formatting, obvious variable naming and commented and especially documented code, though.
-Before you open an issue, make sure that it is not an engine bug, but a real SDK bug. If you are uncertain whether it is a real bug or misuse, you can either open an issue or ask [on the hub](https://hub.jmonkeyengine.org) using the `Troubleshooting | jmonkeyplatform` category.
+If you think you've encountered a bug in the SDK, please open an issue to let the developers know or post [on the hub](https://hub.jmonkeyengine.org) using the `Troubleshooting | jmonkeyplatform` category.
