@@ -136,9 +136,9 @@ public class SceneToolController extends AbstractAppState {
         //cursor.attachChild(cursorArrowZ);
 
         //grid
-        grid = new Geometry("grid", new Grid(20, 20, 1.0f));
+        grid = new Geometry("grid", new Grid(21, 21, 1.0f));
         grid.setMaterial(grayMat);
-        grid.setLocalTranslation(-10, 0, -10);
+        grid.center().move(Vector3f.ZERO);
         SceneApplication.getApplication().enqueue(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
