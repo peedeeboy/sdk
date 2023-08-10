@@ -31,7 +31,6 @@
  */
 package com.jme3.gde.materialdefinition.dialog;
 
-import com.jme3.gde.core.editor.nodes.Diagram;
 import com.jme3.gde.materialdefinition.editor.ShaderNodeDiagram;
 import com.jme3.shader.VarType;
 import java.awt.Point;
