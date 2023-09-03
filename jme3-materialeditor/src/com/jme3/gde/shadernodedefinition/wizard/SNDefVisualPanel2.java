@@ -32,6 +32,8 @@
 package com.jme3.gde.shadernodedefinition.wizard;
 
 import java.awt.EventQueue;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
@@ -40,9 +42,11 @@ import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public final class SNDefVisualPanel2 extends JPanel {
-
-    private final Object[] emptyObj = {"", "", ""};
+    
+    private final Object[] emptyObj = {"float", "", ""};
     private final String type;
+    private final String[] varTypes = new String[]{"bool", "int", "float", "vec2", 
+        "vec3", "vec4", "sampler", "sampler2D", "sampler3D", "mat3", "mat4"};
 
     /**
      * Creates new form SNDefVisualPanel2
@@ -51,7 +55,10 @@ public final class SNDefVisualPanel2 extends JPanel {
         initComponents();
         this.type = type;
         titleLabel.setText(type);
-        varTable.getColumnModel().getSelectionModel().addListSelectionListener(new ExploreSelectionListener());
+        varTable.getColumnModel().getSelectionModel().addListSelectionListener(
+                new ExploreSelectionListener());
+        varTable.getColumn("Type").setCellEditor(new DefaultCellEditor(
+                new JComboBox(varTypes)));
     }
 
     @Override
@@ -107,7 +114,9 @@ public final class SNDefVisualPanel2 extends JPanel {
                 // Edit.
                 if (varTable.isCellEditable(row, col)) {
                     varTable.editCellAt(row, col);
-                    ((JTextField) varTable.getEditorComponent()).selectAll();
+                    if(col != 0) {
+                        ((JTextField) varTable.getEditorComponent()).selectAll();
+                    }
                     varTable.getEditorComponent().requestFocusInWindow();
                 }
             }
@@ -149,7 +158,6 @@ public final class SNDefVisualPanel2 extends JPanel {
         });
         jScrollPane1.setViewportView(varTable);
 
-        jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
         org.openide.awt.Mnemonics.setLocalizedText(titleLabel, org.openide.util.NbBundle.getMessage(SNDefVisualPanel2.class, "SNDefVisualPanel2.titleLabel.text")); // NOI18N
