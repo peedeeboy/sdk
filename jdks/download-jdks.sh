@@ -11,8 +11,8 @@
 set -e # Quit on Error
 
 jdk_major_version="17"
-jdk_version="0.7"
-jdk_build_version="7"
+jdk_version="0.8.1"
+jdk_build_version="1"
 platforms=( "x64_linux" "x86-32_windows" "x64_windows" "x64_mac" )
 
 # DEPRECATED (not required anymore)
