@@ -24,13 +24,26 @@
  */
 package com.jme3.gde.core.sceneviewer;
 
+import com.jme3.asset.AssetManager;
+import com.jme3.asset.MaterialKey;
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
+import com.jme3.gde.core.dnd.SceneViewerDropTargetListener;
 import com.jme3.gde.core.filters.FilterExplorerTopComponent;
 import com.jme3.gde.core.icons.IconList;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.scene.SceneRequest;
 import com.jme3.input.awt.AwtKeyInput;
 import com.jme3.input.event.KeyInputEvent;
+import com.jme3.material.Material;
+import com.jme3.math.Ray;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import java.awt.Component;
+import java.awt.dnd.DropTarget;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
@@ -51,7 +64,7 @@ import org.openide.windows.WindowManager;
  * It also contains the top bar.
  */
 @ConvertAsProperties(dtd = "-//com.jme3.gde.core.sceneviewer//SceneViewer//EN",
-autostore = false)
+        autostore = false)
 public final class SceneViewerTopComponent extends TopComponent {
 
     private static SceneViewerTopComponent instance;
@@ -101,10 +114,9 @@ public final class SceneViewerTopComponent extends TopComponent {
                         String action;
                         if (e.getWheelRotation() < 0) {
                             action = "MouseWheel";
-                        }else if (e.getWheelRotation() > 0) {
+                        } else if (e.getWheelRotation() > 0) {
                             action = "MouseWheel-";
-                        }
-                        else {
+                        } else {
                             return null;
                         }
                         if (app.getActiveCameraController() != null) {
@@ -154,6 +166,7 @@ public final class SceneViewerTopComponent extends TopComponent {
         });
         //}
 
+        oGLPanel.setDropTarget(new DropTarget(this, new SceneViewerDropTargetListener(this)));
     }
 
     /**
@@ -352,7 +365,8 @@ public final class SceneViewerTopComponent extends TopComponent {
      * only, i.e. deserialization routines; otherwise you could get a
      * non-deserialized instance. To obtain the singleton instance, use
      * {@link #findInstance}.
-     * @return 
+     *
+     * @return
      */
     public static synchronized SceneViewerTopComponent getDefault() {
         if (instance == null) {
@@ -364,7 +378,8 @@ public final class SceneViewerTopComponent extends TopComponent {
     /**
      * Obtain the SceneViewerTopComponent instance. Never call
      * {@link #getDefault} directly!
-     * @return 
+     *
+     * @return
      */
     public static synchronized SceneViewerTopComponent findInstance() {
         TopComponent win = WindowManager.getDefault().findTopComponent(PREFERRED_ID);
@@ -453,5 +468,46 @@ public final class SceneViewerTopComponent extends TopComponent {
     @Override
     public UndoRedo getUndoRedo() {
         return Lookup.getDefault().lookup(UndoRedo.class);
+    }
+
+    public void applyMaterial(String assetName, Vector2f cursorPosition) {
+        AssetManager assetManager = app.getAssetManager();
+        Spatial spatial = pickWorldSpatial(app.getCamera(), new Vector2f(cursorPosition.x, app.getCamera().getHeight() - cursorPosition.y), app.getRootNode());
+        System.out.println("position " + new Vector2f(cursorPosition.x, app.getCamera().getHeight() - cursorPosition.y));
+        if (spatial != null) {
+            Material material = assetManager.loadAsset(new MaterialKey(assetName));
+            spatial.setMaterial(material);
+        }
+    }
+
+    public void addModel(String assetName, Vector2f cursorPosition) {
+        AssetManager assetManager = app.getAssetManager();
+        Spatial spatial = assetManager.loadModel(assetName);
+        CollisionResult cr = pick(app.getCamera(), cursorPosition, app.getRootNode());
+        spatial.setLocalTranslation(cr != null ? 
+                cr.getContactPoint() : app.getCamera().getWorldCoordinates(cursorPosition, 100f));
+        app.getRootNode().attachChild(spatial);
+    }
+
+    public static Spatial pickWorldSpatial(Camera cam, Vector2f mouseLoc, Node jmeRootNode) {
+        CollisionResult cr = pick(cam, mouseLoc, jmeRootNode);
+        if (cr != null) {
+            return cr.getGeometry();
+        } else {
+            return null;
+        }
+    }
+
+    private static CollisionResult pick(Camera cam, Vector2f mouseLoc, Node node) {
+        CollisionResults results = new CollisionResults();
+        Ray ray = new Ray();
+        Vector3f pos = cam.getWorldCoordinates(mouseLoc, 0).clone();
+        Vector3f dir = cam.getWorldCoordinates(mouseLoc, 0.125f).clone();
+        dir.subtractLocal(pos).normalizeLocal();
+        ray.setOrigin(pos);
+        ray.setDirection(dir);
+        node.collideWith(ray, results);
+        CollisionResult result = results.getClosestCollision();
+        return result;
     }
 }

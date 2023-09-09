@@ -15,10 +15,13 @@ import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.gde.core.properties.TexturePropertyEditor;
 import com.jme3.gde.core.properties.preview.TexturePreview;
 import com.jme3.gde.materials.MaterialProperty;
+import com.jme3.gde.materials.dnd.TextureDropTargetListener;
+import com.jme3.gde.materials.dnd.TextureDropTargetListener.TextureDropTarget;
 import com.jme3.gde.materials.multiview.MaterialEditorTopComponent;
 import com.jme3.gde.materials.multiview.widgets.icons.Icons;
 import java.awt.Component;
 import java.awt.Graphics2D;
+import java.awt.dnd.DropTarget;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
@@ -30,7 +33,7 @@ import java.util.logging.Logger;
  *
  * @author normenhansen
  */
-public class TexturePanel extends MaterialPropertyWidget {
+public class TexturePanel extends MaterialPropertyWidget implements TextureDropTarget{
 
     private TexturePropertyEditor editor;
     private ProjectAssetManager manager;
@@ -54,6 +57,8 @@ public class TexturePanel extends MaterialPropertyWidget {
         this.manager = manager;
         editor = new TexturePropertyEditor(manager);
         initComponents();
+        
+        setDropTarget(new DropTarget(this, new TextureDropTargetListener(this)));
     }
 
     private void displayPreview() {
@@ -333,4 +338,23 @@ public class TexturePanel extends MaterialPropertyWidget {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel texturePreview;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void setTexture(String name) {
+        property.setValue("");
+        java.awt.EventQueue.invokeLater(() -> {
+            if(name.startsWith("\"")){
+                textureName = name;
+            } else {
+                textureName = "\"" + name + "\"";
+            }
+            property.setValue(textureName);
+            displayPreview();
+            updateFlipRepeat();
+            java.awt.EventQueue.invokeLater(() -> {
+                fireChanged();
+            });
+        });
+        
+    }
 }
