@@ -24,11 +24,11 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
+              <Component id="jPanel4" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="sceneInfoPanel" min="-2" max="-2" attributes="0"/>
+              <Component id="sceneInfoPanel" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="cameraPanel" min="-2" max="-2" attributes="0"/>
+              <Component id="cameraPanel" max="32767" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
           <Component id="jToolBar1" alignment="0" max="32767" attributes="0"/>
@@ -184,6 +184,9 @@
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
               <SpinnerModel initial="0.1" numberType="java.lang.Float" stepSize="0.01" type="number"/>
             </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[22, 23]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jSpinner1StateChanged"/>
@@ -193,6 +196,9 @@
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
               <SpinnerModel initial="500.0" numberType="java.lang.Float" stepSize="1.0" type="number"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[22, 23]"/>
             </Property>
           </Properties>
           <Events>
@@ -204,12 +210,18 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="com/jme3/gde/scenecomposer/Bundle.properties" key="SceneComposerTopComponent.jLabel7.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[34, 17]"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="com/jme3/gde/scenecomposer/Bundle.properties" key="SceneComposerTopComponent.jLabel8.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[36, 17]"/>
             </Property>
           </Properties>
         </Component>
@@ -260,6 +272,9 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="com/jme3/gde/scenecomposer/Bundle.properties" key="SceneComposerTopComponent.jLabel13.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[34, 17]"/>
+            </Property>
           </Properties>
         </Component>
         <Component class="javax.swing.JSlider" name="fovSlider">
@@ -276,6 +291,9 @@
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
               <SpinnerModel initial="45" numberType="java.lang.Integer" stepSize="1" type="number"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[22, 23]"/>
             </Property>
           </Properties>
           <Events>
@@ -910,12 +928,18 @@
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="com/jme3/gde/scenecomposer/Bundle.properties" key="SceneComposerTopComponent.jCheckBox1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
+                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[0, 21]"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField1">
               <Properties>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
                   <ResourceString bundle="com/jme3/gde/scenecomposer/Bundle.properties" key="SceneComposerTopComponent.jTextField1.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+                </Property>
+                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[22, 23]"/>
                 </Property>
               </Properties>
             </Component>
@@ -952,6 +976,9 @@
                   <ResourceString bundle="com/jme3/gde/scenecomposer/Bundle.properties" key="SceneComposerTopComponent.fixedCheckBox.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
                 </Property>
                 <Property name="enabled" type="boolean" value="false"/>
+                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[0, 21]"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JSpinner" name="radiusSpinner">
@@ -959,12 +986,18 @@
                 <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
                   <SpinnerModel initial="0.5" numberType="java.lang.Float" stepSize="0.1" type="number"/>
                 </Property>
+                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[22, 23]"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JSpinner" name="heightSpinner">
               <Properties>
                 <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
                   <SpinnerModel initial="1.8" numberType="java.lang.Float" stepSize="0.1" type="number"/>
+                </Property>
+                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[22, 23]"/>
                 </Property>
               </Properties>
             </Component>
@@ -976,6 +1009,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="com/jme3/gde/scenecomposer/Bundle.properties" key="SceneComposerTopComponent.jLabel5.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[20, 17]"/>
             </Property>
           </Properties>
         </Component>
@@ -996,6 +1032,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
               <ResourceString bundle="com/jme3/gde/scenecomposer/Bundle.properties" key="SceneComposerTopComponent.jLabel6.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+            </Property>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[20, 17]"/>
             </Property>
           </Properties>
         </Component>
