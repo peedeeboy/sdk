@@ -17,6 +17,9 @@ import com.jme3.gde.materials.multiview.widgets.MaterialWidgetListener;
 import com.jme3.gde.materials.multiview.widgets.WidgetFactory;
 import com.jme3.material.Material;
 import java.awt.Component;
+import java.awt.GridLayout;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -83,6 +86,28 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
 
     private void initWindow() {
         initComponents();
+        optionsPane.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if(optionsPane.getWidth() > 400) {
+                    ((GridLayout)optionsPanel.getLayout()).setColumns(2);
+                } else {
+                    ((GridLayout)optionsPanel.getLayout()).setColumns(1);
+                }
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+            }
+
+            @Override
+            public void componentHidden(ComponentEvent e) {
+            }
+        });
         setName(NbBundle.getMessage(MaterialEditorTopComponent.class, "CTL_MaterialEditorTopComponent"));
         setToolTipText(NbBundle.getMessage(MaterialEditorTopComponent.class, "HINT_MaterialEditorTopComponent"));
         setActivatedNodes(new Node[]{dataObject.getNodeDelegate()});
@@ -119,7 +144,7 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
         texturesAndColorsPane = new javax.swing.JTabbedPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         texturePanel = new javax.swing.JPanel();
-        jTabbedPane3 = new javax.swing.JTabbedPane();
+        optionsPane = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         optionsPanel = new javax.swing.JPanel();
         jToolBar2 = new javax.swing.JToolBar();
@@ -169,9 +194,9 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
 
         texturesAndColorsPane.addTab(org.openide.util.NbBundle.getMessage(MaterialEditorTopComponent.class, "MaterialEditorTopComponent.jScrollPane3.TabConstraints.tabTitle"), jScrollPane3); // NOI18N
 
-        jTabbedPane3.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
-        jTabbedPane3.setMinimumSize(new java.awt.Dimension(380, 355));
-        jTabbedPane3.setPreferredSize(new java.awt.Dimension(500, 355));
+        optionsPane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        optionsPane.setMinimumSize(new java.awt.Dimension(200, 355));
+        optionsPane.setPreferredSize(new java.awt.Dimension(500, 355));
 
         jScrollPane2.setBorder(null);
         jScrollPane2.setMinimumSize(new java.awt.Dimension(220, 0));
@@ -179,7 +204,7 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
         optionsPanel.setLayout(new java.awt.GridLayout(0, 2));
         jScrollPane2.setViewportView(optionsPanel);
 
-        jTabbedPane3.addTab(org.openide.util.NbBundle.getMessage(MaterialEditorTopComponent.class, "MaterialEditorTopComponent.jScrollPane2.TabConstraints.tabTitle_1"), jScrollPane2); // NOI18N
+        optionsPane.addTab(org.openide.util.NbBundle.getMessage(MaterialEditorTopComponent.class, "MaterialEditorTopComponent.jScrollPane2.TabConstraints.tabTitle_1"), jScrollPane2); // NOI18N
 
         jToolBar2.setRollover(true);
 
@@ -274,14 +299,14 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
             .addGroup(editorPanelLayout.createSequentialGroup()
                 .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(materialPreviewWidget1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTabbedPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(optionsPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(editorPanelLayout.createSequentialGroup()
-                        .addComponent(texturesAndColorsPane, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+                        .addComponent(texturesAndColorsPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(additionalRenderStatePane, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
-                        .addContainerGap(12, Short.MAX_VALUE))
+                        .addComponent(additionalRenderStatePane, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                        .addContainerGap(16, Short.MAX_VALUE))
                     .addGroup(editorPanelLayout.createSequentialGroup()
                         .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jToolBar3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -304,7 +329,7 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
                     .addComponent(materialPreviewWidget1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(editorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(optionsPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(texturesAndColorsPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(additionalRenderStatePane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
@@ -368,12 +393,12 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JToolBar jToolBar3;
     private com.jme3.gde.materials.multiview.widgets.MaterialPreviewWidget materialPreviewWidget1;
+    private javax.swing.JTabbedPane optionsPane;
     private javax.swing.JPanel optionsPanel;
     private javax.swing.JPanel statesPanel;
     private javax.swing.JPanel texturePanel;
