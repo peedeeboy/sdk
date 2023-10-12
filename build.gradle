@@ -53,6 +53,12 @@ dependencies {
     corelibs dep("org.jmonkeyengine:jme3-plugins:$jmeVersion-$jmeVersionTag", true, true)
     corelibs dep("org.jmonkeyengine:jme3-terrain:$jmeVersion-$jmeVersionTag", true, true)
 
+    optlibs dep("com.simsilica:lemur:1.16.0", true, true)
+    optlibs dep("com.simsilica:lemur-props:1.2.0", true, true)
+    optlibs dep("com.simsilica:sio2:1.8.0", true, true)
+    optlibs dep("com.simsilica:sim-math:1.6.0", true, true)
+    optlibs dep("com.simsilica:zay-es:1.5.0", true, true)
+
     optlibs dep("org.jmonkeyengine:jme3-jbullet:$jmeVersion-$jmeVersionTag", true, true)
     optlibs dep("org.jmonkeyengine:jme3-android:$jmeVersion-$jmeVersionTag", true, true)
     optlibs dep("org.jmonkeyengine:jme3-ios:$jmeVersion-$jmeVersionTag", true, true)
@@ -609,14 +615,14 @@ task cleanSdk() {
 task extractPlatformIndependent(type: Copy) {
     from zipTree('dist/jmonkeyplatform.zip')
     into "dist/temp/"
-    
+
     exclude("jmonkeyplatform/etc/jmonkeyplatform.conf")
 }
 
 task patchPlatformIndependent(type: Copy, dependsOn: extractPlatformIndependent) {
     from zipTree('dist/jmonkeyplatform.zip')
     into "dist/temp/"
-    
+
     include("jmonkeyplatform/etc/jmonkeyplatform.conf")
 
     filter { String line ->
