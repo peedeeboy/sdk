@@ -46,7 +46,8 @@ public final class SNDefVisualPanel2 extends JPanel {
     private final Object[] emptyObj = {"float", "", ""};
     private final String type;
     private final String[] varTypes = new String[]{"bool", "int", "float", "vec2", 
-        "vec3", "vec4", "sampler", "sampler2D", "sampler3D", "mat3", "mat4"};
+        "vec3", "vec4", "sampler", "sampler2D", "sampler3D", "mat3", "mat4",
+        "samplerCube", "sampler2DArray"};
 
     /**
      * Creates new form SNDefVisualPanel2
