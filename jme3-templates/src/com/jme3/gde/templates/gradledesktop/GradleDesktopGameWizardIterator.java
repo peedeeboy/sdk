@@ -132,6 +132,7 @@ public class GradleDesktopGameWizardIterator implements WizardDescriptor./*Progr
         // Create build.gradle from template
         File gradleBuildFile = new File(dirF, "build.gradle");
         Map<String, Object> buildFileBindings = new HashMap<>();
+        buildFileBindings.put("name", wiz.getProperty("name"));
         buildFileBindings.put("jmeVersion", wiz.getProperty("jmeVersion"));
         buildFileBindings.put("lwjglLibrary", wiz.getProperty("lwjglLibrary"));
         buildFileBindings.put("guiLibrary", wiz.getProperty("guiLibrary"));

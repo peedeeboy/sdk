@@ -7,11 +7,16 @@ plugins {
 group 'com.mygame'
 version '1.0'
 
-mainClassName = "com.mygame.Main"
+application {
+    applicationName = '${name}'
+    mainClass = 'com.mygame.Main'
+    if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        applicationDefaultJvmArgs = ['-XstartOnFirstThread']
+    }
+}
 
 repositories {
     mavenCentral()
-    jcenter()
     maven { url 'https://jitpack.io' }
 }
 
@@ -99,7 +104,7 @@ dependencies {
 
 jar {
     manifest {
-        attributes 'Main-Class': "$mainClassName"
+        attributes 'Main-Class': application.mainClass
     }
 }
 
@@ -110,5 +115,5 @@ java {
 }
 
 wrapper {
-    gradleVersion = '7.6'
+    gradleVersion = '8.4'
 }
