@@ -10,6 +10,7 @@ version '1.0'
 application {
     applicationName = '${name}'
     mainClass = 'com.mygame.Main'
+    // Mac OS with LWJGL 3 needs to be started with this JVM argument
     if (System.getProperty("os.name").toLowerCase().contains("mac")) {
         applicationDefaultJvmArgs = ['-XstartOnFirstThread']
     }
@@ -50,7 +51,10 @@ dependencies {
   implementation "org.jmonkeyengine:jme3-core:$jmeVer"
   implementation "org.jmonkeyengine:jme3-desktop:$jmeVer"
   <#if jmeVersion.versionInfo.major gt 3 || (jmeVersion.versionInfo.major == 3 && jmeVersion.versionInfo.minor gte 6 )>
-  implementation "org.jmonkeyengine:jme3-awt-dialogs:$jmeVer"
+  // Mac OS with LWJGL 3 doesn't allow AWT/Swing
+  if (!System.getProperty("os.name").toLowerCase().contains("mac")) {
+    implementation "org.jmonkeyengine:jme3-awt-dialogs:$jmeVer"
+  }
   </#if>
   <#if lwjglLibrary.isCoreJmeLibrary == true>
   implementation "${lwjglLibrary.groupId}:${lwjglLibrary.artifactId}:$jmeVer"
