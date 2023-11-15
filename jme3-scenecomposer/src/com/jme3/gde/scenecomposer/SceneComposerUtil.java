@@ -31,54 +31,25 @@
  */
 package com.jme3.gde.scenecomposer;
 
-import com.jme3.app.Application;
-import com.jme3.app.state.BaseAppState;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
-import java.text.DecimalFormat;
-import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
 
 /**
- * In order to display the Camera Position and LookAt in Realtime,
- * we attach this AppState, so we have a callback on each frame
- * @author MeFisto94
+ *
+ * @author rickard
  */
-public class CameraPositionTrackerAppState extends BaseAppState {
-    private final JLabel lblPos;
-    private final JLabel lblLookAt;
-    
-    private final Vector3f position = new Vector3f();
-    private final Vector3f direction = new Vector3f();
-    
-    public CameraPositionTrackerAppState(JLabel lblPos, JLabel lblLookAt) {
-        this.lblPos = lblPos;
-        this.lblLookAt = lblLookAt;
+
+class SceneComposerUtil {
+
+    /**
+     * Convenience method to trim decimals on a Vector3f to max 4
+     *
+     * @param vector3f
+     * @return trimmed Vector3f in String format
+     */
+    static String trimDecimals(Vector3f vector3f) {
+        return String.format("%s, %s, %s",
+                String.format("%.4f", vector3f.x),
+                String.format("%.4f", vector3f.y),
+                String.format("%.4f", vector3f.z));
     }
-
-    @Override
-    protected void initialize(Application aplctn) { }
-
-    @Override
-    protected void cleanup(Application aplctn) { }
-
-    @Override
-    protected void onEnable() { }
-
-    @Override
-    protected void onDisable() { }
-
-    @Override
-    public void update(float tpf) {
-        super.update(tpf);
-        
-        final Camera cam = getApplication().getCamera();
-        SwingUtilities.invokeLater(() -> {
-            position.set(cam.getLocation());
-            direction.set(cam.getDirection());
-            lblPos.setText(SceneComposerUtil.trimDecimals(position));
-            lblLookAt.setText(SceneComposerUtil.trimDecimals(direction));
-        });
-    }
-    
 }
