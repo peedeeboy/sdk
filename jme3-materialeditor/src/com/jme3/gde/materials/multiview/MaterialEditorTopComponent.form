@@ -87,15 +87,15 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="materialPreviewWidget1" min="-2" pref="255" max="-2" attributes="0"/>
-                              <Component id="jTabbedPane3" max="32767" attributes="0"/>
+                              <Component id="optionsPane" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="texturesAndColorsPane" pref="496" max="32767" attributes="0"/>
+                                  <Component id="texturesAndColorsPane" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="additionalRenderStatePane" pref="329" max="32767" attributes="0"/>
-                                  <EmptySpace pref="12" max="32767" attributes="0"/>
+                                  <Component id="additionalRenderStatePane" pref="331" max="32767" attributes="0"/>
+                                  <EmptySpace pref="16" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -127,7 +127,7 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jTabbedPane3" alignment="1" max="32767" attributes="0"/>
+                              <Component id="optionsPane" alignment="1" max="32767" attributes="0"/>
                               <Component id="texturesAndColorsPane" alignment="1" max="32767" attributes="0"/>
                               <Component id="additionalRenderStatePane" alignment="0" max="32767" attributes="0"/>
                           </Group>
@@ -180,11 +180,11 @@
                     </Container>
                   </SubComponents>
                 </Container>
-                <Container class="javax.swing.JTabbedPane" name="jTabbedPane3">
+                <Container class="javax.swing.JTabbedPane" name="optionsPane">
                   <Properties>
                     <Property name="tabLayoutPolicy" type="int" value="1"/>
                     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[380, 355]"/>
+                      <Dimension value="[200, 355]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[500, 355]"/>

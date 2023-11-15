@@ -99,7 +99,7 @@ public enum AdditionalLibrary implements TemplateLibrary {
     SHADERBLOW_EX("ShaderBlowEx", NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.shaderblowex.description"),
             "com.github.polincdev", "ShaderBlowEx",
-            "master-SNAPSHOT", false),
+            "-SNAPSHOT", false),
     SIO2("SiO2", NbBundle.getMessage(AdditionalLibrary.class,
             "additionalLibrary.sio2.description"),
             "com.simsilica", "sio2",
