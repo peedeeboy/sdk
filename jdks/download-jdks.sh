@@ -13,57 +13,8 @@ set -e # Quit on Error
 jdk_major_version="17"
 jdk_version="0.9"
 jdk_build_version="9"
-platforms=( "x64_linux" "x86-32_windows" "x64_windows" "x64_mac" )
-
-# DEPRECATED (not required anymore)
-function install_xar {
-    # This is needed to open Mac OS .pkg files on Linux...
-    echo ">> Compiling xar, just for you..."
-    wget -q https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/xar/xar-1.5.2.tar.gz
-    tar xf xar-1.5.2.tar.gz
-    cd xar-1.5.2
-    ./configure -q > /dev/null
-    make -s > /dev/null
-    cd ../
-    echo "<< OK!"
-}
-
-# DEPRECATED (not required anymore)
-function install_seven_zip {
-    # This is due to not having root privilegs for apt-get
-    if [ -x "$(command -v 7z)" ]; then
-        return 0
-    fi
-
-    echo "> Installing 7zip"
-
-    if [ -x "7zip/bin/7z" ]; then
-        echo ">> Found cached 7zip, adjusting path"
-        cd 7zip/bin
-        PATH=`pwd`:$PATH
-        cd ../../
-        return 0
-    fi
-
-    echo ">> Compiling 7zip from source"
-    mkdir -p 7zip/bin
-    mkdir -p 7zip/lib
-    cd 7zip
-    wget -q http://downloads.sourceforge.net/project/p7zip/p7zip/15.09/p7zip_15.09_src_all.tar.bz2
-    tar xf p7zip*
-    rm *.bz2
-    cd p7zip*
-    make all3 > /dev/null
-    ./install.sh ../bin ../lib /dev/null /dev/null
-    #mv -v bin/ ../
-    cd ../
-    rm -rf p7zip*
-    cd bin
-    PATH=`pwd`:$PATH
-    cd ../lib
-    PATH=`pwd`:$PATH
-    cd ../../
-}
+# JDK 17.0.9 seems to have botched up release causing download URL to vary and platform versions not on the same step
+jdk_build_tmp_version="9.1"
 
 function download_jdk {
     echo ">>> Downloading the JDK for $1"
@@ -71,6 +22,10 @@ function download_jdk {
     if [ -f downloads/jdk-$1$2 ];
     then
         echo "<<< Already existing, SKIPPING."
+    elif [[ "$1" == *windows ]];
+    then
+        curl -# -o downloads/jdk-$1$2 -L https://github.com/adoptium/temurin$jdk_major_version-binaries/releases/download/jdk-$jdk_major_version.$jdk_version+$jdk_build_tmp_version/OpenJDK${jdk_major_version}U-jdk_$1_hotspot_$jdk_major_version.${jdk_version}_$jdk_build_version$2
+        echo "<<< OK!"
     else
         curl -# -o downloads/jdk-$1$2 -L https://github.com/adoptium/temurin$jdk_major_version-binaries/releases/download/jdk-$jdk_major_version.$jdk_version+$jdk_build_version/OpenJDK${jdk_major_version}U-jdk_$1_hotspot_$jdk_major_version.${jdk_version}_$jdk_build_version$2
         echo "<<< OK!"
