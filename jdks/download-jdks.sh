@@ -13,6 +13,8 @@ set -e # Quit on Error
 jdk_major_version="17"
 jdk_version="0.9"
 jdk_build_version="9"
+# JDK 17.0.9 seems to have botched up release causing download URL to vary and platform versions not on the same step
+jdk_build_tmp_version="9.1"
 
 function download_jdk {
     echo ">>> Downloading the JDK for $1"
@@ -20,6 +22,10 @@ function download_jdk {
     if [ -f downloads/jdk-$1$2 ];
     then
         echo "<<< Already existing, SKIPPING."
+    elif [[ "$1" == *windows ]];
+    then
+        curl -# -o downloads/jdk-$1$2 -L https://github.com/adoptium/temurin$jdk_major_version-binaries/releases/download/jdk-$jdk_major_version.$jdk_version+$jdk_build_tmp_version/OpenJDK${jdk_major_version}U-jdk_$1_hotspot_$jdk_major_version.${jdk_version}_$jdk_build_version$2
+        echo "<<< OK!"
     else
         curl -# -o downloads/jdk-$1$2 -L https://github.com/adoptium/temurin$jdk_major_version-binaries/releases/download/jdk-$jdk_major_version.$jdk_version+$jdk_build_version/OpenJDK${jdk_major_version}U-jdk_$1_hotspot_$jdk_major_version.${jdk_version}_$jdk_build_version$2
         echo "<<< OK!"
