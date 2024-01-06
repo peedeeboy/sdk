@@ -26,7 +26,7 @@ jobs:
     - name: Build Installers
       run: ant -Dstorepass="$NBM_SIGN_PASS" -Dpack200.enabled=false set-spec-version build-installers unset-spec-version
       env:
-        BUILD_X86: true
+        BUILD_X86: false
         BUILD_X64: true
         BUILD_OTHER: true
     - name: Fix Platform Independent Build

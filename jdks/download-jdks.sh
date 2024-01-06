@@ -263,14 +263,14 @@ else
     then
         build_mac_jdk &
         build_other_jdk linux x64 x64 &
-        build_other_jdk windows x86-32 x86 &
+        # Windows 32bit not by default build_other_jdk windows x86-32 x86 &
         build_other_jdk windows x64 x64 &
     else
         build_mac_jdk
         build_other_jdk linux x64 x64
-        build_other_jdk windows x86-32 x86
+        ## Windows 32bit not by default build_other_jdk windows x86-32 x86
         build_other_jdk windows x64 x64
-        #Linux 32bit not supported... build_other_jdk linux x86-32
+        # Linux 32bit not supported... build_other_jdk linux x86-32
     fi
     
 fi
