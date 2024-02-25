@@ -608,7 +608,7 @@ file('.').eachDir{
         buildSdk.inputs.dir it
     }
 }
-buildSdk.outputs.dir "build"
+//buildSdk.outputs.dir "build"
 
 task run(dependsOn: buildSdk) {
     doLast {
