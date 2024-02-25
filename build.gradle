@@ -666,7 +666,7 @@ task fixPlatformIndependent(dependsOn: patchPlatformIndependent, type: Zip) {
 }
 
 wrapper {
-    gradleVersion = '7.5.1'
+    gradleVersion = '8.6'
 }
 
 //jar.dependsOn(buildSdk)
