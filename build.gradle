@@ -608,7 +608,7 @@ file('.').eachDir{
         buildSdk.inputs.dir it
     }
 }
-buildSdk.outputs.dir "build"
+//buildSdk.outputs.dir "build"
 
 task run(dependsOn: buildSdk) {
     doLast {
@@ -666,7 +666,7 @@ task fixPlatformIndependent(dependsOn: patchPlatformIndependent, type: Zip) {
 }
 
 wrapper {
-    gradleVersion = '7.5.1'
+    gradleVersion = '8.6'
 }
 
 //jar.dependsOn(buildSdk)
