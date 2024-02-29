@@ -14,15 +14,14 @@ import com.jme3.asset.AssetNotFoundException;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.gde.core.properties.TexturePropertyEditor;
 import com.jme3.gde.core.properties.preview.TexturePreview;
-import com.jme3.gde.materials.MaterialProperty;
 import com.jme3.gde.materials.dnd.TextureDropTargetListener;
 import com.jme3.gde.materials.dnd.TextureDropTargetListener.TextureDropTarget;
 import com.jme3.gde.materials.multiview.MaterialEditorTopComponent;
 import com.jme3.gde.materials.multiview.widgets.icons.Icons;
 import java.awt.Component;
-import java.awt.Graphics2D;
 import java.awt.dnd.DropTarget;
-import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,11 +34,16 @@ import java.util.logging.Logger;
  */
 public class TexturePanel extends MaterialPropertyWidget implements TextureDropTarget{
 
+    private final String REPEAT = "Repeat";
+    private final String FLIP = "Flip";
+    private final String EMPTY = "";
+    
     private TexturePropertyEditor editor;
     private ProjectAssetManager manager;
     private boolean flip = false;
     private boolean repeat = false;
     protected String textureName = null; // always enclosed with ""
+    protected String extraProperties = ""; // in case the source file has extra properties on texture
     private TexturePreview texPreview;
     private final ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
 
@@ -47,7 +51,7 @@ public class TexturePanel extends MaterialPropertyWidget implements TextureDropT
      * Used by tests
      */
     protected TexturePanel() {
-        
+        initComponents();
     }
     
     /**
@@ -60,66 +64,47 @@ public class TexturePanel extends MaterialPropertyWidget implements TextureDropT
         
         setDropTarget(new DropTarget(this, new TextureDropTargetListener(this)));
     }
-
+    
     private void displayPreview() {
-        if (!"".equals(textureName)) {
-            exec.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        if (texPreview == null) {
-                            texPreview = new TexturePreview(manager);
-                        }
-                        texPreview.requestPreview(extractTextureName(textureName), "", 80, 25, texturePreview, null);
-                    } catch (AssetNotFoundException a) {
-                        Logger.getLogger(MaterialEditorTopComponent.class.getName()).log(Level.WARNING, "Could not load texture {0}", textureName);
+        if (!EMPTY.equals(textureName)) {
+            exec.execute(() -> {
+                try {
+                    if (texPreview == null) {
+                        texPreview = new TexturePreview(manager);
                     }
+                    texPreview.requestPreview(extractTextureName(textureName), "", 80, 25, texturePreview, null);
+                } catch (AssetNotFoundException a) {
+                    Logger.getLogger(MaterialEditorTopComponent.class.getName()).log(Level.WARNING, "Could not load texture {0}", textureName);
                 }
             });
         }
     }
 
     // visible for tests
-    protected String extractTextureName(String textureName) {
-        final String[] textureNameComponents = textureName.split("\"");
-        return textureNameComponents[textureNameComponents.length - 1];
+    protected String extractTextureName(final String property) {
+        final String[] textureNameComponents = property.split("\"");
+        if(property.endsWith("\"")) {
+            // texture name is last in property
+            return textureNameComponents[textureNameComponents.length - 1];
+        }
+        // has extra properties after name, return segment second to last
+        return textureNameComponents[textureNameComponents.length - 2];
     }
 
     // visible for tests
     protected void updateFlipRepeat() {
-        String propertyValue = property.getValue();
-        propertyValue = propertyValue.replaceFirst(textureName, "");
-        if (flip && !propertyValue.contains("Flip ")) {
-            propertyValue += "Flip ";
-        } else if (!flip) {
-            propertyValue = propertyValue.replaceFirst("Flip ", "");
+        String propertyValue = "";
+        final List<String> segments = new ArrayList<>();
+        if (flip) {
+            segments.add(FLIP);
         }
-        if (repeat && !propertyValue.contains("Repeat ")) {
-            propertyValue += "Repeat ";
-        } else if (!repeat) {
-            propertyValue = propertyValue.replaceFirst("Repeat ", "");
+        if (repeat) {
+            segments.add(REPEAT);
         }
-        propertyValue += textureName;
-        property.setValue(propertyValue);
-        texturePreview.setToolTipText(propertyValue);
-    }
-
-    private static BufferedImage resizeImage(BufferedImage originalImage) {
-        int type = originalImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : originalImage.getType();
-        float ratio = (float) originalImage.getWidth() / (float) originalImage.getHeight();
-        int width = 80;
-        int height = 25;
-        if (ratio <= 1) {
-            height = (int) ((float) width * ratio);
-        } else {
-            width = (int) ((float) height * ratio);
-        }
-        BufferedImage resizedImage = new BufferedImage(width, height, type);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, width, height, null);
-        g.dispose();
-
-        return resizedImage;
+        segments.add(textureName);
+        segments.add(extraProperties);
+        property.setValue(String.join(" ", segments).trim());
+        texturePreview.setToolTipText(property.getValue());
     }
 
     /**
@@ -282,7 +267,7 @@ public class TexturePanel extends MaterialPropertyWidget implements TextureDropT
 
     private void texturePreviewMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_texturePreviewMouseClicked
         Component view = editor.getCustomEditor();
-        property.setValue("");
+        property.setValue(EMPTY);
         view.setVisible(true);
         if (editor.getValue() != null) {
             textureName = "\"" + editor.getAsText() + "\"";
@@ -300,25 +285,25 @@ public class TexturePanel extends MaterialPropertyWidget implements TextureDropT
     @Override
     protected void readProperty() {
         java.awt.EventQueue.invokeLater(() -> {
-            textureName = property.getValue();
-            if (textureName.contains("Flip ")) {
+            String prop = property.getValue();
+            if (prop.contains(FLIP)) {
                 flip = true;
-                textureName = textureName.replaceFirst("Flip ", "").trim();
+                prop = prop.replace(FLIP, EMPTY).trim();
             }
-            if (textureName.contains("Repeat ")) {
+            if (prop.contains(REPEAT)) {
                 repeat = true;
-                textureName = textureName.replaceFirst("Repeat ", "").trim();
+                prop = prop.replace(REPEAT, EMPTY).trim();
             }
-            property.setValue(textureName);
+            textureName = "\"" + extractTextureName(prop) + "\"";
+            extraProperties = prop.replace(textureName, "").trim();
+            
+
             jLabel1.setText(property.getName());
             jLabel1.setToolTipText(property.getName());
             displayPreview();
             texturePreview.setToolTipText(property.getValue());
-            MaterialProperty prop = property;
-            property = null;
             jCheckBox1.setSelected(flip);
             jCheckBox2.setSelected(repeat);
-            property = prop;
         });
     }
 
@@ -356,5 +341,15 @@ public class TexturePanel extends MaterialPropertyWidget implements TextureDropT
             });
         });
         
+    }
+    
+    // visible for tests
+    protected boolean isFlip() {
+        return flip;
+    }
+    
+    // visible for tests
+    protected boolean isRepeat() {
+        return repeat;
     }
 }
