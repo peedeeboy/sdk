@@ -39,7 +39,6 @@ import com.jme3.light.Light;
 import com.jme3.math.Vector3f;
 import java.awt.Image;
 import java.io.IOException;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import javax.swing.Action;
 import org.openide.actions.DeleteAction;
@@ -95,8 +94,8 @@ public class JmeVehicleWheel extends AbstractSceneExplorerNode{
         }
 
         set.put(makeProperty(obj, Vector3f.class, "getLocation", "Location"));
-        set.put(makeProperty(obj, Vector3f.class, "getAxle", "Axis"));
-        set.put(makeProperty(obj, Vector3f.class, "getDirection", "Direction"));
+        //set.put(makeProperty(obj, Vector3f.class, "getAxle", "Axis"));
+        //set.put(makeProperty(obj, Vector3f.class, "getDirection", "Direction"));
         set.put(makeProperty(obj, boolean.class, "isFrontWheel", "setFrontWheel", "Front Wheel"));
         set.put(makeProperty(obj, float.class, "getFrictionSlip", "setFrictionSlip", "Friction Slip"));
         set.put(makeProperty(obj, float.class, "getMaxSuspensionForce", "setMaxSuspensionForce", "Max Suspension Force"));
@@ -131,26 +130,22 @@ public class JmeVehicleWheel extends AbstractSceneExplorerNode{
     @Override
     public void destroy() throws IOException {
         try {
-            SceneApplication.getApplication().enqueue(new Callable<Void>() {
-
-                public Void call() throws Exception {
-                    for (int i= 0; i < vehicle.getNumWheels(); i++) {
-                        if(vehicle.getWheel(i)==wheel){
-                            vehicle.removeWheel(i);
-                            return null;
-                        }
+            SceneApplication.getApplication().enqueue(() -> {
+                for (int i = 0; i < vehicle.getNumWheels(); i++) {
+                    if (vehicle.getWheel(i) == wheel) {
+                        vehicle.removeWheel(i);
+                        return null;
                     }
-                    return null;
                 }
+                return null;
             }).get();
-            ((AbstractSceneExplorerNode)getParentNode()).refresh(true);
-        } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (ExecutionException ex) {
+            ((AbstractSceneExplorerNode) getParentNode()).refresh(true);
+        } catch (InterruptedException | ExecutionException ex) {
             Exceptions.printStackTrace(ex);
         }
     }
 
+    @Override
     public Class getExplorerObjectClass() {
         return VehicleWheel.class;
     }

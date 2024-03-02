@@ -12,9 +12,6 @@ Our SDK (or jmonkeyplatform) is based on the Netbeans IDE but includes additiona
 
 -  Bundled JDK for each platform (so you don't need to install java first)
 
--  Bundled [Blender](https://www.blender.org) (so you can start 3d modelling and also use it's import capabilities)
-and many more!  
-
 It is important to know that the SDK is not coupled with the engine itself, so if you have issues which are unrelated to the IDE, report them [here](https://github.com/jMonkeyEngine/jmonkeyengine).
 This however also means, that the SDK can have a different pace than the engine but you can nonetheless work on a different engine version than the one which is bundled. For your own projects, you should consider using Gradle build system which also gives you flexibility on choosing any jMonkeyEngine version. More on this later.
 
@@ -24,9 +21,8 @@ There you can download the version you desire. The SDK will generally follow the
 plus some suffixes for different SDK releases on the same engine version.
 
 There are multiple files from which you can choose:  
-You can take the platform agnostic `jmonkeyplatform.zip` which contains the full SDK able to be run on "any" (X86/x86_64) platform (Windows, Mac OS, Linux) however it lacks the jdk as well as Blender.  
-Thus the prefered download is `jmonkeyplatform-windows-x64.exe` which essentially __is__ `jmonkeyplatform.zip` and the correct version of the JDK and Blender (hence the ~250MiB size increase).  
-If you don't know whether your system is 64 bits (x64) or 32 bits (x86), you can type `uname -i` on Linux or look into the system informations (right click on Computer->Properties) on Windows.
+You can take the platform agnostic `jmonkeyplatform.zip` which contains the full SDK able to be run on "any" (64-bit) platform (Windows, Mac OS, Linux) however it lacks the JDK.  
+Thus the prefered download is `jmonkeyplatform-windows-x64.exe` which essentially __is__ `jmonkeyplatform.zip` and the correct version of the JDK.
 
 After the SDK is up and running. A good starting point is to look at the jME examples. Under *File | New project | JME3 Tests* you can create a new project, populated with the jME build in examples. You can freely mess around with these and try out stuff. Your changes can always be reverted by simply creating a new *JME3 Tests* project. Once you are all comfortable and ready to embark on your own exciting journey, *File | New project | Basic game (with Gradle)* is the recommended starting point.
 
