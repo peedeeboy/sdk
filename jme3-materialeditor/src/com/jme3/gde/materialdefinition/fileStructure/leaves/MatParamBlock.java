@@ -126,7 +126,7 @@ public class MatParamBlock extends LeafStatement {
 
         } catch (Exception e) {
             e.printStackTrace();
-            Logger.getLogger(MatParamBlock.class.getName()).log(Level.WARNING, "Parsing error line " + sta.getLineNumber() + " : " + sta.getLine());
+            Logger.getLogger(MatParamBlock.class.getName()).log(Level.WARNING, "Parsing error line {0} : {1}", new Object[]{sta.getLineNumber(), sta.getLine()});
         }
     }
 }

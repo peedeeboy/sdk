@@ -500,7 +500,7 @@ public class ProjectExtensionManager {
     private void writeFile(ZipInputStream str, FileObject fo) throws IOException {
         OutputStream out = fo.getOutputStream();
         try {
-            logger.log(Level.FINE, "Creating file " + fo.getNameExt());
+            logger.log(Level.FINE, "Creating file {0}", fo.getNameExt());
             FileUtil.copy(str, out);
         } finally {
             out.close();

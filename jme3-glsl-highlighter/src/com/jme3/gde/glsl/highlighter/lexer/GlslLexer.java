@@ -47,7 +47,6 @@ public class GlslLexer implements Lexer<GlslTokenID> {
 
     private final LexerInput lexerInput;
     private final TokenFactory<GlslTokenID> tokenFactory;
-    private final Logger log = Logger.getLogger(this.getClass().getCanonicalName());
 
     private String thisLineSoFar = "";
 

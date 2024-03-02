@@ -51,7 +51,7 @@ public class ConditionBlock extends LeafStatement {
             condition = split[1].trim();
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            Logger.getLogger(ConditionBlock.class.getName()).log(Level.WARNING, "Parsing error line " + sta.getLineNumber() + " : " + sta.getLine());
+            Logger.getLogger(ConditionBlock.class.getName()).log(Level.WARNING, "Parsing error line {0} : {1}", new Object[]{sta.getLineNumber(), sta.getLine()});
         }
     }
 }

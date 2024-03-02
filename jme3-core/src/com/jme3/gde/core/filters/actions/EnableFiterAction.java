@@ -41,6 +41,7 @@ import com.jme3.post.Filter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class EnableFiterAction implements ActionListener {
@@ -58,7 +59,7 @@ public class EnableFiterAction implements ActionListener {
             public Void call() throws Exception {
                 Filter filter=context.getFilter();
                 filter.setEnabled(!filter.isEnabled());                        
-                Logger.getLogger(EnableFiterAction.class.getName()).info( (filter.isEnabled()?"Enabled":"Disabled")+" "+filter.getName());
+                Logger.getLogger(EnableFiterAction.class.getName()).log(Level.INFO, "{0} {1}", new Object[]{filter.isEnabled()?"Enabled":"Disabled", filter.getName()});
                 context.propertyChange("PROP_USER_CHANGE", "Enabled", !filter.isEnabled(), filter.isEnabled());
               
                 return null;

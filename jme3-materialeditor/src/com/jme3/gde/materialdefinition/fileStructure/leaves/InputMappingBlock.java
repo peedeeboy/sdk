@@ -63,7 +63,7 @@ public class InputMappingBlock extends MappingBlock {
             }
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            Logger.getLogger(InputMappingBlock.class.getName()).log(Level.WARNING, "Parsing error line " + sta.getLineNumber() + " : " + sta.getLine());
+            Logger.getLogger(InputMappingBlock.class.getName()).log(Level.WARNING, "Parsing error line {0} : {1}", new Object[]{sta.getLineNumber(), sta.getLine()});
         }
     }
 }
