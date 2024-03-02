@@ -6,6 +6,7 @@ package com.jme3.gde.welcome.rss;
  */
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import javax.swing.text.BadLocationException;
@@ -35,7 +36,7 @@ public class RssFeedParser {
 
     public RssFeedParser(String feedUrl) {
         try {
-            this.url = new URL(feedUrl);
+            this.url = URI.create(feedUrl).toURL();
             ekit = new HTMLEditorKit();
             doc = new HTMLDocument();
         } catch (Exception e) {

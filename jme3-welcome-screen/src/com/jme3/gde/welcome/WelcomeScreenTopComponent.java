@@ -35,6 +35,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
@@ -96,7 +97,7 @@ public final class WelcomeScreenTopComponent extends TopComponent implements Hyp
             }
             while (checkOpenThread == null || checkOpenThread.isAlive()); /* Wait for first getModified (static executed from NB) to finish */
             
-            final URL startUrl = new URL(org.openide.util.NbBundle.getMessage(WelcomeScreenTopComponent.class, "WelcomeScreenTopComponent.http.link"));
+            final URL startUrl = URI.create(org.openide.util.NbBundle.getMessage(WelcomeScreenTopComponent.class, "WelcomeScreenTopComponent.http.link")).toURL();
             final long lastMod = getModified(startUrl);
             NbPreferences.forModule(getClass()).putLong("LAST_PAGE_UPDATE", lastMod);
             
@@ -107,11 +108,11 @@ public final class WelcomeScreenTopComponent extends TopComponent implements Hyp
                         if (lastMod != 0)
                             jEditorPane1.setPage(startUrl);
                         else
-                            jEditorPane1.setPage(new URL(org.openide.util.NbBundle.getMessage(WelcomeScreenTopComponent.class, "WelcomeScreenTopComponent.local.link")));
+                            jEditorPane1.setPage(URI.create(org.openide.util.NbBundle.getMessage(WelcomeScreenTopComponent.class, "WelcomeScreenTopComponent.local.link")).toURL());
                     } catch (IOException ex) {
                         logger.log(Level.INFO, "Loading welcome page from web failed", ex);
                         try {
-                            jEditorPane1.setPage(new URL(org.openide.util.NbBundle.getMessage(WelcomeScreenTopComponent.class, "WelcomeScreenTopComponent.local.link")));
+                            jEditorPane1.setPage(URI.create(org.openide.util.NbBundle.getMessage(WelcomeScreenTopComponent.class, "WelcomeScreenTopComponent.local.link")).toURL());
                         } catch (IOException ex1) {
                             logger.log(Level.SEVERE, "Could not open local help page!", ex1);
                         }
@@ -138,7 +139,7 @@ public final class WelcomeScreenTopComponent extends TopComponent implements Hyp
     public static void checkOpen(long lastMod) {
         try {
             long lastCheck = NbPreferences.forModule(WelcomeScreenTopComponent.class).getLong("LAST_PAGE_UPDATE", 0);
-            URL startUrl = new URL(org.openide.util.NbBundle.getMessage(WelcomeScreenTopComponent.class, "WelcomeScreenTopComponent.http.link"));
+            URL startUrl = URI.create(org.openide.util.NbBundle.getMessage(WelcomeScreenTopComponent.class, "WelcomeScreenTopComponent.http.link")).toURL();
             if (lastMod == 0) {
                 lastMod = getModified(startUrl);
             }
@@ -172,7 +173,7 @@ public final class WelcomeScreenTopComponent extends TopComponent implements Hyp
                 logger.log(Level.INFO, "Loading page failed", ex);
                 try {
                     logger.log(Level.WARNING, "Could not open web page!");
-                    URL startUrl = new URL(org.openide.util.NbBundle.getMessage(WelcomeScreenTopComponent.class, "WelcomeScreenTopComponent.local.link"));
+                    URL startUrl = URI.create(org.openide.util.NbBundle.getMessage(WelcomeScreenTopComponent.class, "WelcomeScreenTopComponent.local.link")).toURL();
                     jEditorPane1.setPage(startUrl);
                 } catch (IOException ex1) {
                     logger.log(Level.SEVERE, "Could not open local help page!", ex1);

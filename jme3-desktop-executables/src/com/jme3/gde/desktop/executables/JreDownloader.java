@@ -39,6 +39,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
@@ -91,7 +92,7 @@ public class JreDownloader {
     private static void attemptDownload(String newUrl, File dest, int retry) {
         logger.log(Level.INFO, "Attempt to download JRE from {0}", newUrl);
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(newUrl).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) URI.create(newUrl).toURL().openConnection();
             connection.setRequestProperty("Cookie", "gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie");
             connection.setAllowUserInteraction(false);
             connection.setInstanceFollowRedirects(true);

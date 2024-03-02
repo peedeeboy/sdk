@@ -33,6 +33,7 @@ package com.jme3.gde.android;
 
 import com.jme3.gde.core.errorreport.ExceptionUtils;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import org.netbeans.api.autoupdate.UpdateUnitProvider;
 import org.netbeans.api.autoupdate.UpdateUnitProviderFactory;
@@ -55,9 +56,9 @@ public class Installer extends ModuleInstall {
             if (implVers != null) {
                 try {
                     UpdateUnitProvider updateUnitProvider = UpdateUnitProviderFactory.getDefault()
-                                .create("NBANDROID", "NBANDROID Update Center", new URL(
+                                .create("NBANDROID", "NBANDROID Update Center", URI.create(
                                         String.format("http://server.arsi.sk:8080/updates/%s-updates.xml", implVers)
-                                ));
+                                ).toURL());
                     updateUnitProvider.setEnable(true);
                 } catch (MalformedURLException ex) {
                     ExceptionUtils.caughtException(ex, "Note: This could be a problem related to your internet connection/firewall etc.");
