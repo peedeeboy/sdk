@@ -39,6 +39,7 @@ package com.jme3.gde.core.sceneexplorer.nodes.actions;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import java.awt.EventQueue;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -114,8 +115,7 @@ public class UserDataPicker extends javax.swing.JDialog {
                             ClassPath.getClassPath(sourceGroup.getRootFolder(), ClassPath.COMPILE),
                             ClassPath.getClassPath(sourceGroup.getRootFolder(), ClassPath.SOURCE));
 
-                    HashSet<SearchScope> set = new HashSet<SearchScope>();
-                    set.add(ClassIndex.SearchScope.SOURCE);
+                    Set<SearchScope> set = EnumSet.of(ClassIndex.SearchScope.SOURCE);
 
                     Set<ElementHandle<TypeElement>> types = cpInfo.getClassIndex().getDeclaredTypes("", NameKind.PREFIX, set);
                     for (Iterator<ElementHandle<TypeElement>> it = types.iterator(); it.hasNext();) {
