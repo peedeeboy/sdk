@@ -373,9 +373,9 @@ public abstract class SceneEditTool {
 
         String collisionName = cr.getGeometry().getName();
 
-        if (pickType != null) {
+        if (pickType != null && collisionName != null) {
             if (pickType == AxisMarkerPickType.planeOnly || pickType == AxisMarkerPickType.axisAndPlane) {
-                if (null != collisionName) switch (collisionName) {
+                switch (collisionName) {
                     case "quadXY", "circleXY" -> {
                         return QUAD_XY;
                     }
@@ -390,7 +390,7 @@ public abstract class SceneEditTool {
                 }
             }
             if (pickType == AxisMarkerPickType.axisOnly || pickType == AxisMarkerPickType.axisAndPlane) {
-                if (null != collisionName) switch (collisionName) {
+                switch (collisionName) {
                     case "arrowX", "coneX", "boxX" -> {
                         return ARROW_X;
                     }
