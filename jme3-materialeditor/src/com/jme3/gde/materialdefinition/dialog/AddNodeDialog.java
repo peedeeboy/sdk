@@ -246,7 +246,7 @@ public class AddNodeDialog extends javax.swing.JDialog {
         List<String> l = new ArrayList<String>();
         l.addAll(mgr.getProjectShaderNodeDefs());
         l.addAll(mgr.getDependenciesShaderNodeDefs());
-        String[] leaves = l.toArray(new String[l.size()]);
+        String[] leaves = l.toArray(String[]::new);
         TreeUtil.createTree(jTree1, leaves);
         TreeUtil.expandTree(jTree1, (TreeNode) jTree1.getModel().getRoot(), 10);
         jTree1.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);

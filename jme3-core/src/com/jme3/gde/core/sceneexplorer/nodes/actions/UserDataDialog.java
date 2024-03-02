@@ -163,13 +163,13 @@ public class UserDataDialog extends javax.swing.JDialog {
                     if (format.equals("String")) {
                         spatial.setUserData(name, data);
                     } else if (format.equals("Int")) {
-                        spatial.setUserData(name, Integer.parseInt(data));
+                        spatial.setUserData(name, Integer.valueOf(data));
                     } else if (format.equals("Float")) {
-                        spatial.setUserData(name, Float.parseFloat(data));
+                        spatial.setUserData(name, Float.valueOf(data));
                     } else if (format.equals("Boolean")) {
-                        spatial.setUserData(name, Boolean.parseBoolean(data));
+                        spatial.setUserData(name, Boolean.valueOf(data));
                     } else if (format.equals("Long")) {
-                        spatial.setUserData(name, Long.parseLong(data));
+                        spatial.setUserData(name, Long.valueOf(data));
                     } else if (userData != null) {
                         spatial.setUserData(name, userData);
                     }

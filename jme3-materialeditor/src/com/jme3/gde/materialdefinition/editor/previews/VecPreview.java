@@ -79,7 +79,7 @@ public class VecPreview extends BasePreview {
 
     private boolean verifyFloatString(String value) {
         try {
-            Float.parseFloat(value);
+            Float.valueOf(value);
         } catch (NumberFormatException ex) {
             logger.warning("Value is not valid float");
             return false;

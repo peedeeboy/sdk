@@ -121,7 +121,7 @@ public class FloatPanelSmall extends MaterialPropertyWidget {
                 MaterialProperty prop = property;
                 property = null;
                 try {
-                    jSpinner1.setValue(Float.parseFloat(prop.getValue()));
+                    jSpinner1.setValue(Float.valueOf(prop.getValue()));
                 } catch (Exception e) {
                     jSpinner1.setValue(0);
                 }

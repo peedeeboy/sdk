@@ -659,7 +659,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
      * @param folderName the folderName to set
      */
     public void setFolderName(String folderName) {
-        if (folderNames.size() > 0) {
+        if (!folderNames.isEmpty()) {
             this.folderNames.remove(0);
         }
         this.folderNames.add(0, folderName);

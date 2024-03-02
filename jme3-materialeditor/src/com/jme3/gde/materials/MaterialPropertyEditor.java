@@ -178,7 +178,7 @@ public class MaterialPropertyEditor implements PropertyEditor, SceneExplorerProp
             String[] matsUnsorted = request.getManager().getMaterials();
             List<String> matList = Arrays.asList(matsUnsorted);
             Collections.sort(matList);
-            String[] materials = matList.toArray(new String[0]);
+            String[] materials = matList.toArray(String[]::new);
             String[] mats = new String[materials.length + 1];
             mats[0] = ("create j3m file");
             for (int i = 0; i < materials.length; i++) {
@@ -190,7 +190,7 @@ public class MaterialPropertyEditor implements PropertyEditor, SceneExplorerProp
             String[] matsUnsorted = request.getManager().getMaterials();
             List<String> matList = Arrays.asList(matsUnsorted);
             Collections.sort(matList);
-            return matList.toArray(new String[0]);
+            return matList.toArray(String[]::new);
         }
     }
 

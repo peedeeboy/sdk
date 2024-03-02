@@ -792,7 +792,7 @@ public final class TerrainEditorTopComponent extends TopComponent implements Sce
 
     private void shininessFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shininessFieldActionPerformed
         try {
-            Float f = Float.parseFloat(shininessField.getText());
+            Float f = Float.valueOf(shininessField.getText());
             editorController.setShininess(Math.max(0, f));
         } catch (Exception e) {
             Logger.getLogger(TerrainEditorTopComponent.class.getName()).log(Level.WARNING,
@@ -936,7 +936,7 @@ public final class TerrainEditorTopComponent extends TopComponent implements Sce
             try {
                 javax.swing.JTextField textField = (javax.swing.JTextField)input;
                 String a=textField.getText();
-                Float.parseFloat(a);
+                Float.valueOf(a);
             }
             catch (NumberFormatException e) {
                 Toolkit.getDefaultToolkit().beep();
@@ -952,7 +952,7 @@ public final class TerrainEditorTopComponent extends TopComponent implements Sce
             if (input instanceof javax.swing.JTextField) {
                 String text = ((javax.swing.JTextField)input).getText();
                 try {
-                    Float f = Float.parseFloat(text);
+                    Float f = Float.valueOf(text);
                     if (f > 0)
                         return true;
                 } catch (Exception e) {

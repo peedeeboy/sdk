@@ -59,7 +59,7 @@ public class MaterialBrowser extends javax.swing.JDialog implements TreeSelectio
         String[] leaves = assetManager.getMaterials();
         List<String> leavesList = Arrays.asList(leaves);
         Collections.sort(leavesList);
-        TreeUtil.createTree(jTree1, leavesList.toArray(new String[0]));
+        TreeUtil.createTree(jTree1, leavesList.toArray(String[]::new));
         TreeUtil.expandTree(jTree1, (TreeNode) jTree1.getModel().getRoot(), 1);
         jTree1.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree1.addTreeSelectionListener(this);

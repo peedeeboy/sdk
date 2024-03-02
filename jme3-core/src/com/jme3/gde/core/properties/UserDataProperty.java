@@ -103,19 +103,19 @@ public class UserDataProperty extends PropertySupport.ReadWrite<String> {
                 public Void call() throws Exception {
                     switch (type) {
                         case 0:
-                            spatial.setUserData(name, Integer.parseInt(val));
+                            spatial.setUserData(name, Integer.valueOf(val));
                             break;
                         case 1:
-                            spatial.setUserData(name, Float.parseFloat(val));
+                            spatial.setUserData(name, Float.valueOf(val));
                             break;
                         case 2:
-                            spatial.setUserData(name, Boolean.parseBoolean(val));
+                            spatial.setUserData(name, Boolean.valueOf(val));
                             break;
                         case 3:
                             spatial.setUserData(name, val);
                             break;
                         case 4:
-                            spatial.setUserData(name, Long.parseLong(val));
+                            spatial.setUserData(name, Long.valueOf(val));
                             break;
                         default:
 //                            throw new UnsupportedOperationException();

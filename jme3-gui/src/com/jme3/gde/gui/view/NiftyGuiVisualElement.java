@@ -349,7 +349,7 @@ public final class NiftyGuiVisualElement extends JPanel implements MultiViewElem
             Collection<GLayer> layers1 = this.editor.getGui().getLayers();
             guiID = this.editor.getGui().getGUIid();
             this.editor.getGui().addObserver(this);
-            DefaultComboBoxModel<GLayer> model = new DefaultComboBoxModel<>(layers1.toArray(new GLayer[0]));
+            DefaultComboBoxModel<GLayer> model = new DefaultComboBoxModel<>(layers1.toArray(GLayer[]::new));
             layers.setModel(model);
             layers.setSelectedItem(this.editor.getCurrentLayer());
             

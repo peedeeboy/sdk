@@ -31,7 +31,7 @@ public class LeafStatement extends Statement {
 
     protected void fire(String propertyName, Object old, Object nue) {
         //Passing 0 below on purpose, so you only synchronize for one atomic call:
-        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(new PropertyChangeListener[0]);
+        PropertyChangeListener[] pcls = (PropertyChangeListener[]) listeners.toArray(PropertyChangeListener[]::new);
         for (PropertyChangeListener pcl : pcls) {
             pcl.propertyChange(new PropertyChangeEvent(this, propertyName, old, nue));
         }

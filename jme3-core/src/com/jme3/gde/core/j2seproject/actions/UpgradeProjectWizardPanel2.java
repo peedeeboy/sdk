@@ -148,7 +148,7 @@ public class UpgradeProjectWizardPanel2 implements WizardDescriptor.ValidatingPa
                         }
                     }
                     
-                    edProps.setProperty("javac.classpath", newClasspath.toArray(new String[newClasspath.size()]));
+                    edProps.setProperty("javac.classpath", newClasspath.toArray(String[]::new));
                     setProgress(60);
                     
                     if (edProps.getProperty("launch4j.exe.enabled") != null) {

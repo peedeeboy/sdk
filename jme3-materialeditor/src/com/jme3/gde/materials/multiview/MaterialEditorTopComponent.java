@@ -587,7 +587,7 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
         jComboBox1.addItem("");
         List<String> matDefList = Arrays.asList(matDefs);
         Collections.sort(matDefList);
-        String[] sortedMatDefs = matDefList.toArray(new String[0]);
+        String[] sortedMatDefs = matDefList.toArray(String[]::new);
         for (String string : sortedMatDefs) {
             jComboBox1.addItem(string);
         }

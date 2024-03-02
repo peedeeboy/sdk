@@ -304,7 +304,7 @@ public class JmeSpatial extends AbstractSceneExplorerNode {
 
         //@TODO: multithreading.. but we only read
         Collection<String> dataKeys = spatial.getUserDataKeys();
-        if (dataKeys.size() > 0) {
+        if (!dataKeys.isEmpty()) {
             Sheet.Set set = Sheet.createPropertiesSet();
             set.setDisplayName("User Data");
             set.setName(Spatial.class.getName() + "_UserData");
