@@ -605,17 +605,19 @@ public final class MatDefEditorlElement extends JPanel implements
 
     private ConnectionEndpoint findConnectPoint(String nameSpace, String name, boolean isInput) {
 
-        if (nameSpace.equals("MatParam")
-                || nameSpace.equals("WorldParam")
-                || nameSpace.equals("Attr")) {
-            NodePanel np = diagram1.getNodePanel(nameSpace + "." + name);
-            return isInput ? np.getInputConnectPoint(name) : np.getOutputConnectPoint(name);
-        } else if (nameSpace.equals("Global")) {
-            ShaderOutBusPanel outBus = diagram1.getOutBusPanel(name);
-            return outBus.getConnectPoint();
-        } else {
-            NodePanel np = diagram1.getNodePanel(diagram1.getCurrentTechniqueName() + "/" + nameSpace);
-            return isInput ? np.getInputConnectPoint(name) : np.getOutputConnectPoint(name);
+        switch (nameSpace) {
+            case "MatParam", "WorldParam", "Attr" -> {
+                NodePanel np = diagram1.getNodePanel(nameSpace + "." + name);
+                return isInput ? np.getInputConnectPoint(name) : np.getOutputConnectPoint(name);
+            }
+            case "Global" -> {
+                ShaderOutBusPanel outBus = diagram1.getOutBusPanel(name);
+                return outBus.getConnectPoint();
+            }
+            default -> {
+                NodePanel np = diagram1.getNodePanel(diagram1.getCurrentTechniqueName() + "/" + nameSpace);
+                return isInput ? np.getInputConnectPoint(name) : np.getOutputConnectPoint(name);
+            }
         }
     }
 

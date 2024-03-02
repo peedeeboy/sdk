@@ -156,20 +156,16 @@ public final class NiftyGuiVisualElement extends JPanel implements MultiViewElem
             @Override
             public void itemStateChanged(ItemEvent e) {
                 String string = (String) e.getItem();
-                if ("640x480".equals(string)) {
-                    view.setResoltion(640, 480);
-                } else if ("1024x768".equals(string)) {
-                     view.setResoltion(1024, 768);
-                } else if ("1280x720".equals(string)) {
-                     view.setResoltion(1280, 720);
-                } else if ("800x600".equals(string)) {
-                     view.setResoltion(800, 600);
-                } else if ("800x480".equals(string)) {
-                     view.setResoltion(800, 480);
-                } else if ("480x800".equals(string)) {
-                     view.setResoltion(480, 800);
-                } else {
-                     view.setResoltion(800, 600);
+                if (null == string) {
+                    view.setResoltion(800, 600);
+                } else switch (string) {
+                    case "640x480" -> view.setResoltion(640, 480);
+                    case "1024x768" -> view.setResoltion(1024, 768);
+                    case "1280x720" -> view.setResoltion(1280, 720);
+                    case "800x600" -> view.setResoltion(800, 600);
+                    case "800x480" -> view.setResoltion(800, 480);
+                    case "480x800" -> view.setResoltion(480, 800);
+                    default -> view.setResoltion(800, 600);
                 }
             }
         });

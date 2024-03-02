@@ -1032,17 +1032,21 @@ public final class TerrainEditorTopComponent extends TopComponent implements Sce
 
         final Spatial node = selectedSpat.getLookup().lookup(Spatial.class);
         if (node != null) {
-            if ("Terrain".equals(name)) {
-                if (terrainWizard == null) {
-                    terrainWizard = new CreateTerrainWizardAction(this);
+            if (null != name) switch (name) {
+                case "Terrain" -> {
+                    if (terrainWizard == null) {
+                        terrainWizard = new CreateTerrainWizardAction(this);
+                    }   terrainWizard.performAction();
                 }
-                terrainWizard.performAction();
-            } else if ("Skybox".equals(name)) {
-                if (skyboxWizard == null) {
-                    skyboxWizard = new SkyboxWizardAction(this);
+                case "Skybox" -> {
+                    if (skyboxWizard == null) {
+                        skyboxWizard = new SkyboxWizardAction(this);
+                    }   skyboxWizard.performAction();
                 }
-                skyboxWizard.performAction();
-            } else if ("Ocean".equals(name)) {
+                case "Ocean" -> {
+                }
+                default -> {
+                }
             }
         }
 

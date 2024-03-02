@@ -270,12 +270,14 @@ public class AssetPackProject implements Project {
 
         @Override
         public boolean isActionEnabled(String command, Lookup lookup) throws IllegalArgumentException {
-            if ((command.equals(ActionProvider.COMMAND_DELETE))) {
-                return true;
-            } else if ((command.equals(ActionProvider.COMMAND_COPY))) {
-                return true;
-            } else {
-                throw new IllegalArgumentException(command);
+            switch (command) {
+                case ActionProvider.COMMAND_DELETE -> {
+                    return true;
+                }
+                case ActionProvider.COMMAND_COPY -> {
+                    return true;
+                }
+                default -> throw new IllegalArgumentException(command);
             }
         }
     }
@@ -352,16 +354,20 @@ public class AssetPackProject implements Project {
 
         @Override
         public JComponent create(Category category) {
-            if (category.getName().equals("General")) {
-                panel1 =
-                        new GeneralSettingsPanel(project);
-                return panel1;
-            } else if (category.getName().equals("License")) {
-                panel2 =
-                        new LicensePanel(project);
-                return panel2;
-            } else {
-                return new JPanel();
+            switch (category.getName()) {
+                case "General" -> {
+                    panel1 =
+                            new GeneralSettingsPanel(project);
+                    return panel1;
+                }
+                case "License" -> {
+                    panel2 =
+                            new LicensePanel(project);
+                    return panel2;
+                }
+                default -> {
+                    return new JPanel();
+                }
             }
 
         }

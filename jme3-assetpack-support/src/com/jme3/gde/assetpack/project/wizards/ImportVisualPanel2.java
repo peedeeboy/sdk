@@ -86,18 +86,15 @@ public final class ImportVisualPanel2 extends JPanel {
     private String pathString() {
         String string = "";
         String type = (String) wiz.getProperty("type");
-        if (type.equals("model")) {
-            string += "/Models/";
-        } else if (type.equals("scene")) {
-            string += "/Scenes/";
-        } else if (type.equals("texture")) {
-            string += "/Textures/";
-        } else if (type.equals("sound")) {
-            string += "/Sounds/";
-        } else if (type.equals("shader")) {
-            string += "/Shaders/";
-        } else if (type.equals("other")) {
-            string += "/Misc/";
+        switch (type) {
+            case "model" -> string += "/Models/";
+            case "scene" -> string += "/Scenes/";
+            case "texture" -> string += "/Textures/";
+            case "sound" -> string += "/Sounds/";
+            case "shader" -> string += "/Shaders/";
+            case "other" -> string += "/Misc/";
+            default -> {
+            }
         }
         String category = ((String) wiz.getProperty("categories")).split(",")[0].trim();
         string += category + "/";

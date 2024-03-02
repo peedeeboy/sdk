@@ -375,12 +375,18 @@ public abstract class SceneEditTool {
 
         if (pickType != null) {
             if (pickType == AxisMarkerPickType.planeOnly || pickType == AxisMarkerPickType.axisAndPlane) {
-                if ("quadXY".equals(collisionName) || "circleXY".equals(collisionName)) {
-                    return QUAD_XY;
-                } else if ("quadXZ".equals(collisionName) || "circleXZ".equals(collisionName)) {
-                    return QUAD_XZ;
-                } else if ("quadYZ".equals(collisionName) || "circleYZ".equals(collisionName)) {
-                    return QUAD_YZ;
+                if (null != collisionName) switch (collisionName) {
+                    case "quadXY", "circleXY" -> {
+                        return QUAD_XY;
+                    }
+                    case "quadXZ", "circleXZ" -> {
+                        return QUAD_XZ;
+                    }
+                    case "quadYZ", "circleYZ" -> {
+                        return QUAD_YZ;
+                    }
+                    default -> {
+                    }
                 }
             }
             if (pickType == AxisMarkerPickType.axisOnly || pickType == AxisMarkerPickType.axisAndPlane) {

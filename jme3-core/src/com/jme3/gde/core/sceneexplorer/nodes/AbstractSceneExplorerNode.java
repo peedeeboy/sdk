@@ -289,13 +289,15 @@ public abstract class AbstractSceneExplorerNode extends AbstractNode implements 
 
     @Override
     public void propertyChange(final String type, final String name, final Object before, final Object after) {
-        if (SceneExplorerProperty.PROP_USER_CHANGE.equals(type)) {
-            fireSave(true);
-            firePropertyChange(name, before, after);
-        } else if (SceneExplorerProperty.PROP_SCENE_CHANGE.equals(type)) {
-            firePropertyChange(name, before, after);
-        } else if (SceneExplorerProperty.PROP_INIT_CHANGE.equals(type)) {
-            firePropertyChange(name, before, after);
+        if (null != type) switch (type) {
+            case SceneExplorerProperty.PROP_USER_CHANGE -> {
+                fireSave(true);
+                firePropertyChange(name, before, after);
+            }
+            case SceneExplorerProperty.PROP_SCENE_CHANGE -> firePropertyChange(name, before, after);
+            case SceneExplorerProperty.PROP_INIT_CHANGE -> firePropertyChange(name, before, after);
+            default -> {
+            }
         }
     }
 

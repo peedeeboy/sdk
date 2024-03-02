@@ -274,12 +274,12 @@ public class ProjectAssetManager extends DesktopAssetManager {
     private PropertyChangeListener classPathListener = new PropertyChangeListener() {
         public void propertyChange(PropertyChangeEvent evt) {
             logger.log(Level.FINE, "Classpath event: {0}", evt);
-            if (ClassPath.PROP_ROOTS.equals(evt.getPropertyName())) {
-                updateClassLoader();
-            } else if (ClassPath.PROP_ENTRIES.equals(evt.getPropertyName())) {
-                updateClassLoader();
-            } else if (ClassPath.PROP_INCLUDES.equals(evt.getPropertyName())) {
-                updateClassLoader();
+            if (null != evt.getPropertyName()) switch (evt.getPropertyName()) {
+                case ClassPath.PROP_ROOTS -> updateClassLoader();
+                case ClassPath.PROP_ENTRIES -> updateClassLoader();
+                case ClassPath.PROP_INCLUDES -> updateClassLoader();
+                default -> {
+                }
             }
         }
     };
