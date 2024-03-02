@@ -35,16 +35,12 @@ import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.gde.core.properties.TexturePropertyEditor;
 import com.jme3.gde.core.properties.preview.TexturePreview;
 import com.jme3.gde.core.scene.SceneApplication;
-import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import java.awt.Component;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import jme3tools.converters.ImageToAwt;
-import org.openide.util.ImageUtilities;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public final class SkyboxVisualPanel2 extends JPanel {
 

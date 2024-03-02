@@ -5,7 +5,6 @@
 package com.jme3.gde.assetpack.project.wizards;
 
 import java.awt.Component;
-import java.io.File;
 import javax.swing.event.ChangeListener;
 import org.openide.WizardDescriptor;
 import org.openide.util.HelpCtx;

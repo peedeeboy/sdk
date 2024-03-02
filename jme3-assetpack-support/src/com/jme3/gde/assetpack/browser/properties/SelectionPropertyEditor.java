@@ -37,7 +37,6 @@ import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 

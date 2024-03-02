@@ -97,15 +97,14 @@ public class JreDownloader {
             connection.setInstanceFollowRedirects(true);
             connection.connect();
             int status = connection.getResponseCode();
-            if (status == HttpURLConnection.HTTP_OK) {
-                downloadFile(connection, dest, retry);
-            } else if (status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == HttpURLConnection.HTTP_SEE_OTHER) {
-                handleRedirect(connection, dest, retry);
-            } else if (status == HttpURLConnection.HTTP_NOT_FOUND) {
-                MessageUtil.error("Download of JRE failed because it was not found.\nMaybe you are running an old Version which isn't available for download anymore?");
-                MessageUtil.error("Go to download.oracle.com and alter the version field in the Project Properties accordingly.\nIf the Problem persists, download the .tar.gz files manually to\n" + dest.getAbsolutePath());
-            } else {
-                logger.log(Level.WARNING, "Download of JRE from {0} failed. HTTP Status Code {1} ", new Object[]{newUrl, status});
+            switch (status) {
+                case HttpURLConnection.HTTP_OK -> downloadFile(connection, dest, retry);
+                case HttpURLConnection.HTTP_MOVED_TEMP, HttpURLConnection.HTTP_MOVED_PERM, HttpURLConnection.HTTP_SEE_OTHER -> handleRedirect(connection, dest, retry);
+                case HttpURLConnection.HTTP_NOT_FOUND -> {
+                    MessageUtil.error("Download of JRE failed because it was not found.\nMaybe you are running an old Version which isn't available for download anymore?");
+                    MessageUtil.error("Go to download.oracle.com and alter the version field in the Project Properties accordingly.\nIf the Problem persists, download the .tar.gz files manually to\n" + dest.getAbsolutePath());
+                }
+                default -> logger.log(Level.WARNING, "Download of JRE from {0} failed. HTTP Status Code {1} ", new Object[]{newUrl, status});
             }
         } catch (MalformedURLException ex) {
             logger.log(Level.SEVERE, "{0}", ex);

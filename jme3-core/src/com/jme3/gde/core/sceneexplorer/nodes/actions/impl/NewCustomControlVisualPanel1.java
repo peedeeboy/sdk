@@ -32,7 +32,6 @@
 package com.jme3.gde.core.sceneexplorer.nodes.actions.impl;
 
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;

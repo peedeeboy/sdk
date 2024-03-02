@@ -6,7 +6,6 @@ package com.jme3.gde.materialdefinition.fileStructure;
 
 import com.jme3.gde.materialdefinition.fileStructure.leaves.MatParamBlock;
 import com.jme3.util.blockparser.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

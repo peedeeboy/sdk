@@ -35,7 +35,6 @@ import com.jme3.gde.core.dnd.AssetNameHolder;
 import com.jme3.gde.core.dnd.TextureDataFlavor;
 import java.awt.Cursor;
 import java.awt.datatransfer.Transferable;
-import java.awt.dnd.DropTargetContext;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;

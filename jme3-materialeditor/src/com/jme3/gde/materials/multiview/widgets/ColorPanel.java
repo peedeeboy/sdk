@@ -10,7 +10,6 @@
  */
 package com.jme3.gde.materials.multiview.widgets;
 
-import com.jme3.gde.materials.multiview.widgets.icons.Icons;
 import com.jme3.math.FastMath;
 import java.awt.Color;
 import javax.swing.JFrame;

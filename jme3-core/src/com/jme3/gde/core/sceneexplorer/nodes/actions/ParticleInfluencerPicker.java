@@ -41,7 +41,6 @@ import com.jme3.gde.core.properties.ParticleInfluencerPropertyEditor;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeParticleEmitter;
 import java.awt.EventQueue;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;

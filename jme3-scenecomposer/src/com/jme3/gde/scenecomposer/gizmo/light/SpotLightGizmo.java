@@ -13,7 +13,6 @@ import com.jme3.light.SpotLight;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 
 /**
  *
@@ -21,8 +20,8 @@ import com.jme3.scene.Spatial;
  */
 public class SpotLightGizmo extends NodeCallback {
 
-    private SpotLight light;
-    private JmeSpotLight jmeLight;
+    private final SpotLight light;
+    private final JmeSpotLight jmeLight;
 
     public SpotLightGizmo(JmeSpotLight jmelight) {
         super("spot light callback", true, true, false);

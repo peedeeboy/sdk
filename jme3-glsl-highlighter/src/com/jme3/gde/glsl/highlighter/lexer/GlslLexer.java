@@ -31,7 +31,6 @@
  */
 package com.jme3.gde.glsl.highlighter.lexer;
 
-import java.util.logging.Logger;
 import org.netbeans.api.lexer.Token;
 import org.netbeans.spi.lexer.Lexer;
 import org.netbeans.spi.lexer.LexerInput;
@@ -73,34 +72,37 @@ public class GlslLexer implements Lexer<GlslTokenID> {
             }
         }
         switch (c) {
-            case '/':
+            case '/' -> {
                 int next = lexerInput.read();
-                if (next == '/') {
-                    //It's an inline comment
-                    readTillNewLine();
-                    return token(GlslTokenID.INLINE_COMMENT);
-                } else if (next == '*') {
-                    while (true) {
-                        int c1 = lexerInput.read();
-                        if (c1 == '*') {
-                            if (lexerInput.read() == '/') {
+                switch (next) {
+                    case '/' -> {
+                        //It's an inline comment
+                        readTillNewLine();
+                        return token(GlslTokenID.INLINE_COMMENT);
+                    }
+                    case '*' -> {
+                        while (true) {
+                            int c1 = lexerInput.read();
+                            if (c1 == '*') {
+                                if (lexerInput.read() == '/') {
+                                    return token(GlslTokenID.BLOCK_COMMENT);
+                                } else {
+                                    lexerInput.backup(1);
+                                }
+                            } else if (c1 == LexerInput.EOF) {
                                 return token(GlslTokenID.BLOCK_COMMENT);
-                            } else {
-                                lexerInput.backup(1);
                             }
-                        } else if (c1 == LexerInput.EOF) {
-                            return token(GlslTokenID.BLOCK_COMMENT);
                         }
                     }
-                } else {
-                    lexerInput.backup(1);
+                    default -> lexerInput.backup(1);
                 }
                 return token(GlslTokenID.OPERATOR);
-            case '\"':
-            case '\'':
-                //String starts here
+            }
+
+
+            case '\"', '\'' -> {
                 int previous = c,
-                 starter = c;
+                        starter = c;
                 while (true) {
                     int now = lexerInput.read();
 
@@ -110,51 +112,44 @@ public class GlslLexer implements Lexer<GlslTokenID> {
                     previous = now;
                 }
                 return token(GlslTokenID.STRING);
-            case '#':
+            }
+            case '#' -> {
                 if (thisLineSoFar.trim().equals("#")) {
                     //Preprocessor code
                     readTillNewLine();
                     return token(GlslTokenID.PREPROCESSOR);
                 }
                 return token(GlslTokenID.OPERATOR);
-            case '|':
-            case '&':
-            case '.':
-            case '>':
-            case '<':
-            case ',':
-            case ';':
-            case ':':
-            case '=':
-            case '+':
-            case '-':
-            case '*':
-            case '%':
-            case '!':
-            case '~':
-            case '^':
-            case '\\':
+            }
+            case '|', '&', '.', '>', '<', ',', ';', ':', '=', '+', '-', '*', '%', '!', '~', '^', '\\' -> {
                 return token(GlslTokenID.OPERATOR);
-            //Those have to be recognized separately for closing bracket recognition
-            case '(':
+            }
+            case '(' -> {
                 return token(GlslTokenID.LPARENTHESIS);
-            case ')':
+            }
+            case ')' -> {
                 return token(GlslTokenID.RPARENTHESIS);
-            case '{':
+            }
+            case '{' -> {
                 return token(GlslTokenID.LBRACKET);
-            case '}':
+            }
+            case '}' -> {
                 return token(GlslTokenID.RBRACKET);
-            case '[':
+            }
+            case '[' -> {
                 return token(GlslTokenID.LSQUARE);
-            case ']':
+            }
+            case ']' -> {
                 return token(GlslTokenID.RSQUARE);
-            case '\n':
-            case '\r':
+            }
+            case '\n', '\r' -> {
                 thisLineSoFar = "";
                 return token(GlslTokenID.NEW_LINE);
-            case LexerInput.EOF:
+            }
+            case LexerInput.EOF -> {
                 return null;
-            default:
+            }
+            default -> {
                 //Text, gotta look it up the library
                 String word = "" + (char) c;
                 if (GlslKeywordLibrary.lookup(word) != null) {
@@ -196,7 +191,6 @@ public class GlslLexer implements Lexer<GlslTokenID> {
                         }
                     }
                     if (current == null) {
-                        break;
                     }
                     switch (current) {
                         case BASIC_TYPE:
@@ -209,7 +203,9 @@ public class GlslLexer implements Lexer<GlslTokenID> {
                             return token(GlslTokenID.BUILTIN_FUNCTION);
                     }
                 }
+            }
         }
+        //Those have to be recognized separately for closing bracket recognition
         return token(GlslTokenID.TEXT);
     }
 

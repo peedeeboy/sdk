@@ -8,9 +8,6 @@ import java.awt.Component;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditorSupport;
-import java.beans.PropertyVetoException;
-import java.beans.VetoableChangeListener;
-import javax.swing.JLabel;
 import org.openide.explorer.propertysheet.ExPropertyEditor;
 import org.openide.explorer.propertysheet.PropertyEnv;
 
@@ -19,7 +16,6 @@ import org.openide.explorer.propertysheet.PropertyEnv;
  * @author cris
  */
 public class SizeEditor  extends PropertyEditorSupport implements ExPropertyEditor, PropertyChangeListener{
-    private PropertyEnv env;
 
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
@@ -46,7 +42,6 @@ public class SizeEditor  extends PropertyEditorSupport implements ExPropertyEdit
 
     @Override
     public void attachEnv(PropertyEnv env) {
-        this.env = env;
     }
 
     @Override
