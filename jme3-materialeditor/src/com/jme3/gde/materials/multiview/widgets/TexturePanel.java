@@ -83,17 +83,17 @@ public class TexturePanel extends MaterialPropertyWidget implements TextureDropT
     // visible for tests
     protected String extractTextureName(final String property) {
         final String[] textureNameComponents = property.split("\"");
-        if(property.endsWith("\"")) {
-            // texture name is last in property
-            return textureNameComponents[textureNameComponents.length - 1];
+        final int length = textureNameComponents.length;
+        if(property.endsWith("\"") || length == 1) {
+            // texture name is last in property, or it's empty
+            return textureNameComponents[length - 1].trim();
         }
         // has extra properties after name, return segment second to last
-        return textureNameComponents[textureNameComponents.length - 2];
+        return textureNameComponents[length - 2].trim();
     }
 
     // visible for tests
     protected void updateFlipRepeat() {
-        String propertyValue = "";
         final List<String> segments = new ArrayList<>();
         if (flip) {
             segments.add(FLIP);
@@ -285,7 +285,7 @@ public class TexturePanel extends MaterialPropertyWidget implements TextureDropT
     @Override
     protected void readProperty() {
         java.awt.EventQueue.invokeLater(() -> {
-            String prop = property.getValue();
+            String prop = property.getValue().trim();
             if (prop.contains(FLIP)) {
                 flip = true;
                 prop = prop.replace(FLIP, EMPTY).trim();
@@ -334,8 +334,9 @@ public class TexturePanel extends MaterialPropertyWidget implements TextureDropT
                 textureName = "\"" + name + "\"";
             }
             property.setValue(textureName);
-            displayPreview();
+            
             updateFlipRepeat();
+            displayPreview();
             java.awt.EventQueue.invokeLater(() -> {
                 fireChanged();
             });

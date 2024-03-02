@@ -55,7 +55,7 @@ public class TexturePanelTest {
     String textureNameWithSpaces = "\"texture name with spaces.jpg\"";
     String textureNameWithSpaceAndModifier = "Flip Repeat \"texture name with spaces.jpg\"";
     String textureName = "\"simple_name.jpg\"";
-    String textureNameWithExtraInfo = "\"simple_name.jpg\" LINEAR";
+    String textureNameWithExtraInfo = "Flip \"simple_name.jpg\" LINEAR";
     
     @Test
     public void testExtractTextureName() {
