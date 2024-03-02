@@ -390,12 +390,18 @@ public abstract class SceneEditTool {
                 }
             }
             if (pickType == AxisMarkerPickType.axisOnly || pickType == AxisMarkerPickType.axisAndPlane) {
-                if ("arrowX".equals(collisionName) || "coneX".equals(collisionName) || "boxX".equals(collisionName)) {
-                    return ARROW_X;
-                } else if ("arrowY".equals(collisionName) || "coneY".equals(collisionName) || "boxY".equals(collisionName)) {
-                    return ARROW_Y;
-                } else if ("arrowZ".equals(collisionName) || "coneZ".equals(collisionName) || "boxZ".equals(collisionName)) {
-                    return ARROW_Z;
+                if (null != collisionName) switch (collisionName) {
+                    case "arrowX", "coneX", "boxX" -> {
+                        return ARROW_X;
+                    }
+                    case "arrowY", "coneY", "boxY" -> {
+                        return ARROW_Y;
+                    }
+                    case "arrowZ", "coneZ", "boxZ" -> {
+                        return ARROW_Z;
+                    }
+                    default -> {
+                    }
                 }
             }
         }

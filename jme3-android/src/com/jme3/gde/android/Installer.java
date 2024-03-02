@@ -34,7 +34,6 @@ package com.jme3.gde.android;
 import com.jme3.gde.core.errorreport.ExceptionUtils;
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 import org.netbeans.api.autoupdate.UpdateUnitProvider;
 import org.netbeans.api.autoupdate.UpdateUnitProviderFactory;
 import org.openide.modules.ModuleInstall;
