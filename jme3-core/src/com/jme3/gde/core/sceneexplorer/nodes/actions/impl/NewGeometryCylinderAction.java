@@ -33,50 +33,44 @@ package com.jme3.gde.core.sceneexplorer.nodes.actions.impl;
 
 import com.jme3.gde.core.sceneexplorer.nodes.actions.AbstractNewSpatialAction;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.NewGeometryAction;
-import com.jme3.gde.core.sceneexplorer.nodes.primitives.CreateQuadPanel;
+import com.jme3.gde.core.sceneexplorer.nodes.primitives.CreateCylinderPanel;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.CenterQuad;
-import com.jme3.scene.shape.Quad;
+import com.jme3.scene.shape.Cylinder;
+import com.jme3.scene.shape.Sphere;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
 
 /**
- * Action to create a new primitive (Quad)
+ * Action to create a new primitive (Cylinder)
  *
- * @author MeFisto94
- * @author david.bernard.31
+ * @author neph1
  */
 @org.openide.util.lookup.ServiceProvider(service = NewGeometryAction.class)
-public class NewGeometryQuadAction extends AbstractNewSpatialAction implements NewGeometryAction {
+public class NewGeometryCylinderAction extends AbstractNewSpatialAction implements NewGeometryAction {
 
-    CreateQuadPanel form;
+    CreateCylinderPanel form;
 
-    public NewGeometryQuadAction() {
-        name = "Quad";
-        form = new CreateQuadPanel();
+    public NewGeometryCylinderAction() {
+        name = "Cylinder";
+        form = new CreateCylinderPanel();
     }
 
     @Override
     protected Spatial doCreateSpatial(Node parent) {
-        Mesh mesh;
-        if (form.isCentered()) {
-            mesh = new CenterQuad(form.getQuadWidth(), form.getQuadHeight(), form.isFlipCoords());
-        } else {
-            mesh = new Quad(form.getQuadWidth(), form.getQuadHeight(), form.isFlipCoords());
-        }
-        
-        Geometry geom = form.getNewGeomPanel().handleGeometry(pm, mesh);
+        Cylinder cylinder = new Cylinder(form.getZSamples(), form.getRadialSamples(), form.getRadius(), form.getHeight(), form.isClosed(), form.isInverted());
+        Sphere s = new Sphere(form.getZSamples(), form.getRadialSamples(),
+                form.getRadius(), form.isClosed(), form.isInverted());
+        Geometry geom = form.getNewGeomPanel().handleGeometry(pm, s);
         // parent.attachChild(geom); // was present in previous code, but should neither be necessary nor correct
         return geom;
     }
 
     @Override
     protected boolean prepareCreateSpatial() {
-        String msg = "Create new Quad";
+        String msg = "Create new Sphere";
         DialogDescriptor dd = new DialogDescriptor(form, msg);
         Object result = DialogDisplayer.getDefault().notify(dd);
         return (result == NotifyDescriptor.OK_OPTION);

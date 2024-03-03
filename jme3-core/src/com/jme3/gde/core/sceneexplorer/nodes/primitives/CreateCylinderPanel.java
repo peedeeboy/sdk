@@ -34,16 +34,16 @@ package com.jme3.gde.core.sceneexplorer.nodes.primitives;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.impl.AbstractNewGeometryPanel;
 
 /**
- * This is the Panel which creates a new Primitive (Quad)
+ * This is the Panel which creates a new Primitive (Cylinder)
  *
- * @author MeFisto94
+ * @author neph1
  */
-public class CreateQuadPanel extends javax.swing.JPanel {
+public class CreateCylinderPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form CreateBoxPanel
      */
-    public CreateQuadPanel() {
+    public CreateCylinderPanel() {
         initComponents();
     }
 
@@ -51,20 +51,24 @@ public class CreateQuadPanel extends javax.swing.JPanel {
         return abstractNewGeometryPanel1;
     }
 
-    public float getQuadWidth() {
-        return (float) spinnerX.getValue();
+    public int getZSamples() {
+        return (int) spinnerZSamples.getValue();
     }
 
-    public float getQuadHeight() {
-        return (float) spinnerY.getValue();
+    public int getRadialSamples() {
+        return (int) spinnerRadialSamples.getValue();
     }
 
-    public boolean isFlipCoords() {
-        return checkFlipCoords.isSelected();
+    public float getRadius() {
+        return (float) spinnerRadius.getValue();
     }
-    
-    public boolean isCentered() {
-        return checkCentered.isSelected();
+
+    public boolean isClosed() {
+        return checkClosed.isSelected();
+    }
+
+    public boolean isInverted() {
+        return checkInverted.isSelected();
     }
 
     /**
@@ -78,29 +82,39 @@ public class CreateQuadPanel extends javax.swing.JPanel {
 
         abstractNewGeometryPanel1 = new com.jme3.gde.core.sceneexplorer.nodes.actions.impl.AbstractNewGeometryPanel();
         jPanel1 = new javax.swing.JPanel();
-        lblWidth = new javax.swing.JLabel();
-        spinnerX = new javax.swing.JSpinner();
-        lblHeight = new javax.swing.JLabel();
-        spinnerY = new javax.swing.JSpinner();
-        checkFlipCoords = new javax.swing.JCheckBox();
-        checkCentered = new javax.swing.JCheckBox();
+        lblRadialSamples = new javax.swing.JLabel();
+        spinnerRadialSamples = new javax.swing.JSpinner();
+        checkClosed = new javax.swing.JCheckBox();
+        spinnerZSamples = new javax.swing.JSpinner();
+        lblZSamples = new javax.swing.JLabel();
+        checkInverted = new javax.swing.JCheckBox();
+        spinnerRadius = new javax.swing.JSpinner();
+        lblRadius = new javax.swing.JLabel();
 
-        abstractNewGeometryPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(CreateQuadPanel.class, "CreateQuadPanel.abstractNewGeometryPanel1.border.title"))); // NOI18N
+        abstractNewGeometryPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.abstractNewGeometryPanel1.border.title"))); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(CreateQuadPanel.class, "CreateQuadPanel.jPanel1.border.title"))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.jPanel1.border.title"))); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblWidth, org.openide.util.NbBundle.getMessage(CreateQuadPanel.class, "CreateQuadPanel.lblWidth.text")); // NOI18N
-        lblWidth.setName(""); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblRadialSamples, org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.lblRadialSamples.text")); // NOI18N
+        lblRadialSamples.setName(""); // NOI18N
 
-        spinnerX.setModel(new javax.swing.SpinnerNumberModel(0.5f, 0.0f, null, 0.1f));
+        spinnerRadialSamples.setModel(new javax.swing.SpinnerNumberModel(10, 1, null, 1));
 
-        org.openide.awt.Mnemonics.setLocalizedText(lblHeight, org.openide.util.NbBundle.getMessage(CreateQuadPanel.class, "CreateQuadPanel.lblHeight.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(checkClosed, org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.checkClosed.text")); // NOI18N
 
-        spinnerY.setModel(new javax.swing.SpinnerNumberModel(0.5f, 0.0f, null, 0.1f));
+        spinnerZSamples.setModel(new javax.swing.SpinnerNumberModel(10, 1, null, 1));
 
-        org.openide.awt.Mnemonics.setLocalizedText(checkFlipCoords, org.openide.util.NbBundle.getMessage(CreateQuadPanel.class, "CreateQuadPanel.checkFlipCoords.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(lblZSamples, org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.lblZSamples.text")); // NOI18N
+        lblZSamples.setToolTipText(org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.lblZSamples.toolTipText")); // NOI18N
+        lblZSamples.setName(""); // NOI18N
 
-        org.openide.awt.Mnemonics.setLocalizedText(checkCentered, org.openide.util.NbBundle.getMessage(CreateQuadPanel.class, "CreateQuadPanel.checkCentered.text")); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(checkInverted, org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.checkInverted.text")); // NOI18N
+
+        spinnerRadius.setModel(new javax.swing.SpinnerNumberModel(0.5f, null, null, 0.01f));
+
+        org.openide.awt.Mnemonics.setLocalizedText(lblRadius, org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.lblRadius.text")); // NOI18N
+        lblRadius.setToolTipText(org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.lblRadius.toolTipText")); // NOI18N
+        lblRadius.setName(""); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -110,17 +124,21 @@ public class CreateQuadPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblHeight)
-                            .addComponent(lblWidth))
+                        .addComponent(lblRadialSamples)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(spinnerX)
-                            .addComponent(spinnerY)))
+                        .addComponent(spinnerRadialSamples))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblZSamples)
+                        .addGap(51, 51, 51)
+                        .addComponent(spinnerZSamples))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblRadius)
+                        .addGap(78, 78, 78)
+                        .addComponent(spinnerRadius))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(checkFlipCoords)
-                            .addComponent(checkCentered))
+                            .addComponent(checkClosed)
+                            .addComponent(checkInverted))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -129,17 +147,21 @@ public class CreateQuadPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblWidth)
-                    .addComponent(spinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblRadialSamples)
+                    .addComponent(spinnerRadialSamples, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblHeight)
-                    .addComponent(spinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(checkFlipCoords)
+                    .addComponent(lblZSamples)
+                    .addComponent(spinnerZSamples, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(checkCentered)
-                .addGap(8, 8, 8))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblRadius)
+                    .addComponent(spinnerRadius, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(checkClosed)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(checkInverted)
+                .addGap(29, 29, 29))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -159,19 +181,20 @@ public class CreateQuadPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(abstractNewGeometryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.jme3.gde.core.sceneexplorer.nodes.actions.impl.AbstractNewGeometryPanel abstractNewGeometryPanel1;
-    private javax.swing.JCheckBox checkCentered;
-    private javax.swing.JCheckBox checkFlipCoords;
+    private javax.swing.JCheckBox checkClosed;
+    private javax.swing.JCheckBox checkInverted;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblHeight;
-    private javax.swing.JLabel lblWidth;
-    private javax.swing.JSpinner spinnerX;
-    private javax.swing.JSpinner spinnerY;
+    private javax.swing.JLabel lblRadialSamples;
+    private javax.swing.JLabel lblRadius;
+    private javax.swing.JLabel lblZSamples;
+    private javax.swing.JSpinner spinnerRadialSamples;
+    private javax.swing.JSpinner spinnerRadius;
+    private javax.swing.JSpinner spinnerZSamples;
     // End of variables declaration//GEN-END:variables
 }
