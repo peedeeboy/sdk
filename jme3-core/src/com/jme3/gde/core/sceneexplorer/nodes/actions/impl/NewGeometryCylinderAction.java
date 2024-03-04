@@ -38,7 +38,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Cylinder;
-import com.jme3.scene.shape.Sphere;
 import org.openide.DialogDescriptor;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -60,17 +59,14 @@ public class NewGeometryCylinderAction extends AbstractNewSpatialAction implemen
 
     @Override
     protected Spatial doCreateSpatial(Node parent) {
-        Cylinder cylinder = new Cylinder(form.getZSamples(), form.getRadialSamples(), form.getRadius(), form.getHeight(), form.isClosed(), form.isInverted());
-        Sphere s = new Sphere(form.getZSamples(), form.getRadialSamples(),
-                form.getRadius(), form.isClosed(), form.isInverted());
-        Geometry geom = form.getNewGeomPanel().handleGeometry(pm, s);
-        // parent.attachChild(geom); // was present in previous code, but should neither be necessary nor correct
+        Cylinder cylinder = new Cylinder(form.getZSamples(), form.getRadialSamples(), form.getRadius(), form.getCylinderHeight(), form.isClosed(), form.isInverted());
+        Geometry geom = form.getNewGeomPanel().handleGeometry(pm, cylinder);
         return geom;
     }
 
     @Override
     protected boolean prepareCreateSpatial() {
-        String msg = "Create new Sphere";
+        String msg = "Create new Cylinder";
         DialogDescriptor dd = new DialogDescriptor(form, msg);
         Object result = DialogDisplayer.getDefault().notify(dd);
         return (result == NotifyDescriptor.OK_OPTION);

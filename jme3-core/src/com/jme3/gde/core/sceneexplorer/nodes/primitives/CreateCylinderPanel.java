@@ -62,6 +62,10 @@ public class CreateCylinderPanel extends javax.swing.JPanel {
     public float getRadius() {
         return (float) spinnerRadius.getValue();
     }
+    
+    public float getCylinderHeight() {
+        return (float) spinnerHeight.getValue();
+    }
 
     public boolean isClosed() {
         return checkClosed.isSelected();
@@ -90,6 +94,8 @@ public class CreateCylinderPanel extends javax.swing.JPanel {
         checkInverted = new javax.swing.JCheckBox();
         spinnerRadius = new javax.swing.JSpinner();
         lblRadius = new javax.swing.JLabel();
+        lblHeight = new javax.swing.JLabel();
+        spinnerHeight = new javax.swing.JSpinner();
 
         abstractNewGeometryPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.abstractNewGeometryPanel1.border.title"))); // NOI18N
 
@@ -116,6 +122,12 @@ public class CreateCylinderPanel extends javax.swing.JPanel {
         lblRadius.setToolTipText(org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.lblRadius.toolTipText")); // NOI18N
         lblRadius.setName(""); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(lblHeight, org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.lblHeight.text")); // NOI18N
+        lblHeight.setToolTipText(org.openide.util.NbBundle.getMessage(CreateCylinderPanel.class, "CreateCylinderPanel.lblHeight.toolTipText")); // NOI18N
+        lblHeight.setName(""); // NOI18N
+
+        spinnerHeight.setModel(new javax.swing.SpinnerNumberModel(0.5f, null, null, 0.01f));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -129,17 +141,21 @@ public class CreateCylinderPanel extends javax.swing.JPanel {
                         .addComponent(spinnerRadialSamples))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblZSamples)
-                        .addGap(51, 51, 51)
+                        .addGap(41, 41, 41)
                         .addComponent(spinnerZSamples))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblRadius)
-                        .addGap(78, 78, 78)
+                        .addGap(63, 63, 63)
                         .addComponent(spinnerRadius))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(checkClosed)
-                            .addComponent(checkInverted))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(checkInverted)
+                            .addComponent(checkClosed))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblHeight)
+                        .addGap(66, 66, 66)
+                        .addComponent(spinnerHeight)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -157,11 +173,19 @@ public class CreateCylinderPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblRadius)
                     .addComponent(spinnerRadius, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(checkClosed)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(checkInverted)
-                .addGap(29, 29, 29))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblHeight)
+                            .addComponent(spinnerHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(75, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(checkClosed)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(checkInverted)
+                        .addContainerGap())))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -181,7 +205,7 @@ public class CreateCylinderPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(abstractNewGeometryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -190,9 +214,11 @@ public class CreateCylinderPanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox checkClosed;
     private javax.swing.JCheckBox checkInverted;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblHeight;
     private javax.swing.JLabel lblRadialSamples;
     private javax.swing.JLabel lblRadius;
     private javax.swing.JLabel lblZSamples;
+    private javax.swing.JSpinner spinnerHeight;
     private javax.swing.JSpinner spinnerRadialSamples;
     private javax.swing.JSpinner spinnerRadius;
     private javax.swing.JSpinner spinnerZSamples;
