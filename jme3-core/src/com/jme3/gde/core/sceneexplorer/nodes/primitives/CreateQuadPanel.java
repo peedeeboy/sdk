@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2019- jMonkeyEngine
+ *  Copyright (c) 2019-2024 jMonkeyEngine
  *  All rights reserved.
  * 
  *  Redistribution and use in source and binary forms, with or without
@@ -62,6 +62,10 @@ public class CreateQuadPanel extends javax.swing.JPanel {
     public boolean isFlipCoords() {
         return checkFlipCoords.isSelected();
     }
+    
+    public boolean isCentered() {
+        return checkCentered.isSelected();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -79,6 +83,7 @@ public class CreateQuadPanel extends javax.swing.JPanel {
         lblHeight = new javax.swing.JLabel();
         spinnerY = new javax.swing.JSpinner();
         checkFlipCoords = new javax.swing.JCheckBox();
+        checkCentered = new javax.swing.JCheckBox();
 
         abstractNewGeometryPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(CreateQuadPanel.class, "CreateQuadPanel.abstractNewGeometryPanel1.border.title"))); // NOI18N
 
@@ -95,6 +100,8 @@ public class CreateQuadPanel extends javax.swing.JPanel {
 
         org.openide.awt.Mnemonics.setLocalizedText(checkFlipCoords, org.openide.util.NbBundle.getMessage(CreateQuadPanel.class, "CreateQuadPanel.checkFlipCoords.text")); // NOI18N
 
+        org.openide.awt.Mnemonics.setLocalizedText(checkCentered, org.openide.util.NbBundle.getMessage(CreateQuadPanel.class, "CreateQuadPanel.checkCentered.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -103,16 +110,18 @@ public class CreateQuadPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(checkFlipCoords)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblHeight)
                             .addComponent(lblWidth))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(spinnerX)
-                            .addComponent(spinnerY))))
+                            .addComponent(spinnerY)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(checkFlipCoords)
+                            .addComponent(checkCentered))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -128,7 +137,9 @@ public class CreateQuadPanel extends javax.swing.JPanel {
                     .addComponent(spinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(checkFlipCoords)
-                .addGap(35, 35, 35))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkCentered)
+                .addGap(8, 8, 8))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -148,13 +159,14 @@ public class CreateQuadPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(abstractNewGeometryPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.jme3.gde.core.sceneexplorer.nodes.actions.impl.AbstractNewGeometryPanel abstractNewGeometryPanel1;
+    private javax.swing.JCheckBox checkCentered;
     private javax.swing.JCheckBox checkFlipCoords;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblHeight;
