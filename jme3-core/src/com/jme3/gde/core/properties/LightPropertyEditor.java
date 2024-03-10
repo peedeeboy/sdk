@@ -45,8 +45,6 @@ import java.beans.PropertyEditor;
 import java.util.LinkedList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 import org.netbeans.api.project.Project;
 import org.openide.DialogDisplayer;
 import org.openide.NotifyDescriptor;
@@ -61,24 +59,20 @@ import org.openide.util.Exceptions;
 
 
 public class LightPropertyEditor implements PropertyEditor {
-    private final LinkedList<PropertyChangeListener> listeners = new LinkedList<PropertyChangeListener>();
-    private JmeLight jmeLight;
+    private final LinkedList<PropertyChangeListener> listeners = new LinkedList<>();
     private Light li;
-    private Project proj;
 
     public LightPropertyEditor() {
     }
 
     public LightPropertyEditor(JmeLight jmeLight, Project project) {
-        this.jmeLight = jmeLight;
         this.li = jmeLight.getLookup().lookup(Light.class);
-        this.proj = project;
     }
 
     @Override
     public void setValue(Object value) {
-        if (value instanceof Light) {
-            li = (Light) value;
+        if (value instanceof Light light) {
+            li = light;
         }
     }
 

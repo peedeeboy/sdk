@@ -153,7 +153,7 @@ public class UberAssetLocator implements AssetLocator {
             file = FileUtil.normalizeFile(file);
             FileObject fileObject = FileUtil.toFileObject(file);
             if (fileObject != null) {
-                logger.log(Level.INFO, "Found file {0}" + fileObject);
+                logger.log(Level.INFO, "Found file '{'0'}'{0}", fileObject);
                 return fileObject;
             }
         }
@@ -161,7 +161,7 @@ public class UberAssetLocator implements AssetLocator {
         file = FileUtil.normalizeFile(file);
         FileObject fileObject = FileUtil.toFileObject(file);
         if (fileObject != null) {
-            logger.log(Level.INFO, "Found file {0}" + fileObject);
+            logger.log(Level.INFO, "Found file '{'0'}'{0}", fileObject);
             return fileObject;
         }
         return getUserPath(key);

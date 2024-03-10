@@ -24,7 +24,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.math.Vector4f;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
@@ -39,9 +38,9 @@ import org.openide.util.Lookup;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class MatParamProperty<T> extends Node.Property<T> {
 
-    private Lookup lookup;
-    private String type;
-    private Class<T> valueType;   
+    private final Lookup lookup;
+    private final String type;
+    private final Class<T> valueType;   
 
     public MatParamProperty(String name, String type, Class<T> valueType, Lookup lookup) {
         super(valueType);

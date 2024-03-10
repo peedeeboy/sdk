@@ -18,7 +18,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.BillboardControl;
-import com.jme3.scene.control.Control;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 
@@ -27,8 +26,6 @@ import com.jme3.texture.Texture;
  * @author dokthar
  */
 public class AudioGizmoFactory {
-
-    private Material audioMarkerMaterial;
 
     public static Spatial createGizmo(AssetManager assetManager, JmeAudioNode node) {
         AudioNode audio = node.getLookup().lookup(AudioNode.class);

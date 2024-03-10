@@ -31,7 +31,6 @@
  */
 package com.jme3.gde.terraineditor.tools;
 
-import com.jme3.asset.AssetManager;
 import com.jme3.gde.core.sceneexplorer.nodes.AbstractSceneExplorerNode;
 import com.jme3.gde.core.undoredo.AbstractUndoableSceneEdit;
 import com.jme3.gde.core.undoredo.SceneUndoRedoManager;

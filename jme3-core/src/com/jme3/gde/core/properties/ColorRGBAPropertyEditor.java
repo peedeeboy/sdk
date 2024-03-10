@@ -40,7 +40,6 @@ import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyEditor;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -49,16 +48,16 @@ import java.util.LinkedList;
  */
 public class ColorRGBAPropertyEditor implements PropertyEditor {
 
-    private LinkedList<PropertyChangeListener> listeners = new LinkedList<PropertyChangeListener>();
+    private final LinkedList<PropertyChangeListener> listeners = new LinkedList<>();
     private ColorRGBA color = new ColorRGBA();
 
     @Override
     public void setValue(Object value) {
-        if (value instanceof ColorRGBA) {
+        if (value instanceof ColorRGBA colorRGBA) {
             if (color == null) {
-                color = new ColorRGBA((ColorRGBA) value);
+                color = new ColorRGBA(colorRGBA);
             } else {
-                color.set((ColorRGBA) value);
+                color.set(colorRGBA);
             }
         }
     }

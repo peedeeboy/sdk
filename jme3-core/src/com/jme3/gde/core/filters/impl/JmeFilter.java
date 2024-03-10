@@ -34,7 +34,6 @@ package com.jme3.gde.core.filters.impl;
 import com.jme3.gde.core.filters.AbstractFilterNode;
 import com.jme3.gde.core.filters.FilterNode;
 import com.jme3.post.Filter;
-import com.jme3.shadow.AbstractShadowFilter;
 import java.lang.reflect.Method;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Node;

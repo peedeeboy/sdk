@@ -255,7 +255,7 @@ public abstract class AbstractFilterNode extends AbstractNode implements FilterN
             }
         }
         
-        return methodList.toArray(new Method[methodList.size()]);
+        return methodList.toArray(Method[]::new);
     }
     
     /**

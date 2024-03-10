@@ -11,9 +11,6 @@
 
 package com.jme3.gde.materials.multiview.widgets;
 
-import java.lang.reflect.InvocationTargetException;
-import org.openide.util.Exceptions;
-
 /**
  *
  * @author normenhansen

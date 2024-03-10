@@ -96,19 +96,24 @@ public class TexturePreview implements SceneListener {
                 TextureKey key = new TextureKey(textureName);
                 Texture t = assetManager.loadTexture(key);
                 Spatial geom = quad;
-                if (key.getTextureTypeHint() == Texture.Type.TwoDimensional) {
-                    material.setTexture("ColorMap", t);
-                    geom.setMaterial(material);                    
-                    setLabel(infoLabel, displayName, t.getImage().getWidth(),  t.getImage().getHeight(), -1);                    
-                } else if (key.getTextureTypeHint() == Texture.Type.ThreeDimensional) {
-                    geom = quad3D;
-                    material3D.setTexture("Texture", t);
-                    geom.setMaterial(material3D);
-                    setLabel(infoLabel, displayName + " (Texture3D)", t.getImage().getWidth(),  t.getImage().getHeight(),  t.getImage().getDepth());
-                    
-                } else if (key.getTextureTypeHint() == Texture.Type.CubeMap) {
-                    geom = SkyFactory.createSky(assetManager, textureName, SkyFactory.EnvMapType.CubeMap);
-                    setLabel(infoLabel, displayName + " (CubeMap)", t.getImage().getWidth(),  t.getImage().getHeight(),  -1);                        
+                if (null != key.getTextureTypeHint()) switch (key.getTextureTypeHint()) {
+                    case TwoDimensional -> {
+                        material.setTexture("ColorMap", t);
+                        geom.setMaterial(material);
+                        setLabel(infoLabel, displayName, t.getImage().getWidth(),  t.getImage().getHeight(), -1);
+                    }
+                    case ThreeDimensional -> {
+                        geom = quad3D;
+                        material3D.setTexture("Texture", t);
+                        geom.setMaterial(material3D);
+                        setLabel(infoLabel, displayName + " (Texture3D)", t.getImage().getWidth(),  t.getImage().getHeight(),  t.getImage().getDepth());
+                    }
+                    case CubeMap -> {                        
+                        geom = SkyFactory.createSky(assetManager, textureName, SkyFactory.EnvMapType.CubeMap);
+                        setLabel(infoLabel, displayName + " (CubeMap)", t.getImage().getWidth(),  t.getImage().getHeight(),  -1);
+                    }
+                    default -> {
+                    }
                 }
 
                 PreviewRequest request = new PreviewRequest(TexturePreview.this, geom, width, height);

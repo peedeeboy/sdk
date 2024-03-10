@@ -35,17 +35,13 @@ package com.jme3.gde.terraineditor;
 import com.jme3.asset.AssetManager;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.scene.controller.SceneToolController;
-import com.jme3.gde.core.sceneexplorer.nodes.AbstractSceneExplorerNode;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
 import com.jme3.gde.terraineditor.tools.TerrainTool;
 import com.jme3.input.event.KeyInputEvent;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import com.jme3.terrain.Terrain;
 import java.util.concurrent.Callable;
-import org.openide.loaders.DataObject;
 
 /**
  * The controller for the terrain modification tools. It will in turn interact
@@ -57,7 +53,7 @@ import org.openide.loaders.DataObject;
  */
 public class TerrainToolController extends SceneToolController {
 
-    private JmeSpatial jmeRootNode;
+    private final JmeSpatial jmeRootNode;
     private TerrainTool terrainTool;
     private TerrainEditorController editorController;
     private TerrainCameraController cameraController;

@@ -44,8 +44,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import org.openide.nodes.PropertySupport;
 import org.openide.util.Exceptions;
@@ -56,11 +54,11 @@ import org.openide.util.Exceptions;
  */
 public class UserDataProperty extends PropertySupport.ReadWrite<String> {
 
-    private Spatial spatial;
-    private JmeSpatial node;
+    private final Spatial spatial;
+    private final JmeSpatial node;
     private String name = "null";
     private int type = 0;
-    private List<ScenePropertyChangeListener> listeners = new LinkedList<ScenePropertyChangeListener>();
+    private final List<ScenePropertyChangeListener> listeners = new LinkedList<>();
 
     public UserDataProperty(JmeSpatial node, String name) {
         super(name, String.class, name, "");
@@ -103,19 +101,19 @@ public class UserDataProperty extends PropertySupport.ReadWrite<String> {
                 public Void call() throws Exception {
                     switch (type) {
                         case 0:
-                            spatial.setUserData(name, Integer.parseInt(val));
+                            spatial.setUserData(name, Integer.valueOf(val));
                             break;
                         case 1:
-                            spatial.setUserData(name, Float.parseFloat(val));
+                            spatial.setUserData(name, Float.valueOf(val));
                             break;
                         case 2:
-                            spatial.setUserData(name, Boolean.parseBoolean(val));
+                            spatial.setUserData(name, Boolean.valueOf(val));
                             break;
                         case 3:
                             spatial.setUserData(name, val);
                             break;
                         case 4:
-                            spatial.setUserData(name, Long.parseLong(val));
+                            spatial.setUserData(name, Long.valueOf(val));
                             break;
                         default:
 //                            throw new UnsupportedOperationException();

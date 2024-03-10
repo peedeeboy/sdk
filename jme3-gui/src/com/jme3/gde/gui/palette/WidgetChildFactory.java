@@ -4,8 +4,6 @@
  */
 package com.jme3.gde.gui.palette;
 
-import jada.ngeditor.guiviews.palettecomponents.NWidget;
-import jada.ngeditor.model.elements.GControl;
 import jada.ngeditor.model.elements.GElement;
 import jada.ngeditor.model.utils.ClassUtils;
 import java.lang.reflect.Modifier;

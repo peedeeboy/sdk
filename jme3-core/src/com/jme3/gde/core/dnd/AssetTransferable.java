@@ -4,14 +4,10 @@
  */
 package com.jme3.gde.core.dnd;
 
-import com.jme3.gde.core.dnd.AssetNameHolder;
-import com.jme3.gde.core.dnd.StringDataFlavor;
-import com.jme3.gde.core.dnd.TextureDataFlavor;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import javax.swing.JPanel;
 
 /**
  *
@@ -20,8 +16,8 @@ import javax.swing.JPanel;
  */
 public class AssetTransferable<T extends DataFlavor> implements Transferable {
 
-    private DataFlavor[] flavors;
-    private AssetNameHolder string;
+    private final DataFlavor[] flavors;
+    private final AssetNameHolder string;
 
     public AssetTransferable(AssetNameHolder name, T flavor) {
         this.string = name;

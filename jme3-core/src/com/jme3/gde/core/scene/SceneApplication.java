@@ -67,7 +67,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -735,7 +735,7 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                HtmlBrowser.URLDisplayer.getDefault().showURL(new URL("https://wiki.jmonkeyengine.org/sdk/troubleshooting.html"));
+                HtmlBrowser.URLDisplayer.getDefault().showURL(URI.create("https://wiki.jmonkeyengine.org/sdk/troubleshooting.html").toURL());
             } catch (MalformedURLException ex) {
                 Exceptions.printStackTrace(ex);
             }

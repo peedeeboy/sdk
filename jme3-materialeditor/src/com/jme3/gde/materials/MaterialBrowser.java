@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.event.TreeSelectionEvent;
@@ -36,9 +37,9 @@ import org.openide.util.Exceptions;
  */
 public class MaterialBrowser extends javax.swing.JDialog implements TreeSelectionListener, WindowListener {
 
-    private ProjectAssetManager assetManager;
-    private MaterialPropertyEditor editor;
-    private Preferences prefs;
+    private final ProjectAssetManager assetManager;
+    private final MaterialPropertyEditor editor;
+    private final Preferences prefs;
     private static final String PREF_LAST_SELECTED = "lastSelectedMaterial";
 
     /** Creates new form MaterialBrowser */
@@ -59,7 +60,7 @@ public class MaterialBrowser extends javax.swing.JDialog implements TreeSelectio
         String[] leaves = assetManager.getMaterials();
         List<String> leavesList = Arrays.asList(leaves);
         Collections.sort(leavesList);
-        TreeUtil.createTree(jTree1, leavesList.toArray(new String[0]));
+        TreeUtil.createTree(jTree1, leavesList.toArray(String[]::new));
         TreeUtil.expandTree(jTree1, (TreeNode) jTree1.getModel().getRoot(), 1);
         jTree1.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree1.addTreeSelectionListener(this);
@@ -83,7 +84,7 @@ public class MaterialBrowser extends javax.swing.JDialog implements TreeSelectio
 
     private void setSelectedMaterial(Material material) {
         if (material != null) {
-            Logger.getLogger(MaterialBrowser.class.getName()).finer("Looking for Texture: " + material.getAssetName());
+            Logger.getLogger(MaterialBrowser.class.getName()).log(Level.FINER, "Looking for Texture: {0}", material.getAssetName());
             String[] path = ("/" + material.getAssetName()).split("/");
             TreePath parent = new TreePath((TreeNode) jTree1.getModel().getRoot());
             jTree1.expandPath(TreeUtil.buildTreePath(jTree1, parent, path, 0, true));

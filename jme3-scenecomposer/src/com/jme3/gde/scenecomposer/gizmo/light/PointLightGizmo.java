@@ -5,24 +5,21 @@
  */
 package com.jme3.gde.scenecomposer.gizmo.light;
 
-import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
 import com.jme3.bounding.BoundingVolume;
 import com.jme3.gde.core.sceneexplorer.nodes.JmePointLight;
 import com.jme3.gde.scenecomposer.gizmo.NodeCallback;
 import com.jme3.light.PointLight;
-import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 
 /**
  * Updates the marker's position whenever the light has moved.
  */
 public class PointLightGizmo extends NodeCallback {
 
-    private PointLight light;
-    private JmePointLight jmeLight;
+    private final PointLight light;
+    private final JmePointLight jmeLight;
 
     public PointLightGizmo(JmePointLight jmelight) {
         super("point light callback", true, false, false);

@@ -16,7 +16,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.terrain.Terrain;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,17 +28,15 @@ import org.critterai.nmgen.IntermediateData;
  * @author sploreg
  */
 public class NavMeshController {
-    private JmeSpatial jmeRootNode;
-    private Node rootNode;
-    private AssetDataObject currentFileObject;
-    private NavMeshTopComponent topComponent;
+    private final JmeSpatial jmeRootNode;
+    private final Node rootNode;
+    private final AssetDataObject currentFileObject;
     //private NavMesh navMesh; // current nav mesh in this scene
     private Material navMaterial;
 
     public NavMeshController(JmeSpatial jmeRootNode, AssetDataObject currentFileObject, NavMeshTopComponent topComponent) {
         this.jmeRootNode = jmeRootNode;
         this.currentFileObject = currentFileObject;
-        this.topComponent = topComponent;
         rootNode = this.jmeRootNode.getLookup().lookup(Node.class);
     }
     

@@ -37,7 +37,6 @@ import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.gde.core.properties.TexturePropertyEditor;
 import com.jme3.gde.core.properties.preview.TexturePreview;
 import com.jme3.gde.materials.MaterialProperty;
-import com.jme3.gde.core.dnd.AssetNameHolder;
 import com.jme3.gde.materials.dnd.TextureDropTargetListener;
 import com.jme3.gde.materials.dnd.TextureDropTargetListener.TextureDropTarget;
 import com.jme3.gde.materials.multiview.MaterialEditorTopComponent;

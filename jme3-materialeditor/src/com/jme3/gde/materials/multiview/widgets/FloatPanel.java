@@ -21,7 +21,7 @@ public class FloatPanel extends MaterialPropertyWidget {
     /** Creates new form NumberPanel */
     public FloatPanel() {
         initComponents();
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, null, Float.valueOf(0.1f)));
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 0.1f));
     }
 
     /** This method is called from within the constructor to
@@ -90,7 +90,7 @@ public class FloatPanel extends MaterialPropertyWidget {
                 MaterialProperty prop = property;
                 property = null;
                 try {
-                    jSpinner1.setValue(Float.parseFloat(prop.getValue()));
+                    jSpinner1.setValue(Float.valueOf(prop.getValue()));
                 } catch (Exception e) {
                     jSpinner1.setValue(0);
                 }

@@ -6,7 +6,6 @@
 package com.jme3.gde.scenecomposer.gizmo.light;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.environment.util.BoundingSphereDebug;
 import com.jme3.gde.scenecomposer.gizmo.light.shape.ProbeRadiusShape;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeDirectionalLight;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeLight;
@@ -15,11 +14,9 @@ import com.jme3.gde.core.sceneexplorer.nodes.JmePointLight;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeSpotLight;
 import com.jme3.gde.scenecomposer.gizmo.shape.RadiusShape;
 import com.jme3.gde.scenecomposer.gizmo.shape.Triangle;
-import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
-import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;

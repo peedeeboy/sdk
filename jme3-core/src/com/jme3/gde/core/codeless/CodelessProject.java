@@ -143,12 +143,14 @@ class CodelessProject implements Project {
 
         @Override
         public boolean isActionEnabled(String command, Lookup lookup) throws IllegalArgumentException {
-            if ((command.equals(ActionProvider.COMMAND_DELETE))) {
-                return true;
-            } else if ((command.equals(ActionProvider.COMMAND_COPY))) {
-                return true;
-            } else {
-                throw new IllegalArgumentException(command);
+            switch (command) {
+                case ActionProvider.COMMAND_DELETE -> {
+                    return true;
+                }
+                case ActionProvider.COMMAND_COPY -> {
+                    return true;
+                }
+                default -> throw new IllegalArgumentException(command);
             }
         }
     }

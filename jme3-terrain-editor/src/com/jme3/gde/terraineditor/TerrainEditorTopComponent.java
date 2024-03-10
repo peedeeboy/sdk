@@ -792,7 +792,7 @@ public final class TerrainEditorTopComponent extends TopComponent implements Sce
 
     private void shininessFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shininessFieldActionPerformed
         try {
-            Float f = Float.parseFloat(shininessField.getText());
+            Float f = Float.valueOf(shininessField.getText());
             editorController.setShininess(Math.max(0, f));
         } catch (Exception e) {
             Logger.getLogger(TerrainEditorTopComponent.class.getName()).log(Level.WARNING,
@@ -936,7 +936,7 @@ public final class TerrainEditorTopComponent extends TopComponent implements Sce
             try {
                 javax.swing.JTextField textField = (javax.swing.JTextField)input;
                 String a=textField.getText();
-                Float.parseFloat(a);
+                Float.valueOf(a);
             }
             catch (NumberFormatException e) {
                 Toolkit.getDefaultToolkit().beep();
@@ -952,7 +952,7 @@ public final class TerrainEditorTopComponent extends TopComponent implements Sce
             if (input instanceof javax.swing.JTextField) {
                 String text = ((javax.swing.JTextField)input).getText();
                 try {
-                    Float f = Float.parseFloat(text);
+                    Float f = Float.valueOf(text);
                     if (f > 0)
                         return true;
                 } catch (Exception e) {
@@ -1032,17 +1032,21 @@ public final class TerrainEditorTopComponent extends TopComponent implements Sce
 
         final Spatial node = selectedSpat.getLookup().lookup(Spatial.class);
         if (node != null) {
-            if ("Terrain".equals(name)) {
-                if (terrainWizard == null) {
-                    terrainWizard = new CreateTerrainWizardAction(this);
+            if (null != name) switch (name) {
+                case "Terrain" -> {
+                    if (terrainWizard == null) {
+                        terrainWizard = new CreateTerrainWizardAction(this);
+                    }   terrainWizard.performAction();
                 }
-                terrainWizard.performAction();
-            } else if ("Skybox".equals(name)) {
-                if (skyboxWizard == null) {
-                    skyboxWizard = new SkyboxWizardAction(this);
+                case "Skybox" -> {
+                    if (skyboxWizard == null) {
+                        skyboxWizard = new SkyboxWizardAction(this);
+                    }   skyboxWizard.performAction();
                 }
-                skyboxWizard.performAction();
-            } else if ("Ocean".equals(name)) {
+                case "Ocean" -> {
+                }
+                default -> {
+                }
             }
         }
 

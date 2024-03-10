@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -48,7 +49,7 @@ public class LoadWikiImages extends Task {
                                 name = name.substring(0, markIdx);
                             }
                             name = name.replaceAll(":", "/");
-                            URL url = new URL(host + link);
+                            URL url = URI.create(host + link).toURL();
                             InputStream in = null;
                             FileOutputStream out = null;
                             try {
@@ -83,7 +84,7 @@ public class LoadWikiImages extends Task {
                             }
                             //make external folder and clean filename
                             name = "external/" + name.replaceAll("[_[^\\w\\däüöÄÜÖ\\/\\+\\-\\. ]]", "_");
-                            URL url = new URL(host + link);
+                            URL url = URI.create((host + link)).toURL();
                             InputStream in = url.openStream();
                             File file = new File(getLocation().getFileName().replaceAll("build.xml", "") + File.separator + targetFolder + File.separator + name.replaceAll("/", File.separator));
                             log("Getting external image: " + host + link);

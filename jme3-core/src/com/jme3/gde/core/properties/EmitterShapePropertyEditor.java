@@ -128,28 +128,34 @@ public class EmitterShapePropertyEditor implements PropertyEditor {
         if (strings.length == 0) {
             return;
         }
-        if ("box".equals(strings[0].trim().toLowerCase())) {
-            if (strings.length == 7) {
-                StatusDisplayer.getDefault().setStatusText("try set parameterized box shape");
-                emitter = new EmitterBoxShape(
-                        new Vector3f(Float.parseFloat(strings[1]), Float.parseFloat(strings[2]), Float.parseFloat(strings[3])), new Vector3f(Float.parseFloat(strings[4]), Float.parseFloat(strings[5]), Float.parseFloat(strings[6])));
-            } else {
-                StatusDisplayer.getDefault().setStatusText("try set standard box shape");
-                emitter = new EmitterBoxShape(new Vector3f(-.5f, -.5f, -.5f), new Vector3f(.5f, .5f, .5f));
+        if (null != strings[0].trim().toLowerCase()) switch (strings[0].trim().toLowerCase()) {
+            case "box" -> {
+                if (strings.length == 7) {
+                    StatusDisplayer.getDefault().setStatusText("try set parameterized box shape");
+                    emitter = new EmitterBoxShape(
+                            new Vector3f(Float.parseFloat(strings[1]), Float.parseFloat(strings[2]), Float.parseFloat(strings[3])), new Vector3f(Float.parseFloat(strings[4]), Float.parseFloat(strings[5]), Float.parseFloat(strings[6])));
+                } else {
+                    StatusDisplayer.getDefault().setStatusText("try set standard box shape");
+                    emitter = new EmitterBoxShape(new Vector3f(-.5f, -.5f, -.5f), new Vector3f(.5f, .5f, .5f));
+                }
             }
-        } else if ("point".equals(strings[0].trim().toLowerCase())) {
-            if (strings.length == 4) {
-                emitter = new EmitterPointShape(
-                        new Vector3f(Float.parseFloat(strings[1]), Float.parseFloat(strings[2]), Float.parseFloat(strings[3])));
-            } else {
-                emitter = new EmitterPointShape(Vector3f.ZERO);
+            case "point" -> {
+                if (strings.length == 4) {
+                    emitter = new EmitterPointShape(
+                            new Vector3f(Float.parseFloat(strings[1]), Float.parseFloat(strings[2]), Float.parseFloat(strings[3])));
+                } else {
+                    emitter = new EmitterPointShape(Vector3f.ZERO);
+                }
             }
-        } else if ("sphere".equals(strings[0].trim().toLowerCase())) {
-            if (strings.length == 5) {
-                emitter = new EmitterSphereShape(
-                        new Vector3f(Float.parseFloat(strings[1]), Float.parseFloat(strings[2]), Float.parseFloat(strings[3])), Float.parseFloat(strings[4]));
-            } else {
-                emitter = new EmitterSphereShape(Vector3f.ZERO, .5f);
+            case "sphere" -> {
+                if (strings.length == 5) {
+                    emitter = new EmitterSphereShape(
+                            new Vector3f(Float.parseFloat(strings[1]), Float.parseFloat(strings[2]), Float.parseFloat(strings[3])), Float.parseFloat(strings[4]));
+                } else {
+                    emitter = new EmitterSphereShape(Vector3f.ZERO, .5f);
+                }
+            }
+            default -> {
             }
         }
         notifyListeners(old, emitter);

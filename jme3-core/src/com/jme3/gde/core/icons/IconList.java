@@ -31,7 +31,6 @@
  */
 package com.jme3.gde.core.icons;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import org.openide.util.ImageUtilities;
 

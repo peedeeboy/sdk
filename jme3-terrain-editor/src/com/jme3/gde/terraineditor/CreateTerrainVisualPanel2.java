@@ -436,7 +436,7 @@ public final class CreateTerrainVisualPanel2 extends JPanel {
     
     public float getHeightScale() {
         try {
-            Float scale = Float.parseFloat(heightScale.getText());
+            Float scale = Float.valueOf(heightScale.getText());
             return Math.abs(scale);
         } catch (NumberFormatException e) {
             return 1;

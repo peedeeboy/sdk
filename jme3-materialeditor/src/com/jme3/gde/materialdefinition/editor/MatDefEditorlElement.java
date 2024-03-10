@@ -58,10 +58,7 @@ import com.jme3.material.Material;
 import com.jme3.shader.Shader;
 import com.jme3.shader.ShaderNodeDefinition;
 import com.jme3.shader.ShaderNodeVariable;
-import com.jme3.shader.ShaderUtils;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Point;
 import java.beans.PropertyVetoException;
 import java.io.BufferedReader;
@@ -76,7 +73,6 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.Action;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.netbeans.core.spi.multiview.CloseOperationState;
 import org.netbeans.core.spi.multiview.MultiViewElement;
@@ -609,17 +605,19 @@ public final class MatDefEditorlElement extends JPanel implements
 
     private ConnectionEndpoint findConnectPoint(String nameSpace, String name, boolean isInput) {
 
-        if (nameSpace.equals("MatParam")
-                || nameSpace.equals("WorldParam")
-                || nameSpace.equals("Attr")) {
-            NodePanel np = diagram1.getNodePanel(nameSpace + "." + name);
-            return isInput ? np.getInputConnectPoint(name) : np.getOutputConnectPoint(name);
-        } else if (nameSpace.equals("Global")) {
-            ShaderOutBusPanel outBus = diagram1.getOutBusPanel(name);
-            return outBus.getConnectPoint();
-        } else {
-            NodePanel np = diagram1.getNodePanel(diagram1.getCurrentTechniqueName() + "/" + nameSpace);
-            return isInput ? np.getInputConnectPoint(name) : np.getOutputConnectPoint(name);
+        switch (nameSpace) {
+            case "MatParam", "WorldParam", "Attr" -> {
+                NodePanel np = diagram1.getNodePanel(nameSpace + "." + name);
+                return isInput ? np.getInputConnectPoint(name) : np.getOutputConnectPoint(name);
+            }
+            case "Global" -> {
+                ShaderOutBusPanel outBus = diagram1.getOutBusPanel(name);
+                return outBus.getConnectPoint();
+            }
+            default -> {
+                NodePanel np = diagram1.getNodePanel(diagram1.getCurrentTechniqueName() + "/" + nameSpace);
+                return isInput ? np.getInputConnectPoint(name) : np.getOutputConnectPoint(name);
+            }
         }
     }
 

@@ -4,7 +4,6 @@
  */
 package com.jme3.gde.materials;
 
-import com.jme3.gde.materials.JMEMaterialDataObject;
 import com.jme3.gde.materials.multiview.MaterialEditorTopComponent;
 import org.openide.cookies.CloseCookie;
 import org.openide.cookies.OpenCookie;

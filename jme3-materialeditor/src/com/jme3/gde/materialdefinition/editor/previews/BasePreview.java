@@ -48,7 +48,7 @@ import javax.swing.border.EmptyBorder;
 public abstract class BasePreview extends JPanel implements MaterialWidgetListener {
 
     private ShaderNodeVariable output;
-    protected Logger logger = Logger.getLogger(BasePreview.class.getName());
+    protected static final Logger logger = Logger.getLogger(BasePreview.class.getName());
 
     public interface OnDefaultValueChangedListener {
 

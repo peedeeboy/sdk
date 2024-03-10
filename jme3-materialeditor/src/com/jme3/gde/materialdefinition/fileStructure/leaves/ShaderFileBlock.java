@@ -45,9 +45,9 @@ public class ShaderFileBlock extends LeafStatement {
             path = split[2].trim();
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            Logger.getLogger(ShaderFileBlock.class.getName()).log(Level.WARNING, "Parsing error line " + sta.getLineNumber() + " : " + sta.getLine());
+            Logger.getLogger(ShaderFileBlock.class.getName()).log(Level.WARNING, "Parsing error line {0} : {1}", new Object[]{sta.getLineNumber(), sta.getLine()});
         } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ShaderFileBlock.class.getName()).log(Level.WARNING, "Invalid light mode : " + sta.getLineNumber() + " : " + sta.getLine());
+            Logger.getLogger(ShaderFileBlock.class.getName()).log(Level.WARNING, "Invalid light mode : {0} : {1}", new Object[]{sta.getLineNumber(), sta.getLine()});
         }
     }
 }

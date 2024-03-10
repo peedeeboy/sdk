@@ -10,7 +10,6 @@
 package com.jme3.gde.gui.palette;
 
 import jada.ngeditor.guiviews.DND.WidgetData;
-import java.io.IOException;
 import javax.swing.Action;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
 import org.netbeans.spi.palette.DragAndDropHandler;
@@ -19,7 +18,6 @@ import org.netbeans.spi.palette.PaletteController;
 import org.netbeans.spi.palette.PaletteFactory;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
-import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.datatransfer.ExTransferable;
 
