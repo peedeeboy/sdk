@@ -45,6 +45,7 @@ import java.beans.PropertyChangeEvent;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import javax.swing.Action;
+import javax.swing.SwingUtilities;
 import org.openide.actions.DeleteAction;
 import org.openide.actions.RenameAction;
 import org.openide.awt.Actions;
@@ -162,19 +163,20 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
 
     @Override
     public void destroy() throws IOException {
-        super.destroy();     
+        super.destroy();  
         final AnimComposer control = jmeControl.getLookup().lookup(AnimComposer.class);
-        try {
-            lookupContents.remove(this.animClip);
-            lookupContents.remove(this);
-            SceneApplication.getApplication().enqueue(() -> {
-                control.removeAnimClip(this.animClip);
-                return null;
-            }).get();
-            setChanged();
-        } catch (InterruptedException | ExecutionException ex) {
-            Exceptions.printStackTrace(ex);
+        if (playing) {
+            control.removeCurrentAction(AnimComposer.DEFAULT_LAYER);
+            jmeControl.setAnimClip(null);
+            
         }
+        lookupContents.remove(JmeAnimClip.this.animClip);
+        lookupContents.remove(this);
+        SceneApplication.getApplication().enqueue( () -> {
+            control.removeAnimClip(this.animClip);
+            SwingUtilities.invokeLater(() -> jmeControl.refresh(false));
+        });
+        setChanged();
     }
 
     @Override
