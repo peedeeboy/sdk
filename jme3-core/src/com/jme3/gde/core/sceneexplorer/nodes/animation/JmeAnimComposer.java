@@ -125,7 +125,7 @@ public class JmeAnimComposer extends JmeControl {
             Exceptions.printStackTrace(ex);
         }
     }
-
+    
     @Override
     public Action[] getActions(boolean context) {
         return new Action[]{
@@ -148,5 +148,11 @@ public class JmeAnimComposer extends JmeControl {
     public Node[] createNodes(Object key, DataObject key2, boolean cookie) {
         JmeAnimClipChildren children = new JmeAnimClipChildren(this);
         return new Node[]{ new JmeAnimComposer((AnimComposer)key, children, key2)};
+    }
+    
+    @Override
+    public void refresh(boolean immediate) {
+        ((JmeAnimClipChildren) jmeChildren).refreshChildren(immediate);
+        super.refresh(immediate);
     }
 }
