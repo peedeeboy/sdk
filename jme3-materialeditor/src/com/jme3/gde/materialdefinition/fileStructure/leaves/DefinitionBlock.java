@@ -66,7 +66,7 @@ public class DefinitionBlock extends LeafStatement {
 
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            Logger.getLogger(DefinitionBlock.class.getName()).log(Level.WARNING, "Parsing error line " + sta.getLineNumber() + " : " + sta.getLine());
+            Logger.getLogger(DefinitionBlock.class.getName()).log(Level.WARNING, "Parsing error line {0} : {1}", new Object[]{sta.getLineNumber(), sta.getLine()});
         }
     }
 }

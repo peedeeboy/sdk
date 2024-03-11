@@ -195,45 +195,48 @@ public class ShaderNodeBlock extends UberStatement implements PropertyChangeList
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(POSITION)) {
-            spatialOrder = (Integer) evt.getNewValue();
-            fire("order", null, null);
-        } else if (evt.getPropertyName().equals(INPUT)) {
-            InputMappingBlock mapping = (InputMappingBlock) evt.getNewValue();
-            if (mapping != null) {
-                if (mapping.getRightNameSpace().equals("Global")) {
-                    globalInput = true;
-                } else {
-                    inputNodes.add(mapping.getRightNameSpace());
-                }
-                addInputMapping(mapping);
-            } else {
-                InputMappingBlock oldMapping = (InputMappingBlock) evt.getOldValue();
-                if (oldMapping.getRightNameSpace().equals("Global")) {
-                    globalInput = false;
-                } else {
-                    inputNodes.remove(oldMapping.getRightNameSpace());
-                }
-                removeInputMapping(oldMapping);
+        switch (evt.getPropertyName()) {
+            case POSITION -> {
+                spatialOrder = (Integer) evt.getNewValue();
+                fire("order", null, null);
             }
-            fire("order", null, null);
-
-        } else if (evt.getPropertyName().equals(OUTPUT)) {
-            OutputMappingBlock mapping = (OutputMappingBlock) evt.getNewValue();
-            if (mapping != null) {
-                if (mapping.getLeftNameSpace().equals("Global")) {
-                    globalOutput = true;
+            case INPUT ->                 {
+                    InputMappingBlock mapping = (InputMappingBlock) evt.getNewValue();
+                    if (mapping != null) {
+                        if (mapping.getRightNameSpace().equals("Global")) {
+                            globalInput = true;
+                        } else {
+                            inputNodes.add(mapping.getRightNameSpace());
+                        }
+                        addInputMapping(mapping);
+                    } else {
+                        InputMappingBlock oldMapping = (InputMappingBlock) evt.getOldValue();
+                        if (oldMapping.getRightNameSpace().equals("Global")) {
+                            globalInput = false;
+                        } else {
+                            inputNodes.remove(oldMapping.getRightNameSpace());
+                        }
+                        removeInputMapping(oldMapping);
+                    }       fire("order", null, null);
                 }
-                addOutputMapping(mapping);
-            } else {
-                OutputMappingBlock oldMapping = (OutputMappingBlock) evt.getOldValue();
-
-                if (oldMapping.getLeftNameSpace().equals("Global")) {
-                    globalOutput = false;
+            case OUTPUT ->                 {
+                    OutputMappingBlock mapping = (OutputMappingBlock) evt.getNewValue();
+                    if (mapping != null) {
+                        if (mapping.getLeftNameSpace().equals("Global")) {
+                            globalOutput = true;
+                        }
+                        addOutputMapping(mapping);
+                    } else {
+                        OutputMappingBlock oldMapping = (OutputMappingBlock) evt.getOldValue();
+                        
+                        if (oldMapping.getLeftNameSpace().equals("Global")) {
+                            globalOutput = false;
+                        }
+                        removeOutputMapping(oldMapping);
+                    }       fire("order", null, null);
                 }
-                removeOutputMapping(oldMapping);
+            default -> {
             }
-            fire("order", null, null);
         }
     }
 }

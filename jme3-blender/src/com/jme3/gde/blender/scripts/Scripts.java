@@ -7,6 +7,7 @@ package com.jme3.gde.blender.scripts;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +42,7 @@ public class Scripts {
                 InputStream in = null;
                 OutputStream out = null;
                 try {
-                    URL url = new URL("nbres:" + root + name);
+                    URL url = URI.create("nbres:" + root + name).toURL();
                     file = FileUtil.createData(folder, name);
                     in = url.openStream();
                     out = file.getOutputStream();

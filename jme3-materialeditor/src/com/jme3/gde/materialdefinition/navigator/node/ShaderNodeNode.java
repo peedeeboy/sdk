@@ -5,9 +5,7 @@
 package com.jme3.gde.materialdefinition.navigator.node;
 
 import com.jme3.gde.core.assets.ProjectAssetManager;
-import com.jme3.gde.materialdefinition.MatDefDataObject;
 import com.jme3.gde.core.editor.nodes.Selectable;
-import com.jme3.gde.materialdefinition.fileStructure.MatDefBlock;
 import com.jme3.gde.materialdefinition.fileStructure.ShaderNodeBlock;
 import com.jme3.gde.materialdefinition.fileStructure.TechniqueBlock;
 import com.jme3.gde.materialdefinition.fileStructure.leaves.MappingBlock;

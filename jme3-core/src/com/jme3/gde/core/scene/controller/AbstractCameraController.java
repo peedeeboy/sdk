@@ -319,54 +319,47 @@ public abstract class AbstractCameraController extends AbstractAppState implemen
     public abstract boolean useCameraControls();
 
     public void onAnalog(String string, float f1, float f) {
-        if ("MouseAxisX".equals(string)) {
-            moved = true;
-            movedR = true;
-
-            if ((buttonDownL && useCameraControls()) || (buttonDownM && !shiftModifier)) {
-                doRotateCamera(Vector3f.UNIT_Y, -f1 * 2.5f);
+        if (null != string) switch (string) {
+            case "MouseAxisX" -> {
+                moved = true;
+                movedR = true;
+                if ((buttonDownL && useCameraControls()) || (buttonDownM && !shiftModifier)) {
+                    doRotateCamera(Vector3f.UNIT_Y, -f1 * 2.5f);
+                }   if ((buttonDownR && useCameraControls()) || (buttonDownM && shiftModifier)) {
+                    doPanCamera(f1 * 2.5f, 0);
+                }
             }
-            if ((buttonDownR && useCameraControls()) || (buttonDownM && shiftModifier)) {
-                doPanCamera(f1 * 2.5f, 0);
+            case "MouseAxisY" -> {
+                moved = true;
+                movedR = true;
+                if ((buttonDownL && useCameraControls()) || (buttonDownM && !shiftModifier)) {
+                    doRotateCamera(cam.getLeft(), -f1 * 2.5f);
+                }   if ((buttonDownR && useCameraControls()) || (buttonDownM && shiftModifier)) {
+                    doPanCamera(0, -f1 * 2.5f);
+                }
             }
-
-        } else if ("MouseAxisY".equals(string)) {
-            moved = true;
-            movedR = true;
-
-            if ((buttonDownL && useCameraControls()) || (buttonDownM && !shiftModifier)) {
-                doRotateCamera(cam.getLeft(), -f1 * 2.5f);
+            case "MouseAxisX-" -> {
+                moved = true;
+                movedR = true;
+                if ((buttonDownL && useCameraControls()) || (buttonDownM && !shiftModifier)) {
+                    doRotateCamera(Vector3f.UNIT_Y, f1 * 2.5f);
+                }   if ((buttonDownR && useCameraControls()) || (buttonDownM && shiftModifier)) {
+                    doPanCamera(-f1 * 2.5f, 0);
+                }
             }
-            if ((buttonDownR && useCameraControls()) || (buttonDownM && shiftModifier)) {
-                doPanCamera(0, -f1 * 2.5f);
+            case "MouseAxisY-" -> {
+                moved = true;
+                movedR = true;
+                if ((buttonDownL && useCameraControls()) || (buttonDownM && !shiftModifier)) {
+                    doRotateCamera(cam.getLeft(), f1 * 2.5f);
+                }   if ((buttonDownR && useCameraControls()) || (buttonDownM && shiftModifier)) {
+                    doPanCamera(0, f1 * 2.5f);
+                }
             }
-
-        } else if ("MouseAxisX-".equals(string)) {
-            moved = true;
-            movedR = true;
-
-            if ((buttonDownL && useCameraControls()) || (buttonDownM && !shiftModifier)) {
-                doRotateCamera(Vector3f.UNIT_Y, f1 * 2.5f);
+            case "MouseWheel" -> doZoomCamera(.1f);
+            case "MouseWheel-" -> doZoomCamera(-.1f);
+            default -> {
             }
-            if ((buttonDownR && useCameraControls()) || (buttonDownM && shiftModifier)) {
-                doPanCamera(-f1 * 2.5f, 0);
-            }
-
-        } else if ("MouseAxisY-".equals(string)) {
-            moved = true;
-            movedR = true;
-
-            if ((buttonDownL && useCameraControls()) || (buttonDownM && !shiftModifier)) {
-                doRotateCamera(cam.getLeft(), f1 * 2.5f);
-            }
-            if ((buttonDownR && useCameraControls()) || (buttonDownM && shiftModifier)) {
-                doPanCamera(0, f1 * 2.5f);
-            }
-
-        } else if ("MouseWheel".equals(string)) {
-            doZoomCamera(.1f);
-        } else if ("MouseWheel-".equals(string)) {
-            doZoomCamera(-.1f);
         }
     }
 

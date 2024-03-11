@@ -6,10 +6,7 @@
 package com.jme3.gde.scenecomposer.tools.shortcuts;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.gde.core.sceneexplorer.SceneExplorerTopComponent;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeNode;
-import com.jme3.gde.core.sceneexplorer.nodes.JmeSpatial;
-import com.jme3.gde.core.sceneviewer.SceneViewerTopComponent;
 import com.jme3.gde.core.undoredo.AbstractUndoableSceneEdit;
 import com.jme3.gde.scenecomposer.SceneComposerToolController;
 import com.jme3.input.KeyInput;

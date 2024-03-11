@@ -119,5 +119,5 @@ java {
 }
 
 wrapper {
-    gradleVersion = '8.4'
+    gradleVersion = '8.6'
 }

@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +44,7 @@ public class OnlineBrowser extends javax.swing.JPanel implements HyperlinkListen
         this.lib = lib;
         jEditorPane1.addHyperlinkListener(this);
         try {
-            URL url = new URL("http://jmonkeyengine.org/assetpacks/list.php");
+            URL url = URI.create("http://jmonkeyengine.org/assetpacks/list.php").toURL();
             jEditorPane1.setPage(url);
         } catch (IOException ex) {
             Exceptions.printStackTrace(ex);

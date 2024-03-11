@@ -35,7 +35,6 @@ import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import java.text.DecimalFormat;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 

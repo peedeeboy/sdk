@@ -32,7 +32,6 @@
 package com.jme3.gde.core.assets.actions;
 
 import com.jme3.export.Savable;
-import com.jme3.gde.core.assets.AssetDataObject;
 import com.jme3.gde.core.assets.BinaryModelDataObject;
 import com.jme3.gde.core.assets.SpatialAssetDataObject;
 import com.jme3.gde.core.util.notify.MessageUtil;
@@ -42,7 +41,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.netbeans.api.progress.ProgressHandle;
-import org.openide.util.Exceptions;
 
 public final class ConvertModel implements ActionListener {
     protected static final Logger logger = Logger.getLogger(ConvertModel.class.getName());

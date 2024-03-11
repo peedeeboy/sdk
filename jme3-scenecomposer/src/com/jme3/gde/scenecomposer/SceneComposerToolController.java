@@ -386,12 +386,12 @@ public class SceneComposerToolController extends SceneToolController {
 
     public void setTransformationType(String type) {
         if (type != null) {
-            if (type.equals("Local")) {
-                setTransformationType(TransformationType.local);
-            } else if (type.equals("Global")) {
-                setTransformationType(TransformationType.global);
-            } else if (type.equals("Camera")) {
-                setTransformationType(TransformationType.camera);
+            switch (type) {
+                case "Local" -> setTransformationType(TransformationType.local);
+                case "Global" -> setTransformationType(TransformationType.global);
+                case "Camera" -> setTransformationType(TransformationType.camera);
+                default -> {
+                }
             }
         }
     }

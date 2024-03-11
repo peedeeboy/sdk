@@ -82,7 +82,7 @@ public class AndroidImportantFiles implements ImportantFiles {
         } catch (DataObjectNotFoundException ex) {
             Exceptions.printStackTrace(ex);
         }
-        return list.toArray(new Node[list.size()]);
+        return list.toArray(Node[]::new);
     }
 
     @Override

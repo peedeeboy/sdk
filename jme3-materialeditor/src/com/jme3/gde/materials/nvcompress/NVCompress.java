@@ -395,7 +395,7 @@ public class NVCompress extends javax.swing.JFrame {
             case 8: params.add("-bc5"); break;
         }
 
-        return params.toArray(new String[0]);
+        return params.toArray(String[]::new);
     }
 
     private void updateWork(String workStatus, int percent){

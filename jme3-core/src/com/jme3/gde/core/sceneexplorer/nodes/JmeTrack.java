@@ -86,18 +86,11 @@ public class JmeTrack extends AbstractSceneExplorerNode {
     }
 
     private void setName() {
-        if (track instanceof BoneTrack) {
-            BoneTrack boneTrack = (BoneTrack) track;
-            super.setName("BoneTrack : " + control.getSkeleton().getBone(boneTrack.getTargetBoneIndex()).getName());
-        } else if (track instanceof EffectTrack) {
-            EffectTrack effectTrack = (EffectTrack) track;
-            super.setName("EffectTrack : " + effectTrack.getEmitter().getName());            
-        } else if (track instanceof AudioTrack) {
-            AudioTrack audioTrack = (AudioTrack) track;
-            super.setName("AudioTrack : " + audioTrack.getAudio().getName());
-            
-        } else {
-            super.setName(track.getClass().getSimpleName());
+        switch (track) {
+            case BoneTrack boneTrack -> super.setName("BoneTrack : " + control.getSkeleton().getBone(boneTrack.getTargetBoneIndex()).getName());
+            case EffectTrack effectTrack -> super.setName("EffectTrack : " + effectTrack.getEmitter().getName());
+            case AudioTrack audioTrack -> super.setName("AudioTrack : " + audioTrack.getAudio().getName());
+            default -> super.setName(track.getClass().getSimpleName());
         }
     }
     

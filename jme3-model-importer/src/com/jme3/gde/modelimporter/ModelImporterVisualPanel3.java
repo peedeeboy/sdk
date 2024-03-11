@@ -106,7 +106,7 @@ public final class ModelImporterVisualPanel3 extends JPanel {
                 }
                 jList1.setListData(assetKeys.toArray());
                 jList2.setListData(failedKeys.toArray());
-                if (failedKeys.size() > 0) {
+                if (!failedKeys.isEmpty()) {
                     statusLabel.setText(org.openide.util.NbBundle.getMessage(ModelImporterVisualPanel3.class, "ModelImporterVisualPanel3.statusLabel.text_missing"));
                     infoTextArea.setText(org.openide.util.NbBundle.getMessage(ModelImporterVisualPanel3.class, "ModelImporterVisualPanel3.infoTextArea.text_missing"));
                 } else {

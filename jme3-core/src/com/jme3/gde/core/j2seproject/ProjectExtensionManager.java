@@ -39,6 +39,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -234,7 +235,7 @@ public class ProjectExtensionManager {
 
     public void setDataZip(String url) {
         try {
-            this.zipFile = new URL(url);
+            this.zipFile = URI.create(url).toURL();
         } catch (MalformedURLException ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -251,7 +252,7 @@ public class ProjectExtensionManager {
      */
     public void loadTargets(String path) {
         try {
-            LineNumberReader in = new LineNumberReader(new InputStreamReader(new URL(path).openStream()));
+            LineNumberReader in = new LineNumberReader(new InputStreamReader(URI.create(path).toURL().openStream()));
             StringWriter out = new StringWriter();
             String line = in.readLine();
             while (line != null) {
@@ -500,7 +501,7 @@ public class ProjectExtensionManager {
     private void writeFile(ZipInputStream str, FileObject fo) throws IOException {
         OutputStream out = fo.getOutputStream();
         try {
-            logger.log(Level.FINE, "Creating file " + fo.getNameExt());
+            logger.log(Level.FINE, "Creating file {0}", fo.getNameExt());
             FileUtil.copy(str, out);
         } finally {
             out.close();

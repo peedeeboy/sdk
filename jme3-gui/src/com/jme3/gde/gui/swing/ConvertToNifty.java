@@ -71,7 +71,7 @@ public final class ConvertToNifty implements ActionListener {
                 }
             }
             for (SourceGroup sourceGroup : groups) {
-                ClassLoader loader = new URLClassLoader(urls.toArray(new URL[urls.size()]), this.getClass().getClassLoader());
+                ClassLoader loader = new URLClassLoader(urls.toArray(URL[]::new), this.getClass().getClassLoader());
                 try {
                     Class<?> clazzFactory = loader.loadClass("nl.tygron.niftyconverter.NiftyFactory");
                     Class<?> clazzFile = loader.loadClass("java.io.File");

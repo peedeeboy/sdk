@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -177,7 +178,7 @@ public class ZipExtensionTool {
         URL url = null;
         try {
             String tempFileName = extractionPath + "_tmp.zip";
-            url = new URL("nbres:" + zipPath);
+            url = URI.create("nbres:" + zipPath).toURL();
             in = new BufferedInputStream(url.openStream());
             out = new BufferedOutputStream(new FileOutputStream(tempFileName));
             int inbyte = in.read();

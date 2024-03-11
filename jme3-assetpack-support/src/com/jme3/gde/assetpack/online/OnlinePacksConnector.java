@@ -31,7 +31,7 @@ public class OnlinePacksConnector {
             int size = (int) FileUtil.toFileObject(file).getSize();
             Logger.getLogger(OnlinePacksConnector.class.getName()).log(Level.FINE, "Upload file size: {0}", size);
 
-            URL url = new URL(urlString);
+            URL url = URI.create(urlString).toURL();
             String boundary = MultiPartFormOutputStream.createBoundary();
             URLConnection urlConn = MultiPartFormOutputStream.createConnection(url);
             urlConn.setRequestProperty("Accept", "*/*");
@@ -77,7 +77,7 @@ public class OnlinePacksConnector {
 
     private static boolean test(String urlString, String user, String pass) {
         try {
-            URL url = new URL(urlString);
+            URL url = URI.create(urlString).toURL();
             String boundary = MultiPartFormOutputStream.createBoundary();
             URLConnection urlConn = MultiPartFormOutputStream.createConnection(url);
             urlConn.setRequestProperty("Accept", "*/*");

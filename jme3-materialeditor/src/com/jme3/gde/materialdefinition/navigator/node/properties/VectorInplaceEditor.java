@@ -4,12 +4,9 @@
  */
 package com.jme3.gde.materialdefinition.navigator.node.properties;
 
-import com.jme3.math.Vector2f;
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.beans.PropertyEditor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import org.openide.explorer.propertysheet.InplaceEditor;

@@ -7,7 +7,6 @@ package com.jme3.gde.gui.view;
 import com.jme3.gde.gui.nodes.GElementNode;
 import com.jme3.gde.gui.nodes.GUINode;
 import jada.ngeditor.controller.CommandProcessor;
-import jada.ngeditor.controller.GUIEditor;
 import jada.ngeditor.controller.commands.SelectCommand;
 import jada.ngeditor.listeners.events.SelectionChanged;
 import jada.ngeditor.model.GUI;

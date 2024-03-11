@@ -54,9 +54,9 @@ public class LightModeBlock extends LeafStatement {
             TechniqueDef.LightMode.valueOf(lightMode);
 
         } catch (ArrayIndexOutOfBoundsException e) {           
-            Logger.getLogger(LightModeBlock.class.getName()).log(Level.WARNING, "Parsing error line " + sta.getLineNumber() + " : " + sta.getLine());
+            Logger.getLogger(LightModeBlock.class.getName()).log(Level.WARNING, "Parsing error line {0} : {1}", new Object[]{sta.getLineNumber(), sta.getLine()});
         } catch (IllegalArgumentException ex){
-            Logger.getLogger(LightModeBlock.class.getName()).log(Level.WARNING, "Invalid light mode : " + sta.getLineNumber() + " : " + sta.getLine());
+            Logger.getLogger(LightModeBlock.class.getName()).log(Level.WARNING, "Invalid light mode : {0} : {1}", new Object[]{sta.getLineNumber(), sta.getLine()});
         }
     }
 }

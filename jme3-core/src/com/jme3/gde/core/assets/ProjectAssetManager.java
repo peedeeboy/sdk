@@ -33,7 +33,6 @@ package com.jme3.gde.core.assets;
 
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
-import com.jme3.asset.AssetManager;
 import com.jme3.asset.DesktopAssetManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -87,12 +86,12 @@ public class ProjectAssetManager extends DesktopAssetManager {
     private static final Logger logger = Logger.getLogger(ProjectAssetManager.class.getName());
     private final Mutex mutex = new Mutex();
     private final Project project;
-    private final List<ClassPathChangeListener> classPathListeners = Collections.synchronizedList(new LinkedList<ClassPathChangeListener>());
-    private final List<ClassPath> classPaths = Collections.synchronizedList(new LinkedList<ClassPath>());
-    private final List<ClassPathItem> classPathItems = Collections.synchronizedList(new LinkedList<ClassPathItem>());
-    private final List<AssetEventListener> assetEventListeners = Collections.synchronizedList(new LinkedList<AssetEventListener>());
-    private final List<String> folderNames = new LinkedList<String>();
-    private final List<FileObject> jarItems = new LinkedList<FileObject>();
+    private final List<ClassPathChangeListener> classPathListeners = Collections.synchronizedList(new LinkedList<>());
+    private final List<ClassPath> classPaths = Collections.synchronizedList(new LinkedList<>());
+    private final List<ClassPathItem> classPathItems = Collections.synchronizedList(new LinkedList<>());
+    private final List<AssetEventListener> assetEventListeners = Collections.synchronizedList(new LinkedList<>());
+    private final List<String> folderNames = new LinkedList<>();
+    private final List<FileObject> jarItems = new LinkedList<>();
     private URLClassLoader loader;
 
     public ProjectAssetManager(Project prj, String folderName) {
@@ -275,12 +274,12 @@ public class ProjectAssetManager extends DesktopAssetManager {
     private PropertyChangeListener classPathListener = new PropertyChangeListener() {
         public void propertyChange(PropertyChangeEvent evt) {
             logger.log(Level.FINE, "Classpath event: {0}", evt);
-            if (ClassPath.PROP_ROOTS.equals(evt.getPropertyName())) {
-                updateClassLoader();
-            } else if (ClassPath.PROP_ENTRIES.equals(evt.getPropertyName())) {
-                updateClassLoader();
-            } else if (ClassPath.PROP_INCLUDES.equals(evt.getPropertyName())) {
-                updateClassLoader();
+            if (null != evt.getPropertyName()) switch (evt.getPropertyName()) {
+                case ClassPath.PROP_ROOTS -> updateClassLoader();
+                case ClassPath.PROP_ENTRIES -> updateClassLoader();
+                case ClassPath.PROP_INCLUDES -> updateClassLoader();
+                default -> {
+                }
             }
         }
     };
@@ -659,7 +658,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
      * @param folderName the folderName to set
      */
     public void setFolderName(String folderName) {
-        if (folderNames.size() > 0) {
+        if (!folderNames.isEmpty()) {
             this.folderNames.remove(0);
         }
         this.folderNames.add(0, folderName);

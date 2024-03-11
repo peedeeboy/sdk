@@ -50,7 +50,6 @@ import com.jme3.light.LightProbe;
 import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
-import com.jme3.post.SceneProcessor;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
@@ -62,14 +61,13 @@ import com.jme3.system.JmeCanvasContext;
 import com.jme3.system.awt.AwtPanel;
 import com.jme3.system.awt.AwtPanelsContext;
 import com.jme3.system.awt.PaintMode;
-import com.jme3.util.SafeArrayList;
 import com.jme3.util.SkyFactory;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -700,7 +698,8 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
 
     private static final ActionListener lst = (ActionEvent e) -> {
         try {
-            HtmlBrowser.URLDisplayer.getDefault().showURL(new URL("https://wiki.jmonkeyengine.org/docs/3.4/sdk/troubleshooting.html#troubleshooting-jmonkeyengine3-sdk"));
+            HtmlBrowser.URLDisplayer.getDefault().showURL(
+                    URI.create("https://wiki.jmonkeyengine.org/docs/3.4/sdk/troubleshooting.html#troubleshooting-jmonkeyengine3-sdk").toURL());
         } catch (MalformedURLException ex) {
             Exceptions.printStackTrace(ex);
         }

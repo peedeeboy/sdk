@@ -87,7 +87,7 @@ public class IntPanel extends MaterialPropertyWidget {
                 MaterialProperty prop=property;
                 property=null;
                 try {
-                    jSpinner1.setValue(Integer.parseInt(prop.getValue()));
+                    jSpinner1.setValue(Integer.valueOf(prop.getValue()));
                 } catch (Exception e) {
                     jSpinner1.setValue(0);
                 }

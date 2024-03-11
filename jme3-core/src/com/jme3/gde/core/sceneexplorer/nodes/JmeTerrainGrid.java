@@ -115,7 +115,7 @@ public class JmeTerrainGrid extends JmeTerrainQuad implements TerrainGridListene
     }
 
     public void tileAttached(Vector3f vctrf, TerrainQuad tq) {
-        logger.log(Level.FINE, "Calling TerrainGrid update for node: {0}" + this);
+        logger.log(Level.FINE, "Calling TerrainGrid update for node: '{'0'}'{0}", this);
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 refresh(false);
@@ -124,7 +124,7 @@ public class JmeTerrainGrid extends JmeTerrainQuad implements TerrainGridListene
     }
 
     public void tileDetached(Vector3f vctrf, TerrainQuad tq) {
-        logger.log(Level.FINE, "Calling TerrainGrid update for node: {0}" + this);
+        logger.log(Level.FINE, "Calling TerrainGrid update for node: '{'0'}'{0}", this);
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 refresh(false);

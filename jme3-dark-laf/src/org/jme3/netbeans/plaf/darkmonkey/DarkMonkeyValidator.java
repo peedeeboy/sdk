@@ -5,11 +5,7 @@
  */
 package org.jme3.netbeans.plaf.darkmonkey;
 
-import java.awt.EventQueue;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 import org.openide.modules.OnStart;
-import org.openide.windows.OnShowing;
 
 /**
  * This is something that would be used once the nbm format is no longer

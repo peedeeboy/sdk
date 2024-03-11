@@ -38,7 +38,6 @@ import com.jme3.animation.Track;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.sceneexplorer.nodes.animation.JmeAnimControl;
 import com.jme3.math.Quaternion;
-import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import java.awt.Cursor;
 import java.io.BufferedReader;
@@ -62,7 +61,6 @@ public class ExtractSubAnimationDialog extends javax.swing.JDialog {
 
     Animation _animation;
     JmeAnimControl _animControl;
-    private int _splitAnimationCount;
 
     /**
      * Creates new form ChannelDialog
@@ -77,7 +75,6 @@ public class ExtractSubAnimationDialog extends javax.swing.JDialog {
         _radManual.setSelected(true);
         _txtCsvFilename.setEnabled(false);
         _btnBrowse.setEnabled(false);
-        _splitAnimationCount = 0;
     }
 
     public void setAnimation(Animation animation) {

@@ -94,8 +94,8 @@ public class JmeAnimClipChildren extends Children.Keys<Object> {
 
     @Override
     protected Node[] createNodes(Object key) {
-        if (key instanceof AnimClip) {
-            return new Node[]{ new JmeAnimClip(jmeAnimComposer, (AnimClip)key, dataObject).setReadOnly(readOnly)};
+        if (key instanceof AnimClip animClip) {
+            return new Node[]{ new JmeAnimClip(jmeAnimComposer, animClip, dataObject).setReadOnly(readOnly)};
         } else {
             return new Node[]{ Node.EMPTY };
         }

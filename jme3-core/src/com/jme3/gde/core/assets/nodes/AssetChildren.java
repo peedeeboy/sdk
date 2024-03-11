@@ -68,7 +68,7 @@ public class AssetChildren extends FilterNode.Children {
             }
         }
 
-        return result.toArray(new Node[0]);
+        return result.toArray(Node[]::new);
     }
 
     private boolean accept(Node node) {
