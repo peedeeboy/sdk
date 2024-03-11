@@ -50,6 +50,7 @@ import com.jme3.light.LightProbe;
 import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.post.SceneProcessor;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
@@ -61,6 +62,7 @@ import com.jme3.system.JmeCanvasContext;
 import com.jme3.system.awt.AwtPanel;
 import com.jme3.system.awt.AwtPanelsContext;
 import com.jme3.system.awt.PaintMode;
+import com.jme3.util.SafeArrayList;
 import com.jme3.util.SkyFactory;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -68,7 +70,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,6 +94,7 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
 
     private static final Logger logger = Logger.getLogger(SceneApplication.class.getName());
     private static boolean failMessageShown = false;
+    private final ColorRGBA backgroundColor = new ColorRGBA().setAsSrgb(0.25f, 0.25f, 0.25f, 1.0f);
     private PointLight camLight;
     private static SceneApplication application;
 
@@ -114,14 +116,14 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
     protected Node toolsNode = new Node("Tools Node");
     private SceneCameraController camController;
     private AbstractCameraController activeCamController = null;
-    //preview variables
+
     protected float secondCounter = 0.0f;
     protected BitmapText fpsText;
     protected StatsView statsView;
     protected FlyByCamera flyCam;
     protected boolean showSettings = true;
     private SceneRequest currentSceneRequest;
-    private ConcurrentLinkedQueue<SceneListener> listeners = new ConcurrentLinkedQueue<SceneListener>();
+    private ConcurrentLinkedQueue<SceneListener> listeners = new ConcurrentLinkedQueue<>();
     private ScenePreviewProcessor previewProcessor;
     private ApplicationLogHandler logHandler = new ApplicationLogHandler();
     private WireProcessor wireProcessor;
@@ -163,9 +165,7 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
             if (!useCanvas) {
                 start();
             }
-        } catch (Exception e) {
-            showStartupErrorMessage(e);
-        } catch (Error e) {
+        } catch (Exception | Error e) {
             showStartupErrorMessage(e);
         } finally {
         }
@@ -185,12 +185,9 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
     }
 
     private void attachPanel() {
-        enqueue(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                panel.attachTo(true, viewPort, overlayView, guiViewPort);
-                return null;
-            }
+        enqueue(() -> {
+            panel.attachTo(true, viewPort, overlayView, guiViewPort);
+            return null;
         });
     }
 
@@ -213,7 +210,6 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
         // move it up so it appears above fps text
         statsView.setLocalTranslation(0, fpsText.getLineHeight(), 0);
         statsGuiNode.attachChild(statsView);
-//        guiNode.attachChild(statsGuiNode);
     }
 
     @Override
@@ -229,9 +225,8 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
                     overlayView.setClearFlags(false, true, false);
                     guiViewPort.setClearFlags(false, false, false);
                 }
-                ColorRGBA color = new ColorRGBA();
-                color.setAsSrgb(0.25f, 0.25f, 0.25f, 1.0f);
-                viewPort.setBackgroundColor(color);
+                
+                viewPort.setBackgroundColor(backgroundColor);
                 //create camera controller
                 camController = new SceneCameraController(cam, inputManager);
                 //create preview view
@@ -329,9 +324,7 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
                 getStateManager().postRender();
             } catch (NullPointerException e) {
                 handleError("NullPointerException: " + e.getMessage(), e);
-            } catch (Exception e) {
-                handleError(e.getMessage(), e);
-            } catch (Error e) {
+            } catch (Exception | Error e) {
                 handleError(e.getMessage(), e);
             }
         }
@@ -365,12 +358,9 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
     }
 
     public void notifyPreview(final PreviewRequest request) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                for (SceneListener sceneViewerListener : listeners) {
-                    sceneViewerListener.previewCreated(request);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            for (SceneListener sceneViewerListener : listeners) {
+                sceneViewerListener.previewCreated(request);
             }
         });
     }
@@ -390,57 +380,51 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
             return;
         }
         closeScene(currentSceneRequest, request);
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                if (request == null) {
-                    return;
-                }
-                currentSceneRequest = request;
-                if (request.getDataNode() != null) {
-                    setCurrentFileNode(request.getDataNode());
-                } else {
-                    setCurrentFileNode(null);
-                }
-                //TODO: handle this differently (no opened file)
-                if (request.getRootNode() == null && request.getJmeNode() == null) {
-                    DataObject dobj = request.getDataObject();
-                    if (dobj != null) {
-                        request.setJmeNode(NodeUtility.createNode(rootNode, dobj));
-                    } else {
-                        request.setJmeNode(NodeUtility.createNode(rootNode, false));
-                    }
-                }
-                setHelpContext(request.getHelpCtx());
-                setWindowTitle(request.getWindowTitle());
-                if (request.getRequester() instanceof SceneApplication) {
-                    camController.enable();
-                } else {
-                    camController.disable();
-                }
-                final AssetManager manager = request.getManager();
-                request.setFakeApp(fakeApp);
-                fakeApp.newAssetManager(manager);
-                enqueue(new Callable() {
-                    @Override
-                    public Object call() throws Exception {
-                        if (manager != null) {
-                            assetManager = manager;
-                        }
-                        Spatial model = request.getRootNode();
-                        //TODO: use FakeApp internal root node, don't handle model vs clean scene here
-                        if (model != null && model != rootNode) {
-                            rootNode.attachChild(model);
-                        }
-                        if (request.getToolNode() != null) {
-                            toolsNode.attachChild(request.getToolNode());
-                        }
-                        request.setDisplayed(true);
-                        return null;
-                    }
-                });
-                notifyOpen(request);
+        java.awt.EventQueue.invokeLater(() -> {
+            if (request == null) {
+                return;
             }
+            currentSceneRequest = request;
+            if (request.getDataNode() != null) {
+                setCurrentFileNode(request.getDataNode());
+            } else {
+                setCurrentFileNode(null);
+            }
+            //TODO: handle this differently (no opened file)
+            if (request.getRootNode() == null && request.getJmeNode() == null) {
+                DataObject dobj = request.getDataObject();
+                if (dobj != null) {
+                    request.setJmeNode(NodeUtility.createNode(rootNode, dobj));
+                } else {
+                    request.setJmeNode(NodeUtility.createNode(rootNode, false));
+                }
+            }
+            setHelpContext(request.getHelpCtx());
+            setWindowTitle(request.getWindowTitle());
+            if (request.getRequester() instanceof SceneApplication) {
+                camController.enable();
+            } else {
+                camController.disable();
+            }
+            final AssetManager manager = request.getManager();
+            request.setFakeApp(fakeApp);
+            fakeApp.newAssetManager(manager);
+            enqueue(() -> {
+                if (manager != null) {
+                    assetManager = manager;
+                }
+                Spatial model = request.getRootNode();
+                //TODO: use FakeApp internal root node, don't handle model vs clean scene here
+                if (model != null && model != rootNode) {
+                    rootNode.attachChild(model);
+                }
+                if (request.getToolNode() != null) {
+                    toolsNode.attachChild(request.getToolNode());
+                }
+                request.setDisplayed(true);
+                return null;
+            });
+            notifyOpen(request);
         });
     }
 
@@ -454,52 +438,47 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
     }
 
     private void closeScene(final SceneRequest oldRequest, final SceneRequest newRequest) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                if (oldRequest == null) {
-                    return;
-                }
-                notifyClose(oldRequest);
-                if (newRequest == null || newRequest.getDataObject() != oldRequest.getDataObject()) {
-                    checkSave(oldRequest);
-                    SceneUndoRedoManager manager = Lookup.getDefault().lookup(SceneUndoRedoManager.class);
-                    if (manager != null) {
-                        manager.discardAllEdits();
-                    }
-                }
-                if (newRequest == null) {
-                    setCurrentFileNode(null);
-                    setWindowTitle("OpenGL Window");
-                    setHelpContext(null);
-                }
-                if (oldRequest.getRequester() instanceof SceneApplication) {
-                    camController.disable();
-                }
-                enableCamLight(false);
-                //TODO: state list is not thread safe..
-                fakeApp.removeCurrentStates();
-                enqueue(new Callable() {
-                    @Override
-                    public Object call() throws Exception {
-                        if (physicsState != null) {
-                            physicsState.getPhysicsSpace().removeAll(rootNode);
-                            getStateManager().detach(physicsState);
-                            physicsState = null;
-                        }
-                        //TODO: possibly dangerous (new var is created in EDT
-                        if (fakeApp != null) {
-                            fakeApp.cleanupFakeApp();
-                        }
-                        toolsNode.detachAllChildren();
-                        rootNode.detachAllChildren();
-                        // resetCam();
-                        lastError = "";
-                        oldRequest.setDisplayed(false);
-                        return null;
-                    }
-                });
+        java.awt.EventQueue.invokeLater(() -> {
+            if (oldRequest == null) {
+                return;
             }
+            notifyClose(oldRequest);
+            if (newRequest == null || newRequest.getDataObject() != oldRequest.getDataObject()) {
+                checkSave(oldRequest);
+                SceneUndoRedoManager manager = Lookup.getDefault().lookup(SceneUndoRedoManager.class);
+                if (manager != null) {
+                    manager.discardAllEdits();
+                }
+            }
+            if (newRequest == null) {
+                setCurrentFileNode(null);
+                setWindowTitle("OpenGL Window");
+                setHelpContext(null);
+            }
+            if (oldRequest.getRequester() instanceof SceneApplication) {
+                camController.disable();
+            }
+            enableCamLight(false);
+            viewPort.setBackgroundColor(backgroundColor);
+            //TODO: state list is not thread safe..
+            fakeApp.removeCurrentStates();
+            enqueue(() -> {
+                if (physicsState != null) {
+                    physicsState.getPhysicsSpace().removeAll(rootNode);
+                    getStateManager().detach(physicsState);
+                    physicsState = null;
+                }
+                //TODO: possibly dangerous (new var is created in EDT
+                if (fakeApp != null) {
+                    fakeApp.cleanupFakeApp();
+                }
+                toolsNode.detachAllChildren();
+                rootNode.detachAllChildren();
+                // resetCam();
+                lastError = "";
+                oldRequest.setDisplayed(false);
+                return null;
+            });
         });
     }
 
@@ -554,45 +533,36 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
     }
 
     public void enableCamLight(final boolean enabled) {
-        enqueue(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                if (enabled) {
-                    rootNode.removeLight(camLight);
-                    rootNode.addLight(camLight);
-                } else {
-                    rootNode.removeLight(camLight);
-                }
-                return null;
+        enqueue(() -> {
+            if (enabled) {
+                rootNode.removeLight(camLight);
+                rootNode.addLight(camLight);
+            } else {
+                rootNode.removeLight(camLight);
             }
+            return null;
         });
     }
 
     public void enableStats(final boolean enabled) {
-        enqueue(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                if (enabled) {
-                    guiNode.attachChild(statsGuiNode);
-                } else {
-                    guiNode.detachChild(statsGuiNode);
-                }
-                return null;
+        enqueue(() -> {
+            if (enabled) {
+                guiNode.attachChild(statsGuiNode);
+            } else {
+                guiNode.detachChild(statsGuiNode);
             }
+            return null;
         });
     }
 
     public void enableWireFrame(final boolean selected) {
-        enqueue(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                if (selected) {
-                    viewPort.addProcessor(wireProcessor);
-                } else {
-                    viewPort.removeProcessor(wireProcessor);
-                }
-                return null;
+        enqueue(() -> {
+            if (selected) {
+                viewPort.addProcessor(wireProcessor);
+            } else {
+                viewPort.removeProcessor(wireProcessor);
             }
+            return null;
         });
     }
     
@@ -680,24 +650,21 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
     }
 
     public void setPhysicsEnabled(final boolean enabled) {
-        enqueue(new Callable() {
-            @Override
-            public Object call() throws Exception {
-                if (enabled) {
-                    if (physicsState == null) {
-                        physicsState = new BulletAppState();
-                        getStateManager().attach(physicsState);
-                        physicsState.getPhysicsSpace().addAll(rootNode);
-                    }
-                } else {
-                    if (physicsState != null) {
-                        physicsState.getPhysicsSpace().removeAll(rootNode);
-                        getStateManager().detach(physicsState);
-                        physicsState = null;
-                    }
+        enqueue(() -> {
+            if (enabled) {
+                if (physicsState == null) {
+                    physicsState = new BulletAppState();
+                    getStateManager().attach(physicsState);
+                    physicsState.getPhysicsSpace().addAll(rootNode);
                 }
-                return null;
+            } else {
+                if (physicsState != null) {
+                    physicsState.getPhysicsSpace().removeAll(rootNode);
+                    getStateManager().detach(physicsState);
+                    physicsState = null;
+                }
             }
+            return null;
         });
     }
 
@@ -731,14 +698,11 @@ public class SceneApplication extends LegacyApplication implements LookupProvide
         logger.log(Level.INFO, exception.getMessage(), exception);
     }
 
-    private static final ActionListener lst = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            try {
-                HtmlBrowser.URLDisplayer.getDefault().showURL(new URL("https://wiki.jmonkeyengine.org/sdk/troubleshooting.html"));
-            } catch (MalformedURLException ex) {
-                Exceptions.printStackTrace(ex);
-            }
+    private static final ActionListener lst = (ActionEvent e) -> {
+        try {
+            HtmlBrowser.URLDisplayer.getDefault().showURL(new URL("https://wiki.jmonkeyengine.org/docs/3.4/sdk/troubleshooting.html#troubleshooting-jmonkeyengine3-sdk"));
+        } catch (MalformedURLException ex) {
+            Exceptions.printStackTrace(ex);
         }
     };
 
