@@ -20,7 +20,7 @@ import org.openide.loaders.MultiFileLoader;
         mimeType = "text/x-wavefrontobj",
         extension = {"obj", "OBJ"}
 )
-@DataObject.Registration(displayName = "Wavefront OBJ", mimeType = "text/x-wavefrontobj", iconBase ="com/jme3/gde/wavefront/People_039.gif")
+@DataObject.Registration(displayName = "Wavefront OBJ", mimeType = "text/x-wavefrontobj", iconBase ="com/jme3/gde/wavefront/obj-file-icon.svg")
 @ActionReferences(value = {
     @ActionReference(id =
     @ActionID(category = "jMonkeyPlatform", id = "com.jme3.gde.core.assets.actions.ConvertModel"), path = "Loaders/text/x-wavefrontobj/Actions", position = 10),
