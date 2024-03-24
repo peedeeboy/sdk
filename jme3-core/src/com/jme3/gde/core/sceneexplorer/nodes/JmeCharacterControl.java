@@ -33,6 +33,7 @@ package com.jme3.gde.core.sceneexplorer.nodes;
 
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.objects.PhysicsCharacter;
 import com.jme3.gde.core.icons.IconList;
 import com.jme3.math.Vector3f;
 import java.awt.Image;
@@ -85,15 +86,15 @@ public class JmeCharacterControl extends JmeControl {
 
         set.put(makeProperty(obj, Vector3f.class, "getPhysicsLocation", "setPhysicsLocation", "Physics Location"));
 
-        set.put(makeProperty(obj, CollisionShape.class, "getCollisionShape", "setCollisionShape", "Collision Shape"));
-        set.put(makeProperty(obj, int.class, "getCollisionGroup", "setCollisionGroup", "Collision Group"));
-        set.put(makeProperty(obj, int.class, "getCollideWithGroups", "setCollideWithGroups", "Collide With Groups"));
+        PhysicsCharacter character = obj.getCharacter();
         
-        set.put(makeProperty(obj, int.class, "getUpAxis", "setUpAxis", "Up Axis"));
-        set.put(makeProperty(obj, float.class, "getFallSpeed", "setFallSpeed", "Fall Speed"));
-        set.put(makeProperty(obj, float.class, "getJumpSpeed", "setJumpSpeed", "Jump Speed"));
-        set.put(makeProperty(obj, float.class, "getGravity", "setGravity", "Gravity"));
-        set.put(makeProperty(obj, float.class, "getMaxSlope", "setMaxSlope", "Max Slope"));
+        set.put(makeEmbedProperty(character, PhysicsCharacter.class, CollisionShape.class, "getCollisionShape", "setCollisionShape", "Collision Shape"));
+        set.put(makeEmbedProperty(character, PhysicsCharacter.class, int.class, "getCollisionGroup", "setCollisionGroup", "Collision Group"));
+        set.put(makeEmbedProperty(character, PhysicsCharacter.class, int.class, "getCollideWithGroups", "setCollideWithGroups", "Collide With Groups"));
+        
+        set.put(makeEmbedProperty(character, PhysicsCharacter.class, float.class, "getFallSpeed", "setFallSpeed", "Fall Speed"));
+        set.put(makeEmbedProperty(character, PhysicsCharacter.class, float.class, "getJumpSpeed", "setJumpSpeed", "Jump Speed"));
+        set.put(makeEmbedProperty(character, PhysicsCharacter.class, float.class, "getMaxSlope", "setMaxSlope", "Max Slope"));
 
         sheet.put(set);
         return sheet;
