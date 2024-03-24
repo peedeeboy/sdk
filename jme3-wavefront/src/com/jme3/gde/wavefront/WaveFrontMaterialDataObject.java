@@ -17,7 +17,7 @@ import org.openide.loaders.MultiFileLoader;
         mimeType = "text/x-wavefrontmtl",
         extension = {"mtl", "MTL"}
 )
-@DataObject.Registration(displayName = "Wavefront OBJ Material", mimeType = "text/x-wavefrontmtl", iconBase="com/jme3/gde/wavefront/Computer_File_083.gif")
+@DataObject.Registration(displayName = "Wavefront OBJ Material", mimeType = "text/x-wavefrontmtl", iconBase="com/jme3/gde/wavefront/obj-file-outline-icon.svg")
 public class WaveFrontMaterialDataObject extends AssetDataObject {
 
     public WaveFrontMaterialDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException {
