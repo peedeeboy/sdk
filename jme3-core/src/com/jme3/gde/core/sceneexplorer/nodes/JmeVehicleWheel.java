@@ -35,7 +35,6 @@ import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.gde.core.icons.IconList;
 import com.jme3.gde.core.scene.SceneApplication;
-import com.jme3.light.Light;
 import com.jme3.math.Vector3f;
 import java.awt.Image;
 import java.io.IOException;
@@ -87,7 +86,7 @@ public class JmeVehicleWheel extends AbstractSceneExplorerNode{
         Sheet sheet = Sheet.createDefault();
         Sheet.Set set = Sheet.createPropertiesSet();
         set.setDisplayName("VehicleWheel");
-        set.setName(Light.class.getName());
+        set.setName(VehicleWheel.class.getName());
         VehicleWheel obj = wheel;
         if (obj == null) {
             return sheet;
