@@ -57,7 +57,7 @@ public class SelectionPropertyEditor implements PropertyEditor {
 
     public void setValue(Object value) {
         if (value instanceof String) {
-            value = (String) value;
+            this.value = (String) value;
         }
     }
 
