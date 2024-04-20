@@ -11,17 +11,17 @@
 set -e # Quit on Error
 
 jdk_major_version="21"
-jdk_version="0.2"
-jdk_build_version="13"
+jvm_impl="hotspot"
+jdk_vendor="eclipse"
 
 function download_jdk {
-    echo ">>> Downloading the JDK for $1"
+    echo ">>> Downloading the JDK for $1_$2$3"
 
-    if [ -f downloads/jdk-$1$2 ];
+    if [ -f downloads/jdk-$1_$2$3 ];
     then
         echo "<<< Already existing, SKIPPING."
     else
-        curl -# -o downloads/jdk-$1$2 -L https://github.com/adoptium/temurin$jdk_major_version-binaries/releases/download/jdk-$jdk_major_version.$jdk_version+$jdk_build_version/OpenJDK${jdk_major_version}U-jdk_$1_hotspot_$jdk_major_version.${jdk_version}_$jdk_build_version$2
+        curl -# -o downloads/jdk-$1_$2$3 -L https://api.adoptium.net/v3/binary/latest/$jdk_major_version/ga/$2/$1/jdk/$jvm_impl/normal/$jdk_vendor?project=jdk
         echo "<<< OK!"
     fi
 }
@@ -37,26 +37,17 @@ function unpack_mac_jdk {
         return 0
     fi
 
-    download_jdk x64_mac .tar.gz
+    download_jdk x64 mac .tar.gz
     tar xf downloads/jdk-x64_mac.tar.gz
-    if [ "$jdk_major_version" == "8" ];
-    then
-        cd jdk$jdk_version-$jdk_build_version/Contents/
-    else
-        cd jdk-$jdk_major_version.$jdk_version+$jdk_build_version/Contents/
-    fi
+    cd jdk-$jdk_major_version*/Contents/
+
     # FROM HERE: build-osx-zip.sh by normen (with changes)
     mv Home jdk # rename folder
     rm -rf jdk/man jdk/legal # ANT got stuck at the symlinks (https://bz.apache.org/bugzilla/show_bug.cgi?id=64053)
     zip -9 -r -y -q ../../compiled/jdk-macosx.zip jdk
     cd ../../
     
-    if [ "$jdk_major_version" == "8" ];
-    then
-        rm -r jdk$jdk_version-$jdk_build_version
-    else
-        rm -rf jdk-$jdk_major_version.$jdk_version+$jdk_build_version
-    fi
+    rm -rf jdk-$jdk_major_version*
 
     if [ "$TRAVIS" == "true" ]; then
         rm -rf downloads/jdk-x64_mac.tar.gz
@@ -90,22 +81,14 @@ function unpack_windows {
         return 0
     fi
 
-    download_jdk $1_windows .zip
+    download_jdk $1 windows .zip
 
     mkdir -p windows-$1
     unzip -qq downloads/jdk-$1_windows.zip -d windows-$1
     cd windows-$1/
     
-    if [ "$jdk_major_version" == "8" ];
-    then
-        mv jdk$jdk_version-$jdk_build_version/* .
-        rm -r jdk$jdk_version-$jdk_build_version
-        # TODO: Why?
-        rm src.zip
-    else
-        mv jdk-$jdk_major_version.$jdk_version+$jdk_build_version/* .
-        rm -rf jdk-$jdk_major_version.$jdk_version+$jdk_build_version
-    fi    
+    mv jdk-$jdk_major_version*/* .
+    rm -rf jdk-$jdk_major_version*   
 
     # This seems to be replaced by lib/tools.jar in openJDK
     #unzip -qq tools.zip -d .
@@ -139,21 +122,13 @@ function unpack_linux {
         return 0
     fi
 
-    download_jdk $1_linux .tar.gz
+    download_jdk $1 linux .tar.gz
 
     mkdir -p linux-$1
     cd linux-$1
     tar -xf "../downloads/jdk-$1_linux.tar.gz"
-    if [ "$jdk_major_version" == "8" ];
-    then
-        mv jdk$jdk_version-$jdk_build_version/* .
-        rm -r jdk$jdk_version-$jdk_build_version
-        # TODO: Why?
-        rm src.zip
-    else
-        mv jdk-$jdk_major_version.$jdk_version+$jdk_build_version/* .
-        rm -rf jdk-$jdk_major_version.$jdk_version+$jdk_build_version
-    fi
+    mv jdk-$jdk_major_version*/* .
+    rm -rf jdk-$jdk_major_version*
     
     cd ../
 
