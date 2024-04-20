@@ -81,7 +81,7 @@ function unpack_windows {
         return 0
     fi
 
-    download_jdk $1 windows .zip
+    download_jdk "$1" windows .zip
 
     mkdir -p windows-$1
     unzip -qq downloads/jdk-$1_windows.zip -d windows-$1
@@ -122,7 +122,7 @@ function unpack_linux {
         return 0
     fi
 
-    download_jdk $1 linux .tar.gz
+    download_jdk "$1" linux .tar.gz
 
     mkdir -p linux-$1
     cd linux-$1
