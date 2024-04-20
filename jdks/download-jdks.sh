@@ -202,10 +202,10 @@ function build_other_jdk {
     echo "< OK!"
 }
 
-mkdir -p local/$jdk_major_version-$jdk_version-$jdk_build_version/downloads
-mkdir -p local/$jdk_major_version-$jdk_version-$jdk_build_version/compiled
+mkdir -p local/$jdk_major_version/downloads
+mkdir -p local/$jdk_major_version/compiled
 
-cd local/$jdk_major_version-$jdk_version-$jdk_build_version
+cd local/$jdk_major_version
 
 if [ "x$TRAVIS" != "x" ]; then
     if [ "x$BUILD_X64" != "x" ]; then
