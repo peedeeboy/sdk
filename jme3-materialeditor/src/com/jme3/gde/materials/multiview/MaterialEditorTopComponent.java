@@ -600,19 +600,10 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
         jComboBox1.addItem("");
         List<String> matDefList = Arrays.asList(matDefs);
         Collections.sort(matDefList);
-        String[] sortedMatDefs = matDefList.toArray(String[]::new);
-        for (String string : sortedMatDefs) {
-            jComboBox1.addItem(string);
+        for (String matDef : matDefList) {
+            jComboBox1.addItem(matDef);
         }
 
-//        jComboBox1.addItem("Common/MatDefs/Light/Lighting.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Misc/Unshaded.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Misc/Particle.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Misc/Sky.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Gui/Gui.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Terrain/TerrainLighting.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Terrain/Terrain.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Misc/ShowNormals.j3md");
         jComboBox1.setSelectedItem(selected);
         materialFile = prop;
     }
