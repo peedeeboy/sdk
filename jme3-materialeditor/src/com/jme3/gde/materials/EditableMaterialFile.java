@@ -188,24 +188,26 @@ public class EditableMaterialFile {
         matDef = manager.getAssetFolder().getFileObject(getMatDefName());
 
         //try to read from classpath if not in assets folder and store in a virtual filesystem folder
-        if (matDef == null || !matDef.isValid()) {
-            try {
-                fs = FileUtil.createMemoryFileSystem();
-                matDef = fs.getRoot().createData(name, "j3md");
-                try ( OutputStream out = matDef.getOutputStream()) {
-                    InputStream in = manager.getResourceAsStream(getMatDefName());
-                    if (in != null) {
-                        int input = in.read();
-                        while (input != -1) {
-                            out.write(input);
-                            input = in.read();
-                        }
-                        in.close();
+        if (matDef != null && matDef.isValid()) {
+            return;
+        }
+        
+        try {
+            fs = FileUtil.createMemoryFileSystem();
+            matDef = fs.getRoot().createData(name, "j3md");
+            try ( OutputStream out = matDef.getOutputStream()) {
+                InputStream in = manager.getResourceAsStream(getMatDefName());
+                if (in != null) {
+                    int input = in.read();
+                    while (input != -1) {
+                        out.write(input);
+                        input = in.read();
                     }
+                    in.close();
                 }
-            } catch (IOException ex) {
-                Exceptions.printStackTrace(ex);
             }
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
         }
     }
 
