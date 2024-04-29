@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009-2023 jMonkeyEngine
+ *  Copyright (c) 2009-2024 jMonkeyEngine
  *  All rights reserved.
  * 
  *  Redistribution and use in source and binary forms, with or without
@@ -50,6 +50,7 @@ public class MaterialPreviewWidget extends javax.swing.JPanel {
 
     private boolean init=false;
     private MaterialPreviewRenderer matRenderer;
+    
     /** Creates new form MaterialPreviewWidget */
     public MaterialPreviewWidget() {
         initComponents();        
@@ -204,6 +205,7 @@ public class MaterialPreviewWidget extends javax.swing.JPanel {
         togglePbrEnvButton.setName("togglePbrEnvButton"); // NOI18N
         togglePbrEnvButton.setPreferredSize(new java.awt.Dimension(40, 40));
         togglePbrEnvButton.setPressedIcon(Icons.lightOn);
+        togglePbrEnvButton.setSelectedIcon(Icons.lightOn);
         togglePbrEnvButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         togglePbrEnvButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
