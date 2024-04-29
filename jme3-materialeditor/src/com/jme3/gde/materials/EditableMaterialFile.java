@@ -59,7 +59,13 @@ public class EditableMaterialFile {
     private final List<String> matDefEntries = new ArrayList<>();
     private final ProjectAssetManager manager;
     private FileSystem fs;
-    public static final String[] variableTypes = new String[]{"Int", "Boolean", "Float", "Vector2", "Vector3", "Vector4", "Color", "Texture2D", "Texture3D", "TextureArray", "TextureBuffer", "TextureCubeMap"};
+    
+    // Note that these are tested with startsWith, so the ordering matters (i.e. FloatArray & Float)
+    public static final String[] variableTypes = new String[]{
+        "IntArray", "Int", "Boolean", "FloatArray", "Float", "Vector2Array",
+        "Vector3Array", "Vector4Array", "Vector2", "Vector3", "Vector4",
+        "Color", "Texture2D", "Texture3D", "TextureArray", "TextureBuffer",
+        "TextureCubeMap"};
 
     public EditableMaterialFile(FileObject material, ProjectAssetManager manager) {
         this.material = material;
@@ -188,24 +194,26 @@ public class EditableMaterialFile {
         matDef = manager.getAssetFolder().getFileObject(getMatDefName());
 
         //try to read from classpath if not in assets folder and store in a virtual filesystem folder
-        if (matDef == null || !matDef.isValid()) {
-            try {
-                fs = FileUtil.createMemoryFileSystem();
-                matDef = fs.getRoot().createData(name, "j3md");
-                try ( OutputStream out = matDef.getOutputStream()) {
-                    InputStream in = manager.getResourceAsStream(getMatDefName());
-                    if (in != null) {
-                        int input = in.read();
-                        while (input != -1) {
-                            out.write(input);
-                            input = in.read();
-                        }
-                        in.close();
+        if (matDef != null && matDef.isValid()) {
+            return;
+        }
+        
+        try {
+            fs = FileUtil.createMemoryFileSystem();
+            matDef = fs.getRoot().createData(name, "j3md");
+            try ( OutputStream out = matDef.getOutputStream()) {
+                InputStream in = manager.getResourceAsStream(getMatDefName());
+                if (in != null) {
+                    int input = in.read();
+                    while (input != -1) {
+                        out.write(input);
+                        input = in.read();
                     }
+                    in.close();
                 }
-            } catch (IOException ex) {
-                Exceptions.printStackTrace(ex);
             }
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
         }
     }
 
@@ -255,6 +263,8 @@ public class EditableMaterialFile {
                                     materialParameters.put(prop.getName(), prop);
                                 }
                                 prop.setType(string);
+                                
+                                break;
                             }
                         }
                     }
