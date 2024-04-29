@@ -23,15 +23,12 @@ import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.event.DocumentEvent;
@@ -41,7 +38,6 @@ import org.openide.util.Exceptions;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
-//import org.openide.util.ImageUtilities;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.cookies.SaveCookie;
 import org.openide.filesystems.FileUtil;
@@ -52,7 +48,7 @@ import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.CloneableTopComponent;
 
 /**
- * Top component which displays something.
+ * Top component for Material Editor
  */
 @ConvertAsProperties(dtd = "-//com.jme3.gde.materials.multiview//MaterialEditor//EN",
 autostore = false)
@@ -60,12 +56,8 @@ autostore = false)
 public final class MaterialEditorTopComponent extends CloneableTopComponent implements MaterialWidgetListener, MaterialChangeProvider {
 
     private static MaterialEditorTopComponent instance;
-    /** path to the icon used by the component and its open action */
-//    static final String ICON_PATH = "SET/PATH/TO/ICON/HERE";
     private static final String PREFERRED_ID = "MaterialEditorTopComponent";
-    //private Lookup lookup;
     private final InstanceContent lookupContents = new InstanceContent();
-//    private SaveNode saveNode;
     private DataObject dataObject;
     private EditableMaterialFile materialFile;
     private String materialFileName;
@@ -446,8 +438,6 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
     @Override
     public HelpCtx getHelpCtx() {
         HelpCtx ctx = new HelpCtx("sdk.material_editing");
-        //this call is for single components:
-        //HelpCtx.setHelpIDString(this, "com.jme3.gde.core.sceneviewer");
         return ctx;
     }
 
@@ -472,11 +462,8 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
     }
 
     void writeProperties(java.util.Properties p) {
-        // better to version settings since initial version as advocated at
-        // http://wiki.apidesign.org/wiki/PropertyFiles
         p.setProperty("version", "1.0");
         p.setProperty("MaterialFileName", materialFileName);
-        // TODO store your settings
     }
 
     Object readProperties(java.util.Properties p) {
@@ -531,8 +518,6 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
     }
 
     private class DocumentChangeListener implements DocumentListener {
-
-        String newline = "\n";
 
         @Override
         public void insertUpdate(DocumentEvent e) {
@@ -598,15 +583,6 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
         for (String string : sortedMatDefs) {
             jComboBox1.addItem(string);
         }
-
-//        jComboBox1.addItem("Common/MatDefs/Light/Lighting.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Misc/Unshaded.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Misc/Particle.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Misc/Sky.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Gui/Gui.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Terrain/TerrainLighting.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Terrain/Terrain.j3md");
-//        jComboBox1.addItem("Common/MatDefs/Misc/ShowNormals.j3md");
         jComboBox1.setSelectedItem(selected);
         materialFile = prop;
     }
@@ -677,8 +653,8 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
 
     private void updateStates() {
         for (Component component : statesPanel.getComponents()) {
-            if (component instanceof MaterialPropertyWidget) {
-                ((MaterialPropertyWidget) component).registerChangeListener(null);
+            if (component instanceof MaterialPropertyWidget materialPropertyWidget) {
+                materialPropertyWidget.registerChangeListener(null);
             }
         }
         statesPanel.removeAll();
