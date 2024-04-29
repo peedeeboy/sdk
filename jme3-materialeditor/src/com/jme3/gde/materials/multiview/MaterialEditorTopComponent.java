@@ -25,11 +25,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.event.DocumentEvent;
@@ -585,7 +587,12 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
         materialFile = null;
         jComboBox1.removeAllItems();
         jComboBox1.addItem("");
-        List<String> matDefList = Arrays.asList(matDefs);
+        List<String> matDefList = new ArrayList<>();
+        for(String s: matDefs) {
+            if (!matDefList.contains(s)){
+                matDefList.add(s);
+            }
+        }
         Collections.sort(matDefList);
         String[] sortedMatDefs = matDefList.toArray(String[]::new);
         for (String string : sortedMatDefs) {
