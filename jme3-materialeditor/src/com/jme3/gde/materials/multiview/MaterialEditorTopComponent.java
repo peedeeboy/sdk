@@ -121,6 +121,32 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
         materialPreviewWidget1.showMaterial(manager, materialFileName);
 
         relativeMaterialFileName = manager.getRelativeAssetPath(materialFileName);
+        
+        jTextField1.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateName();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateName();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateName();
+            }
+
+            private void updateName() {
+                if (materialFile != null) {
+                    materialFile.setName(jTextField1.getText());
+                    String string = materialFile.getUpdatedContent();
+                    jTextArea1.setText(string);
+                }
+            }
+
+        });
     }
 
     /** This method is called from within the constructor to
@@ -260,11 +286,6 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
         jToolBar3.add(jPanel1);
 
         jTextField1.setText(org.openide.util.NbBundle.getMessage(MaterialEditorTopComponent.class, "MaterialEditorTopComponent.jTextField1.text")); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
         jToolBar3.add(jTextField1);
 
         jCheckBox1.setSelected(true);
@@ -353,14 +374,6 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
         saveImmediate = jCheckBox1.isSelected();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        if (materialFile != null) {
-            materialFile.setName(jTextField1.getText());
-            String string = materialFile.getUpdatedContent();
-            jTextArea1.setText(string);
-        }
-    }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         if (materialFile != null) {
