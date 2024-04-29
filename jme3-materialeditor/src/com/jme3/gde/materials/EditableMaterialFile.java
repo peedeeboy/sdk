@@ -65,7 +65,7 @@ public class EditableMaterialFile {
         "IntArray", "Int", "Boolean", "FloatArray", "Float", "Vector2Array",
         "Vector3Array", "Vector4Array", "Vector2", "Vector3", "Vector4",
         "Color", "Texture2D", "Texture3D", "TextureArray", "TextureBuffer",
-        "TextureCubeMap", "Matrix3Array", "Matrix4Array", "Matrix3", "Matrix4"};
+        "TextureCubeMap"};
 
     public EditableMaterialFile(FileObject material, ProjectAssetManager manager) {
         this.material = material;
