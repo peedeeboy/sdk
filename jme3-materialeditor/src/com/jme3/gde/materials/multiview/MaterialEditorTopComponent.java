@@ -23,12 +23,14 @@ import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.swing.event.DocumentEvent;
@@ -44,7 +46,6 @@ import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Node;
 import org.openide.util.HelpCtx;
-import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.CloneableTopComponent;
 
 /**
@@ -57,7 +58,6 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
 
     private static MaterialEditorTopComponent instance;
     private static final String PREFERRED_ID = "MaterialEditorTopComponent";
-    private final InstanceContent lookupContents = new InstanceContent();
     private DataObject dataObject;
     private EditableMaterialFile materialFile;
     private String materialFileName;
@@ -572,15 +572,8 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
         materialFile = null;
         jComboBox1.removeAllItems();
         jComboBox1.addItem("");
-        List<String> matDefList = new ArrayList<>();
-        for(String s: matDefs) {
-            if (!matDefList.contains(s)){
-                matDefList.add(s);
-            }
-        }
-        Collections.sort(matDefList);
-        String[] sortedMatDefs = matDefList.toArray(String[]::new);
-        for (String string : sortedMatDefs) {
+        Set<String> matDefList = new TreeSet<>(Arrays.asList(matDefs));
+        for (String string : matDefList) {
             jComboBox1.addItem(string);
         }
         jComboBox1.setSelectedItem(selected);
@@ -589,13 +582,13 @@ public final class MaterialEditorTopComponent extends CloneableTopComponent impl
 
     private void updateProperties() {
         for (Component component : optionsPanel.getComponents()) {
-            if (component instanceof MaterialPropertyWidget) {
-                ((MaterialPropertyWidget) component).registerChangeListener(null);
+            if (component instanceof MaterialPropertyWidget materialPropertyWidget) {
+                materialPropertyWidget.registerChangeListener(null);
             }
         }
         for (Component component : texturePanel.getComponents()) {
-            if (component instanceof MaterialPropertyWidget) {
-                ((MaterialPropertyWidget) component).registerChangeListener(null);
+            if (component instanceof MaterialPropertyWidget materialPropertyWidget) {
+                materialPropertyWidget.registerChangeListener(null);
             }
         }
         optionsPanel.removeAll();
