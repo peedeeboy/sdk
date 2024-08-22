@@ -33,10 +33,14 @@ package com.jme3.gde.core.sceneexplorer.nodes.animation;
 
 import com.jme3.anim.AnimClip;
 import com.jme3.anim.AnimComposer;
+import com.jme3.anim.AnimLayer;
 import com.jme3.gde.core.scene.SceneApplication;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Children;
@@ -44,19 +48,19 @@ import org.openide.nodes.Node;
 import org.openide.util.Exceptions;
 
 /**
- * Representation of multiple Animations in the Scene Explorer
- * @author MeFisto94
+ * Representation of an AnimComposers AnimClips and AnimLayers in the Scene Explorer
+ * @author MeFisto94, neph1
  */
-public class JmeAnimClipChildren extends Children.Keys<Object> {
+public class JmeAnimComposerChildren extends Children.Keys<Object> {
     protected JmeAnimComposer jmeAnimComposer;
     protected boolean readOnly = true;
     protected HashMap<Object, Node> map = new HashMap<>();
     private DataObject dataObject;
 
-    public JmeAnimClipChildren() {
+    public JmeAnimComposerChildren() {
     }
 
-    public JmeAnimClipChildren(JmeAnimComposer jmeAnimComposer) {
+    public JmeAnimComposerChildren(JmeAnimComposer jmeAnimComposer) {
         this.jmeAnimComposer = jmeAnimComposer;
     }
 
@@ -82,6 +86,12 @@ public class JmeAnimClipChildren extends Children.Keys<Object> {
                 AnimComposer composer = jmeAnimComposer.getLookup().lookup(AnimComposer.class);
                 if (composer != null) {
                     keys.addAll(composer.getAnimClips());
+                    final Set<String> layerNames = composer.getLayerNames();
+                    final List<AnimLayer> layers = new ArrayList<>();
+                    for(String s: layerNames) {
+                        layers.add(composer.getLayer(s));
+                    }
+                    keys.addAll(layers);
                 }
                 
                 return keys;
@@ -96,7 +106,10 @@ public class JmeAnimClipChildren extends Children.Keys<Object> {
     protected Node[] createNodes(Object key) {
         if (key instanceof AnimClip animClip) {
             return new Node[]{ new JmeAnimClip(jmeAnimComposer, animClip, dataObject).setReadOnly(readOnly)};
-        } else {
+        } else if (key instanceof AnimLayer animLayer) {
+            return new Node[]{ new JmeAnimLayer(jmeAnimComposer, animLayer, dataObject).setReadOnly(readOnly)};
+        } 
+        else {
             return new Node[]{ Node.EMPTY };
         }
     }

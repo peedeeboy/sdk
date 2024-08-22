@@ -31,11 +31,14 @@
  */
 package com.jme3.gde.core.sceneexplorer.nodes.animation;
 
+import com.jme3.anim.AnimComposer;
+import com.jme3.anim.ArmatureMask;
 import com.jme3.anim.Joint;
 import com.jme3.gde.core.icons.IconList;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.sceneexplorer.nodes.AbstractSceneExplorerNode;
 import com.jme3.gde.core.sceneexplorer.nodes.ClipboardSpatial;
+import com.jme3.gde.core.sceneexplorer.nodes.JmeControl;
 import com.jme3.gde.core.sceneexplorer.nodes.SceneExplorerNode;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
@@ -43,6 +46,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.ExecutionException;
 import javax.swing.Action;
+import javax.swing.JOptionPane;
 import org.openide.awt.Actions;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Sheet;
@@ -99,24 +103,9 @@ public class JmeJoint extends AbstractSceneExplorerNode {
     @Override
     public Action[] getActions(boolean context) {
         return new Action[]{
-            Actions.alwaysEnabled(new AttachementNodeActionListener(), "Get attachement Node", "", false)
+            Actions.alwaysEnabled(new AttachementNodeActionListener(), "Get attachement Node", "", false),
+            Actions.alwaysEnabled(new ArmatureMaskActionListener(), "Create armature mask", "", false)
         };
-    }
-
-    private class AttachementNodeActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            fireSave(true);
-            try {
-                SceneApplication.getApplication().enqueue(() -> 
-                    jmeSkinningControl.getSkinningControl().getAttachmentsNode(joint.getName())
-                ).get();
-                
-                ((AbstractSceneExplorerNode)jmeSkinningControl.getParentNode()).refresh(false);
-            } catch (InterruptedException | ExecutionException ex) {
-                Exceptions.printStackTrace(ex);
-            }
-        }
     }
 
     @Override
@@ -135,5 +124,46 @@ public class JmeJoint extends AbstractSceneExplorerNode {
         children.setReadOnly(cookie);
         children.setDataObject(key2);
         return new org.openide.nodes.Node[]{new JmeJoint(jmeSkinningControl, (Joint)key, children).setReadOnly(cookie)};
+    }
+    
+    
+    private class AttachementNodeActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            fireSave(true);
+            try {
+                SceneApplication.getApplication().enqueue(() -> 
+                    jmeSkinningControl.getSkinningControl().getAttachmentsNode(joint.getName())
+                ).get();
+                
+                ((AbstractSceneExplorerNode)jmeSkinningControl.getParentNode()).refresh(false);
+            } catch (InterruptedException | ExecutionException ex) {
+                Exceptions.printStackTrace(ex);
+            }
+        }
+    }
+    
+    private class ArmatureMaskActionListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String name = JOptionPane.showInputDialog("Enter a name for the armature mask"); 
+            if(name == null) {
+                return;
+            }
+            fireSave(true);
+            SceneApplication.getApplication().enqueue(() -> {
+                final AnimComposer composer = jmeSkinningControl.getSkinningControl().getSpatial().getControl(AnimComposer.class);
+                composer.makeLayer(name, ArmatureMask.createMask(jmeSkinningControl.getSkinningControl().getArmature(), joint.getName()));
+                }
+            );
+            jmeSkinningControl.fireSave(true);
+            final JmeAnimComposer animComposer = (JmeAnimComposer) ((AbstractSceneExplorerNode)jmeSkinningControl.getParentNode()).getChildren().findChild("AnimComposer");
+            animComposer.refresh(true);
+            animComposer.fireSave(true);
+            
+            
+        }
+        
     }
 }

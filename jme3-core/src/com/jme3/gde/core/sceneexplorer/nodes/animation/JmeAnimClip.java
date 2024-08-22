@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009-2020 jMonkeyEngine
+ *  Copyright (c) 2009-2024 jMonkeyEngine
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -43,6 +43,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
@@ -58,7 +60,7 @@ import org.openide.util.actions.SystemAction;
 
 /**
  * Visual representation of the AnimClip Class in the Scene Explorer
- * @author MeFisto94
+ * @author MeFisto94, neph1
  */
 @org.openide.util.lookup.ServiceProvider(service = SceneExplorerNode.class)
 @SuppressWarnings({"unchecked", "rawtypes"})
@@ -67,7 +69,6 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
     private AnimClip animClip;
     private Image icon;
     private JmeAnimComposer jmeControl;
-    private boolean playing = false;
 
     public JmeAnimClip() {
     }
@@ -103,7 +104,7 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
     }
 
     public void toggleIcon(boolean enabled) {
-        if (!playing) {
+        if (!enabled) {
             icon = IconList.animation.getImage();
         } else {
             icon = IconList.animationPlay.getImage();
@@ -113,13 +114,12 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
 
     @Override
     public Action getPreferredAction() {
-        return Actions.alwaysEnabled(new PlayAction(), "Play", "", false);
+        return Actions.alwaysEnabled(new PlayAction(AnimComposer.DEFAULT_LAYER), "Play", "", false);
     }
 
-    private void play() {
-        playing = !playing;
-        toggleIcon(playing);
-        jmeControl.setAnimClip(this);
+    private void play(String layer) {
+        toggleIcon(true);
+        jmeControl.setAnimClip(layer, this);
     }
 
     @Override
@@ -142,13 +142,25 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
 
     @Override
     public Action[] getActions(boolean context) {
-        return new Action[]{Actions.alwaysEnabled(new PlayAction(), playing ? "Stop" : "Play", "", false),
-            SystemAction.get(RenameAction.class),
-            SystemAction.get(DeleteAction.class),
-            //Actions.alwaysEnabled(new EffectTrackWizardAction(jmeControl.getLookup().lookup(AnimComposer.class).getSpatial(), this), "Add Effect Track", "", false),
-            //Actions.alwaysEnabled(new AudioTrackWizardAction(jmeControl.getLookup().lookup(AnimComposer.class).getSpatial(), this), "Add Audio Track", "", false),
-            // @TODO: not working yet, Actions.alwaysEnabled(new ExtractAnimationAction(), "Extract sub-animation", "", true)
-        };
+        final AnimComposer control = jmeControl.getLookup().lookup(AnimComposer.class);
+        if(control == null) {
+            return new Action[]{
+                Actions.alwaysEnabled(new PlayAction(AnimComposer.DEFAULT_LAYER), jmeControl.getPlaying(AnimComposer.DEFAULT_LAYER) == this ? "Stop" : "Play", "", false),
+                SystemAction.get(RenameAction.class),
+                SystemAction.get(DeleteAction.class),
+            };
+        }
+        final String[] layers = control.getLayerNames().stream().toArray(String[] ::new);
+        
+        List<Action> playActions = new ArrayList<>();
+        
+        for(String layer: layers) {
+            playActions.add(Actions.alwaysEnabled(new PlayAction(layer), jmeControl.getPlaying(layer) == this ? "Stop " + layer : "Play " + layer, "", false));
+        }
+        playActions.add(SystemAction.get(RenameAction.class));
+        playActions.add(SystemAction.get(DeleteAction.class));
+        final Action[] actions = new Action[playActions.size()];
+        return playActions.toArray(actions);
     }
 
     @Override
@@ -157,19 +169,19 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
     }
 
     public void stop() {
-        playing = false;
-        toggleIcon(playing);
+        toggleIcon(false);
     }
 
     @Override
     public void destroy() throws IOException {
         super.destroy();  
         final AnimComposer control = jmeControl.getLookup().lookup(AnimComposer.class);
-        if (playing) {
+
+        if (jmeControl.getPlaying(AnimComposer.DEFAULT_LAYER) == this) {
             control.removeCurrentAction(AnimComposer.DEFAULT_LAYER);
-            jmeControl.setAnimClip(null);
-            
+            jmeControl.setAnimClip(AnimComposer.DEFAULT_LAYER, null);  
         }
+        
         lookupContents.remove(JmeAnimClip.this.animClip);
         lookupContents.remove(this);
         SceneApplication.getApplication().enqueue( () -> {
@@ -202,6 +214,13 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
     }
 
     class PlayAction implements ActionListener {
+        
+        private final String layer;
+        
+        public PlayAction(String layer) {
+            this.layer = layer;
+        }
+        
         @Override
         public void actionPerformed(ActionEvent e) {
             final AnimComposer control = jmeControl.getLookup().lookup(AnimComposer.class);
@@ -211,14 +230,14 @@ public class JmeAnimClip extends AbstractSceneExplorerNode {
 
             try {
                 SceneApplication.getApplication().enqueue(() -> {
-                    if (playing) { // Stop Playing
-                        control.removeCurrentAction(AnimComposer.DEFAULT_LAYER);
-                        jmeControl.setAnimClip(null);
+                    if (jmeControl.getPlaying(layer) == JmeAnimClip.this) { // Stop Playing
+                        control.removeCurrentAction(layer);
+                        jmeControl.setAnimClip(layer, null);
                         return null;
                     } else {
-                        control.setCurrentAction(animClip.getName());
+                        control.setCurrentAction(animClip.getName(), layer);
                         java.awt.EventQueue.invokeLater(() -> {
-                            play();
+                            play(layer);
                         });
                         return null;
                     }

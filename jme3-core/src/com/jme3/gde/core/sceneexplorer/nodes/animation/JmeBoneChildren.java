@@ -48,6 +48,7 @@ import org.openide.util.Exceptions;
  *
  * @author normenhansen
  */
+@Deprecated
 public class JmeBoneChildren extends Children.Keys<Object> {
 
     protected Bone rootBone;

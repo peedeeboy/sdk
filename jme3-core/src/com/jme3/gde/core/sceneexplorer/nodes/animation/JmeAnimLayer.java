@@ -31,77 +31,115 @@
  */
 package com.jme3.gde.core.sceneexplorer.nodes.animation;
 
-import com.jme3.anim.SkinningControl;
+import com.jme3.anim.AnimComposer;
+import com.jme3.anim.AnimLayer;
 import com.jme3.gde.core.icons.IconList;
-import com.jme3.gde.core.sceneexplorer.nodes.JmeControl;
+import com.jme3.gde.core.scene.SceneApplication;
+import com.jme3.gde.core.sceneexplorer.nodes.AbstractSceneExplorerNode;
 import com.jme3.gde.core.sceneexplorer.nodes.SceneExplorerNode;
 import java.awt.Image;
+import java.io.IOException;
+import javax.swing.Action;
+import javax.swing.SwingUtilities;
+import org.openide.actions.DeleteAction;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Node;
 import org.openide.nodes.Sheet;
+import org.openide.util.actions.SystemAction;
+
 
 /**
- * Visual representation of the Armature Class in the Scene Explorer
- * @author MeFisto94
+ * Representation of an AnimComposers AnimLayer
+ * @author rickard
  */
 @org.openide.util.lookup.ServiceProvider(service = SceneExplorerNode.class)
-@SuppressWarnings({"unchecked", "rawtypes"})
-public class JmeSkinningControl extends JmeControl {
-    private SkinningControl skinningControl;
-    private static Image smallImage = IconList.skeletonControl.getImage();
-
-    public JmeSkinningControl() {
+public class JmeAnimLayer extends AbstractSceneExplorerNode {
+    
+    private Image icon;
+    private JmeAnimComposer jmeControl;
+    private AnimLayer layer;
+    
+    public JmeAnimLayer() {
+        
     }
 
-    public JmeSkinningControl(SkinningControl skinningControl, JmeJointChildren children) {
-        super(children);
-        this.skinningControl = skinningControl;
+    public JmeAnimLayer(JmeAnimComposer animComposer, AnimLayer layer, DataObject dataObject) {
+        super();
+        this.jmeControl = animComposer;
+        this.layer = layer;
+        this.dataObject = dataObject;
         lookupContents.add(this);
-        lookupContents.add(skinningControl);
-        setName("Armature");
-        children.setSkinningControl(this);
+        lookupContents.add(layer);
+        setName(layer.getName());
+        icon = IconList.important.getImage();
     }
-
+    
     @Override
     public Image getIcon(int type) {
-        return smallImage;
+        return icon;
     }
 
     @Override
     public Image getOpenedIcon(int type) {
-        return smallImage;
+        return icon;
     }
-
+    
     @Override
     protected Sheet createSheet() {
         Sheet sheet = Sheet.createDefault();
         Sheet.Set set = Sheet.createPropertiesSet();
-        set.setDisplayName("SkinningControl");
-        set.setName(SkinningControl.class.getName());
-        if (skinningControl != null) {
+        set.setDisplayName("AnimLayer");
+        set.setName(AnimLayer.class.getName());
+        if (layer != null) {
             sheet.put(set);
-        } // else: empty sheet
+        } // else: Empty Sheet
         
         return sheet;
     }
+    
+    @Override
+    public Action[] getActions(boolean context) {
+        return new Action[]{
+            SystemAction.get(DeleteAction.class),
+        };
+    }
 
+    @Override
+    public boolean canDestroy() {
+         return !getName().equals((AnimComposer.DEFAULT_LAYER)) && !jmeControl.isReadOnly();
+    }
+    
+    @Override
+    public void destroy() throws IOException {
+        super.destroy();  
+        final AnimComposer control = jmeControl.getLookup().lookup(AnimComposer.class);
+
+        lookupContents.remove(JmeAnimLayer.this.layer);
+        lookupContents.remove(this);
+        SceneApplication.getApplication().enqueue( () -> {
+            control.removeLayer(this.getName());
+            SwingUtilities.invokeLater(() -> jmeControl.refresh(false));
+        });
+        setChanged();
+    }
+    
+    public void setChanged() {
+        fireSave(true);
+    }
+    
     @Override
     public Class getExplorerObjectClass() {
-        return SkinningControl.class;
+        return AnimLayer.class;
     }
-
+    
     @Override
     public Class getExplorerNodeClass() {
-        return JmeSkinningControl.class;
+        return JmeAnimLayer.class;
     }
-
-    public SkinningControl getSkinningControl() {
-        return skinningControl;
-    }
-
+    
     @Override
     public Node[] createNodes(Object key, DataObject key2, boolean cookie) {
-        JmeJointChildren children = new JmeJointChildren(null, null);
-        return new Node[]{new JmeSkinningControl((SkinningControl)key, children)};
+        JmeAnimLayer jsc = new JmeAnimLayer(jmeControl, (AnimLayer)key, key2);
+        return new Node[]{jsc};
     }
 }
