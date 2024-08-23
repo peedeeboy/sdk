@@ -34,24 +34,29 @@ package com.jme3.gde.core.sceneexplorer.nodes.animation;
 import com.jme3.anim.AnimComposer;
 import com.jme3.gde.core.icons.IconList;
 import com.jme3.gde.core.scene.SceneApplication;
+import com.jme3.gde.core.sceneexplorer.SceneExplorerTopComponent;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeControl;
 import com.jme3.gde.core.sceneexplorer.nodes.SceneExplorerNode;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.ControlsPopup;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.animation.AnimClipProperty;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import org.openide.actions.DeleteAction;
+import org.openide.awt.Actions;
+import org.openide.explorer.ExplorerManager;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Node;
 import org.openide.nodes.Sheet;
 import org.openide.util.Exceptions;
 import org.openide.util.actions.SystemAction;
+import org.openide.windows.TopComponent;
 
 /**
  * Visual representation of the AnimComposer Class in the Scene Explorer
@@ -61,7 +66,7 @@ import org.openide.util.actions.SystemAction;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class JmeAnimComposer extends JmeControl {
     private AnimComposer animComposer;
-    private Map<String, JmeAnimClip> playingAnimation = new HashMap<>();
+    private final Map<String, JmeAnimClip> playingAnimation = new HashMap<>();
     private static Image smallImage = IconList.animControl.getImage();
 
     public JmeAnimComposer() {
@@ -161,9 +166,13 @@ public class JmeAnimComposer extends JmeControl {
         ((JmeAnimComposerChildren) jmeChildren).refreshChildren(immediate);
         super.refresh(immediate);
     }
-    
+   
     private class StopAllAction extends AbstractAction {
 
+        public StopAllAction() {
+            super("Stop animations");
+        }
+                
         @Override
         public void actionPerformed(ActionEvent e) {
             for(JmeAnimClip layer: JmeAnimComposer.this.playingAnimation.values()) {

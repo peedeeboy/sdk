@@ -38,7 +38,6 @@ import com.jme3.gde.core.icons.IconList;
 import com.jme3.gde.core.scene.SceneApplication;
 import com.jme3.gde.core.sceneexplorer.nodes.AbstractSceneExplorerNode;
 import com.jme3.gde.core.sceneexplorer.nodes.ClipboardSpatial;
-import com.jme3.gde.core.sceneexplorer.nodes.JmeControl;
 import com.jme3.gde.core.sceneexplorer.nodes.SceneExplorerNode;
 import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
@@ -157,12 +156,9 @@ public class JmeJoint extends AbstractSceneExplorerNode {
                 composer.makeLayer(name, ArmatureMask.createMask(jmeSkinningControl.getSkinningControl().getArmature(), joint.getName()));
                 }
             );
-            jmeSkinningControl.fireSave(true);
             final JmeAnimComposer animComposer = (JmeAnimComposer) ((AbstractSceneExplorerNode)jmeSkinningControl.getParentNode()).getChildren().findChild("AnimComposer");
             animComposer.refresh(true);
             animComposer.fireSave(true);
-            
-            
         }
         
     }
