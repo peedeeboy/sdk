@@ -50,6 +50,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.netbeans.api.java.classpath.ClassPath;
@@ -506,12 +507,12 @@ public class ProjectAssetManager extends DesktopAssetManager {
         return filesWithSuffix("j3md", includeDependencies);
     }
 
-    public List<String>  getProjectShaderNodeDefs() {       
-        return collectProjectFilesWithSuffix("j3sn", new LinkedList<>());
+    public Set<String>  getProjectShaderNodeDefs() {       
+        return collectProjectFilesWithSuffix("j3sn", new TreeSet<>());
     }
 
-    public  List<String> getDependenciesShaderNodeDefs() {        
-        return collectDependenciesFilesWithSuffix("j3sn", new LinkedList<>());
+    public  Set<String> getDependenciesShaderNodeDefs() {        
+        return collectDependenciesFilesWithSuffix("j3sn", new TreeSet<>());
     }
     
     public String[] getAssetsWithSuffix(String string) {
@@ -523,12 +524,12 @@ public class ProjectAssetManager extends DesktopAssetManager {
     }
 
     private String[] filesWithSuffix(String string, boolean includeDependencies) {
-        List<String> list = collectFilesWithSuffix(string, includeDependencies);
+        Set<String> list = collectFilesWithSuffix(string, includeDependencies);
         return list.toArray(String[]::new);
     }
 
-    private List<String> collectFilesWithSuffix(String suffix, boolean includeDependencies) {
-        List<String> list = new LinkedList<>();
+    private Set<String> collectFilesWithSuffix(String suffix, boolean includeDependencies) {
+        Set<String> list = new TreeSet<>();
         collectProjectFilesWithSuffix(suffix, list);
         if(includeDependencies) {
             collectDependenciesFilesWithSuffix(suffix, list);
@@ -536,7 +537,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
         return list;
     }
 
-    private List<String> collectProjectFilesWithSuffix(String suffix, List<String> list) {
+    private Set<String> collectProjectFilesWithSuffix(String suffix, Set<String> list) {
         FileObject assetsFolder = getAssetFolder();
         if (assetsFolder != null) {
             Enumeration<FileObject> assets = (Enumeration<FileObject>) assetsFolder.getChildren(true);
@@ -550,7 +551,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
         return list;
     }
 
-    private List<String> collectDependenciesFilesWithSuffix(String suffix, List<String> list) {
+    private Set<String> collectDependenciesFilesWithSuffix(String suffix, Set<String> list) {
         synchronized (classPathItems) {
             // TODO I need to find out if classPathItems contains all jars added to a project
             Iterator<ClassPathItem> classPathItemsIter = classPathItems.iterator();
