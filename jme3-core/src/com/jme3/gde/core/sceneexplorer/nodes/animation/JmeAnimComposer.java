@@ -34,19 +34,29 @@ package com.jme3.gde.core.sceneexplorer.nodes.animation;
 import com.jme3.anim.AnimComposer;
 import com.jme3.gde.core.icons.IconList;
 import com.jme3.gde.core.scene.SceneApplication;
+import com.jme3.gde.core.sceneexplorer.SceneExplorerTopComponent;
 import com.jme3.gde.core.sceneexplorer.nodes.JmeControl;
 import com.jme3.gde.core.sceneexplorer.nodes.SceneExplorerNode;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.ControlsPopup;
 import com.jme3.gde.core.sceneexplorer.nodes.actions.animation.AnimClipProperty;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import org.openide.actions.DeleteAction;
+import org.openide.awt.Actions;
+import org.openide.explorer.ExplorerManager;
 import org.openide.loaders.DataObject;
 import org.openide.nodes.Node;
 import org.openide.nodes.Sheet;
 import org.openide.util.Exceptions;
 import org.openide.util.actions.SystemAction;
+import org.openide.windows.TopComponent;
 
 /**
  * Visual representation of the AnimComposer Class in the Scene Explorer
@@ -56,13 +66,13 @@ import org.openide.util.actions.SystemAction;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class JmeAnimComposer extends JmeControl {
     private AnimComposer animComposer;
-    private JmeAnimClip playingAnimation = null;
+    private final Map<String, JmeAnimClip> playingAnimation = new HashMap<>();
     private static Image smallImage = IconList.animControl.getImage();
 
     public JmeAnimComposer() {
     }
 
-    public JmeAnimComposer(AnimComposer animComposer, JmeAnimClipChildren children, DataObject obj) {
+    public JmeAnimComposer(AnimComposer animComposer, JmeAnimComposerChildren children, DataObject obj) {
         super(children);
         dataObject = obj;
         children.setDataObject(dataObject);
@@ -100,15 +110,15 @@ public class JmeAnimComposer extends JmeControl {
         return sheet;
     }
 
-    public boolean isPlaying() {
-        return playingAnimation != null;
+    public JmeAnimClip getPlaying(String layer) {
+        return playingAnimation.get(layer);
     }
-
-    public void setAnimClip(JmeAnimClip anim) {
-        if (playingAnimation != null) {
-            playingAnimation.stop();
+    
+    public void setAnimClip(String layer, JmeAnimClip anim) {
+        if (playingAnimation.get(layer) != null) {
+            playingAnimation.get(layer).stop();
         }
-        playingAnimation = anim;
+        playingAnimation.put(layer, anim);
     }
     
     public float getGlobalSpeed() {
@@ -130,7 +140,8 @@ public class JmeAnimComposer extends JmeControl {
     public Action[] getActions(boolean context) {
         return new Action[]{
             new ControlsPopup(this),
-            SystemAction.get(DeleteAction.class)
+            new StopAllAction(),
+            SystemAction.get(DeleteAction.class),
         };
     }
 
@@ -146,13 +157,28 @@ public class JmeAnimComposer extends JmeControl {
 
     @Override
     public Node[] createNodes(Object key, DataObject key2, boolean cookie) {
-        JmeAnimClipChildren children = new JmeAnimClipChildren(this);
+        JmeAnimComposerChildren children = new JmeAnimComposerChildren(this);
         return new Node[]{ new JmeAnimComposer((AnimComposer)key, children, key2)};
     }
     
     @Override
     public void refresh(boolean immediate) {
-        ((JmeAnimClipChildren) jmeChildren).refreshChildren(immediate);
+        ((JmeAnimComposerChildren) jmeChildren).refreshChildren(immediate);
         super.refresh(immediate);
     }
+   
+    private class StopAllAction extends AbstractAction {
+
+        public StopAllAction() {
+            super("Stop animations");
+        }
+                
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            for(JmeAnimClip layer: JmeAnimComposer.this.playingAnimation.values()) {
+                layer.stop();
+            }
+        }
+    }
+    
 }

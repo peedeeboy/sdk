@@ -46,6 +46,7 @@ import org.openide.nodes.Sheet;
  */
 @org.openide.util.lookup.ServiceProvider(service = SceneExplorerNode.class)
 @SuppressWarnings({"unchecked", "rawtypes"})
+@Deprecated
 public class JmeSkeletonControl extends JmeControl {
 
     private SkeletonControl skeletonControl;

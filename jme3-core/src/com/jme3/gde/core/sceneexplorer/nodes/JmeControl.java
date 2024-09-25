@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009-2016 jMonkeyEngine
+ *  Copyright (c) 2009-2024jMonkeyEngine
  *  All rights reserved.
  * 
  *  Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import java.io.IOException;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import javax.swing.Action;
 import org.openide.actions.DeleteAction;
@@ -97,17 +96,12 @@ public abstract class JmeControl extends AbstractSceneExplorerNode {
         final Spatial spat = getParentNode().getLookup().lookup(Spatial.class);
         try {
             fireSave(true);
-            SceneApplication.getApplication().enqueue(new Callable<Void>() {
-
-                public Void call() throws Exception {
-                    spat.removeControl(control);
-                    return null;
-                }
+            SceneApplication.getApplication().enqueue(() -> {
+                spat.removeControl(control);
+                return null;
             }).get();
             ((AbstractSceneExplorerNode) getParentNode()).refresh(true);
-        } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             Exceptions.printStackTrace(ex);
         }
     }
@@ -116,9 +110,8 @@ public abstract class JmeControl extends AbstractSceneExplorerNode {
     @Override
     public void fireSave(boolean modified) {
         super.fireSave(true);
-        Node parent = getParentNode();
-        if (parent instanceof AbstractSceneExplorerNode) {
-            AbstractSceneExplorerNode par=(AbstractSceneExplorerNode)parent;
+        final Node parent = getParentNode();
+        if (parent instanceof AbstractSceneExplorerNode par) {
             par.fireSave(modified);
         }
     }
@@ -128,23 +121,18 @@ public abstract class JmeControl extends AbstractSceneExplorerNode {
      * This only works for extended AbstractControls!!
      * Also see: {@link #isEnabled() }
      * @param enabled Whether the Control should be enabled or disabled
-     * @return If we had success (false when an Exception occured or no {@link Control} assigned or not of type {@link AbstractControl} )
+     * @return If we had success (false when an Exception occurred or no {@link Control} assigned or not of type {@link AbstractControl} )
      */
     public boolean setEnabled(final boolean enabled) {
         if (!isEnableable())
             return false;
         try {
-            SceneApplication.getApplication().enqueue(new Callable<Void>() {
-                public Void call() throws Exception {
-                    ((AbstractControl)control).setEnabled(enabled);
-                    return null;
-                }
+            SceneApplication.getApplication().enqueue(() -> {
+                ((AbstractControl)control).setEnabled(enabled);
+                return null;
             }).get();
            
-        } catch (InterruptedException ex) {
-            Exceptions.printStackTrace(ex);
-            return false;
-        } catch (ExecutionException ex) {
+        } catch (InterruptedException | ExecutionException ex) {
             Exceptions.printStackTrace(ex);
             return false;
         }
