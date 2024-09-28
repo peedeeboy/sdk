@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2010 jMonkeyEngine
+ * Copyright (c) 2009-2024 jMonkeyEngine
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,6 +50,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.netbeans.api.java.classpath.ClassPath;
@@ -215,9 +216,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
                     runtimeFiles = sourceSet.getRuntimeClassPath();
                 }
             }
-        } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
-        } catch (IllegalArgumentException ex) {
+        } catch (IOException | IllegalArgumentException ex) {
             Exceptions.printStackTrace(ex);
         }
 
@@ -243,25 +242,31 @@ public class ProjectAssetManager extends DesktopAssetManager {
     }
 
     FileChangeListener listener = new FileChangeListener() {
+        @Override
         public void fileFolderCreated(FileEvent fe) {
             fireChange(fe);
         }
 
+        @Override
         public void fileDataCreated(FileEvent fe) {
             fireChange(fe);
         }
 
+        @Override
         public void fileChanged(FileEvent fe) {
             fireChange(fe);
         }
 
+        @Override
         public void fileDeleted(FileEvent fe) {
         }
 
+        @Override
         public void fileRenamed(FileRenameEvent fe) {
             fireChange(fe);
         }
 
+        @Override
         public void fileAttributeChanged(FileAttributeEvent fae) {
         }
 
@@ -271,26 +276,22 @@ public class ProjectAssetManager extends DesktopAssetManager {
         }
     };
 
-    private PropertyChangeListener classPathListener = new PropertyChangeListener() {
-        public void propertyChange(PropertyChangeEvent evt) {
-            logger.log(Level.FINE, "Classpath event: {0}", evt);
-            if (null != evt.getPropertyName()) switch (evt.getPropertyName()) {
-                case ClassPath.PROP_ROOTS -> updateClassLoader();
-                case ClassPath.PROP_ENTRIES -> updateClassLoader();
-                case ClassPath.PROP_INCLUDES -> updateClassLoader();
-                default -> {
-                }
+    private PropertyChangeListener classPathListener = (PropertyChangeEvent evt) -> {
+        logger.log(Level.FINE, "Classpath event: {0}", evt);
+        if (null != evt.getPropertyName()) switch (evt.getPropertyName()) {
+            case ClassPath.PROP_ROOTS -> updateClassLoader();
+            case ClassPath.PROP_ENTRIES -> updateClassLoader();
+            case ClassPath.PROP_INCLUDES -> updateClassLoader();
+            default -> {
             }
         }
     };
 
     public void updateClassLoader() {
-        ProjectManager.mutex().postWriteRequest(new Runnable() {
-            public void run() {
-                synchronized (classPathItems) {
-                    clearClassLoader();
-                    loadClassLoader();
-                }
+        ProjectManager.mutex().postWriteRequest(() -> {
+            synchronized (classPathItems) {
+                clearClassLoader();
+                loadClassLoader();
             }
         });
         notifyClassPathListeners();
@@ -303,6 +304,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
 
     private void prepAssetEventListeners() {
         super.setAssetEventListener(new AssetEventListener() {
+            @Override
             public void assetLoaded(AssetKey ak) {
                 synchronized (assetEventListeners) {
                     for (AssetEventListener assetEventListener : assetEventListeners) {
@@ -311,6 +313,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
                 }
             }
 
+            @Override
             public void assetRequested(AssetKey ak) {
                 synchronized (assetEventListeners) {
                     for (AssetEventListener assetEventListener : assetEventListeners) {
@@ -319,6 +322,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
                 }
             }
 
+            @Override
             public void assetDependencyNotFound(AssetKey ak, AssetKey ak1) {
                 synchronized (assetEventListeners) {
                     for (AssetEventListener assetEventListener : assetEventListeners) {
@@ -425,6 +429,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
 
     /**
      * Adds a locator to a folder within the main project directory
+     * @param relativePath
      */
     public void addFolderLocator(String relativePath) {
         String string = project.getProjectDirectory().getPath() + "/" + relativePath + "/";
@@ -506,12 +511,12 @@ public class ProjectAssetManager extends DesktopAssetManager {
         return filesWithSuffix("j3md", includeDependencies);
     }
 
-    public List<String>  getProjectShaderNodeDefs() {       
-        return collectProjectFilesWithSuffix("j3sn", new LinkedList<>());
+    public Set<String>  getProjectShaderNodeDefs() {       
+        return collectProjectFilesWithSuffix("j3sn", new TreeSet<>());
     }
 
-    public  List<String> getDependenciesShaderNodeDefs() {        
-        return collectDependenciesFilesWithSuffix("j3sn", new LinkedList<>());
+    public  Set<String> getDependenciesShaderNodeDefs() {        
+        return collectDependenciesFilesWithSuffix("j3sn", new TreeSet<>());
     }
     
     public String[] getAssetsWithSuffix(String string) {
@@ -523,12 +528,12 @@ public class ProjectAssetManager extends DesktopAssetManager {
     }
 
     private String[] filesWithSuffix(String string, boolean includeDependencies) {
-        List<String> list = collectFilesWithSuffix(string, includeDependencies);
+        Set<String> list = collectFilesWithSuffix(string, includeDependencies);
         return list.toArray(String[]::new);
     }
 
-    private List<String> collectFilesWithSuffix(String suffix, boolean includeDependencies) {
-        List<String> list = new LinkedList<>();
+    private Set<String> collectFilesWithSuffix(String suffix, boolean includeDependencies) {
+        Set<String> list = new TreeSet<>();
         collectProjectFilesWithSuffix(suffix, list);
         if(includeDependencies) {
             collectDependenciesFilesWithSuffix(suffix, list);
@@ -536,7 +541,7 @@ public class ProjectAssetManager extends DesktopAssetManager {
         return list;
     }
 
-    private List<String> collectProjectFilesWithSuffix(String suffix, List<String> list) {
+    private Set<String> collectProjectFilesWithSuffix(String suffix, Set<String> list) {
         FileObject assetsFolder = getAssetFolder();
         if (assetsFolder != null) {
             Enumeration<FileObject> assets = (Enumeration<FileObject>) assetsFolder.getChildren(true);
@@ -550,12 +555,9 @@ public class ProjectAssetManager extends DesktopAssetManager {
         return list;
     }
 
-    private List<String> collectDependenciesFilesWithSuffix(String suffix, List<String> list) {
+    private Set<String> collectDependenciesFilesWithSuffix(String suffix, Set<String> list) {
         synchronized (classPathItems) {
-            // TODO I need to find out if classPathItems contains all jars added to a project
-            Iterator<ClassPathItem> classPathItemsIter = classPathItems.iterator();
-            while (classPathItemsIter.hasNext()) {
-                ClassPathItem classPathItem = classPathItemsIter.next();
+            for (ClassPathItem classPathItem : classPathItems) {
                 FileObject jarFile = classPathItem.object;
                 
                 // Gradle projects don't know that the dependency is a Jar file
@@ -572,9 +574,9 @@ public class ProjectAssetManager extends DesktopAssetManager {
                         }
                     }
                 }
-
             }
-            return list;
+// TODO I need to find out if classPathItems contains all jars added to a project
+                        return list;
         }
     }
 
@@ -582,9 +584,8 @@ public class ProjectAssetManager extends DesktopAssetManager {
         InputStream in = null;//JmeSystem.getResourceAsStream(name);
         synchronized (classPathItems) {
             // TODO I need to find out if classPathItems contains all jars added to a project
-            Iterator<ClassPathItem> classPathItemsIter = classPathItems.iterator();
-            while (classPathItemsIter.hasNext()) {
-                ClassPathItem classPathItem = classPathItemsIter.next();
+            
+            for (ClassPathItem classPathItem : classPathItems) {
                 FileObject jarFile = classPathItem.object;
 
                 Enumeration<FileObject> jarEntry;
@@ -692,12 +693,10 @@ public class ProjectAssetManager extends DesktopAssetManager {
 
     private void notifyClassPathListeners() {
         final ProjectAssetManager pm = this;
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                synchronized (classPathListeners) {
-                    for (ClassPathChangeListener classPathChangeListener : classPathListeners) {
-                        classPathChangeListener.classPathChanged(pm);
-                    }
+        java.awt.EventQueue.invokeLater(() -> {
+            synchronized (classPathListeners) {
+                for (ClassPathChangeListener classPathChangeListener : classPathListeners) {
+                    classPathChangeListener.classPathChanged(pm);
                 }
             }
         });
@@ -729,10 +728,12 @@ public class ProjectAssetManager extends DesktopAssetManager {
             this.pm = pm;
         }
 
+        @Override
         public Lookup getLookup() {
             return Lookups.fixed(this, pm);
         }
 
+        @Override
         public FileObject getProjectDirectory() {
             if (folder != null) {
                 return folder;
@@ -743,7 +744,6 @@ public class ProjectAssetManager extends DesktopAssetManager {
 
     private static class ClassPathItem {
 
-        ClassPath path;
         FileObject object;
         FileChangeListener listener;
 

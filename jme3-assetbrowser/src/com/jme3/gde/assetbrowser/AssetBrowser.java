@@ -90,7 +90,7 @@ public class AssetBrowser extends javax.swing.JPanel implements PreviewInteracti
 
     private int lastGridColumns = 0;
     private int lastGridRows = 0;
-    private String lastFilter;
+    private String lastFilter = "";
 
     private int sizeX = Constants.sizeX;
     private int sizeY = Constants.sizeY;
@@ -155,7 +155,7 @@ public class AssetBrowser extends javax.swing.JPanel implements PreviewInteracti
         Dimension size = previewsPanel.getSize();
 
         int rows = Math.min(size.height, getHeight() - 30) / sizeY;
-
+        
         final var textures = Arrays.stream(assetManager.getTextures()).filter(s -> filter.isEmpty() || s.toLowerCase().contains(filter)).collect(Collectors.toList());
         final var materials = Arrays.stream(assetManager.getMaterials()).filter(s -> filter.isEmpty() || s.toLowerCase().contains(filter)).collect(Collectors.toList());
         final var models = Arrays.stream(assetManager.getModels()).filter(s -> filter.isEmpty() || s.toLowerCase().contains(filter)).collect(Collectors.toList());
