@@ -36,12 +36,14 @@
 
 package com.jme3.gde.blender;
 
+import com.jme3.plugins.json.JsonArray;
+import com.jme3.plugins.json.JsonElement;
+import com.jme3.plugins.json.JsonObject;
+import com.jme3.plugins.json.JsonPrimitive;
 import java.lang.reflect.Array;
 import java.util.*;
 
 import org.slf4j.*;
-
-import com.google.gson.*;
 
 import com.jme3.scene.Spatial;
 import com.jme3.scene.plugins.gltf.*;
@@ -77,11 +79,19 @@ public class GltfExtrasLoader implements ExtrasLoader {
         log.debug("handleExtras(" + loader + ", " + parentName + ", " + parent + ", " + extras + ", " + input + ")");     
 
         // Only interested in composite objects
-        if( !extras.isJsonObject() ) {
+        JsonObject jo = null;
+        try {
+            jo = extras.getAsJsonObject();
+        }
+        catch(Exception e) {
+            log.warn("Skipping extras:" + extras, e);
+        }
+        
+        if(jo == null) {
             log.warn("Skipping extras:" + extras);
             return input; 
         }
-        JsonObject jo = extras.getAsJsonObject();
+        
         apply(input, jo);
         return input;
     }
@@ -120,15 +130,21 @@ public class GltfExtrasLoader implements ExtrasLoader {
     }
  
     protected Object toAttribute( JsonElement el, boolean nested ) {
-        if( el.isJsonObject() ) {
+        try {
             return toAttribute(el.getAsJsonObject(), nested);
-        } else if( el.isJsonArray() ) {
-            return toAttribute(el.getAsJsonArray(), nested);
-        } else if( el.isJsonPrimitive() ) {
-            return toAttribute(el.getAsJsonPrimitive(), nested);
-        } else if( el.isJsonNull() ) {
-            return null;
+        } catch (Exception e) {
         }
+
+        try {
+            return toAttribute(el.getAsJsonArray(), nested);
+        } catch (Exception e) {
+        }
+
+        try {
+            return toAttribute(el.getAsJsonPrimitive(), nested);
+        } catch (Exception e) {
+        }
+
         log.warn("Unhandled extras element:" + el);
         return null;       
     }
