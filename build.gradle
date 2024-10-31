@@ -57,6 +57,7 @@ dependencies {
     optlibs dep("com.simsilica:sim-math:1.6.0", true, true)
     optlibs dep("com.simsilica:zay-es:1.5.0", true, true)
 
+    optlibs dep("org.jmonkeyengine:jme3-plugins-json:$jmeVersion-$jmeVersionTag", true, true)
     optlibs dep("org.jmonkeyengine:jme3-jbullet:$jmeVersion-$jmeVersionTag", true, true)
     optlibs dep("org.jmonkeyengine:jme3-android:$jmeVersion-$jmeVersionTag", true, true)
     optlibs dep("org.jmonkeyengine:jme3-ios:$jmeVersion-$jmeVersionTag", true, true)
