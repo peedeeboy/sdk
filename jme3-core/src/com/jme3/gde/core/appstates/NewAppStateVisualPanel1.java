@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009-2010 jMonkeyEngine
+ *  Copyright (c) 2009-2024 jMonkeyEngine
  *  All rights reserved.
  * 
  *  Redistribution and use in source and binary forms, with or without
@@ -31,6 +31,7 @@
  */
 package com.jme3.gde.core.appstates;
 
+import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -49,8 +50,8 @@ import org.netbeans.api.java.source.CompilationController;
 import org.netbeans.api.java.source.ElementHandle;
 import org.netbeans.api.java.source.JavaSource;
 import org.netbeans.api.java.source.JavaSource.Phase;
-import org.netbeans.api.java.source.Task;
 import org.netbeans.api.project.Project;
+import org.netbeans.api.project.ProjectUtils;
 import org.netbeans.api.project.SourceGroup;
 import org.netbeans.api.project.Sources;
 import org.openide.util.Exceptions;
@@ -82,8 +83,8 @@ public final class NewAppStateVisualPanel1 extends JPanel {
     }
 
     private List<String> getSources() {
-        Sources sources = proj.getLookup().lookup(Sources.class);
-        final List<String> list = new LinkedList<String>();
+        Sources sources = ProjectUtils.getSources(proj);
+        final List<String> list = new LinkedList<>();
         if (sources != null) {
             SourceGroup[] groups = sources.getSourceGroups(JavaProjectConstants.SOURCES_TYPE_JAVA);
             if (groups != null) {
@@ -98,31 +99,27 @@ public final class NewAppStateVisualPanel1 extends JPanel {
                         final ElementHandle<TypeElement> elementHandle = it.next();
                         JavaSource js = JavaSource.create(cpInfo);
                         try {
-                            js.runUserActionTask(new Task<CompilationController>() {
-                                public void run(CompilationController control)
-                                        throws Exception {
-                                    control.toPhase(Phase.RESOLVED);
-                                    //TODO: check with proper casting check.. gotta get TypeMirror of Control interface..
-//                                    TypeUtilities util = control.getTypeUtilities();//.isCastable(Types., null)
-//                                    util.isCastable(null, null);
-                                    TypeElement elem = elementHandle.resolve(control);
-                                    if (elem != null) {
-                                        List<? extends TypeMirror> interfaces = elem.getInterfaces();
-                                        for (TypeMirror typeMirror : interfaces) {
-                                            String interfaceName = typeMirror.toString();
-                                            if ("com.jme3.app.state.AppState".equals(interfaceName)) {
-                                                list.add(elem.getQualifiedName().toString());
-                                            }
-                                        }
-                                        TypeMirror superClass = elem.getSuperclass();
-                                        String superClassName = superClass.toString();
-                                        if ("com.jme3.app.state.AbstractAppState".equals(superClassName)) {
+                            js.runUserActionTask((CompilationController control) -> {
+                                control.toPhase(Phase.RESOLVED);
+                                
+                                TypeElement elem = elementHandle.resolve(control);
+                                if (elem != null) {
+                                    List<? extends TypeMirror> interfaces = elem.getInterfaces();
+                                    for (TypeMirror typeMirror : interfaces) {
+                                        String interfaceName = typeMirror.toString();
+                                        if ("com.jme3.app.state.AppState".equals(interfaceName)) {
                                             list.add(elem.getQualifiedName().toString());
                                         }
                                     }
+                                    TypeMirror superClass = elem.getSuperclass();
+                                    String superClassName = superClass.toString();
+                                    if ("com.jme3.app.state.AbstractAppState".equals(superClassName)
+                                            || "com.jme3.app.state.BaseAppState".equals(superClassName)) {
+                                        list.add(elem.getQualifiedName().toString());
+                                    }
                                 }
                             }, false);
-                        } catch (Exception ioe) {
+                        } catch (IOException ioe) {
                             Exceptions.printStackTrace(ioe);
                         }
                     }
