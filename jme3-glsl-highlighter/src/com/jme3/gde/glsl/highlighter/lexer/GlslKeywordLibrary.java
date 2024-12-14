@@ -491,7 +491,9 @@ final class GlslKeywordLibrary {
     public static KeywordType lookup(String s) {
         KeywordType returnType = null;
         returnType = lookup(s, returnType, KeywordType.BASIC_TYPE, basicTypesTrie);
-        returnType = lookup(s, returnType, KeywordType.BUILTIN_VARIABLE, builtinVariablesTrie);
+        if (returnType == KeywordType.UNFINISHED || returnType == null) {
+            returnType = lookup(s, returnType, KeywordType.BUILTIN_VARIABLE, builtinVariablesTrie);
+        }
         if (returnType == KeywordType.UNFINISHED || returnType == null) {
             returnType = lookup(s, returnType, KeywordType.BUILTIN_FUNCTION, builtinFunctionsTrie);
         }
