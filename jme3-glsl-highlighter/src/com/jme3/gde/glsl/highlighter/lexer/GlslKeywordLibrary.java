@@ -31,6 +31,7 @@
  */
 package com.jme3.gde.glsl.highlighter.lexer;
 
+import com.jme3.gde.glsl.highlighter.util.Trie;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,18 +41,20 @@ import java.util.List;
  *
  * @author grizeldi
  */
-class GlslKeywordLibrary {
-
+final class GlslKeywordLibrary {
+    
     public enum KeywordType {
         KEYWORD, BUILTIN_FUNCTION, BUILTIN_VARIABLE, BASIC_TYPE, UNFINISHED;
     }
-    private static final List<String> keywords = new ArrayList<>(),
-            builtinFunctions = new ArrayList<>(),
-            builtinVariables = new ArrayList<>(),
-            basicTypes = new ArrayList<>();
+    
+    private static final Trie keywordsTrie = new Trie();
+    private static final Trie builtinFunctionsTrie = new Trie();
+    private static final Trie builtinVariablesTrie = new Trie();
+    private static final Trie basicTypesTrie = new Trie();
 
     static {
         //keywords
+        List<String> keywords = new ArrayList<>();
         keywords.add("attribute");
         keywords.add("const");
         keywords.add("uniform");
@@ -93,6 +96,7 @@ class GlslKeywordLibrary {
         keywords.add("discard");
         keywords.add("return");
         //primitives and other types
+        List<String> basicTypes = new ArrayList<>();
         basicTypes.add("float");
         basicTypes.add("double");
         basicTypes.add("int");
@@ -217,6 +221,7 @@ class GlslKeywordLibrary {
         basicTypes.add("struct");
         //builtin variables
         //compute shaders
+        List<String> builtinVariables = new ArrayList<>();
         builtinVariables.add("gl_NumWorkGroups");
         builtinVariables.add("gl_WorkGroupSize");
         builtinVariables.add("gl_WorkGroupID");
@@ -291,6 +296,7 @@ class GlslKeywordLibrary {
         builtinVariables.add("g_LightColor");
         builtinVariables.add("g_AmbientLightColor");
         //builtin functions
+        List<String> builtinFunctions = new ArrayList<>();
         builtinFunctions.add("radians");
         builtinFunctions.add("degrees");
         builtinFunctions.add("sin");
@@ -466,51 +472,45 @@ class GlslKeywordLibrary {
         builtinFunctions.add("memoryBarrierShared");
         builtinFunctions.add("memoryBarrierImage");
         builtinFunctions.add("groupMemoryBarrier");
+        
+        // Create the search tries
+        for(String keyword : keywords) {
+            keywordsTrie.insert(keyword);
+        }
+        for(String keyword : builtinFunctions) {
+            builtinFunctionsTrie.insert(keyword);
+        }
+        for(String keyword : builtinVariables) {
+            builtinVariablesTrie.insert(keyword);
+        }
+        for(String keyword : basicTypes) {
+            basicTypesTrie.insert(keyword);
+        }
     }
 
     public static KeywordType lookup(String s) {
         KeywordType returnType = null;
-        for (String primitive : basicTypes) {
-            if (primitive.startsWith(s)) {
-                if (primitive.equals(s)) {
-                    returnType = KeywordType.BASIC_TYPE;
-                    break;
-                } else {
-                    returnType = KeywordType.UNFINISHED;
-                }
-            }
+        returnType = lookup(s, returnType, KeywordType.BASIC_TYPE, basicTypesTrie);
+        returnType = lookup(s, returnType, KeywordType.BUILTIN_VARIABLE, builtinVariablesTrie);
+        if (returnType == KeywordType.UNFINISHED || returnType == null) {
+            returnType = lookup(s, returnType, KeywordType.BUILTIN_FUNCTION, builtinFunctionsTrie);
         }
-        for (String var : builtinVariables) {
-            if (var.startsWith(s)) {
-                if (var.equals(s)) {
-                    returnType = KeywordType.BUILTIN_VARIABLE;
-                    break;
-                } else {
-                    returnType = KeywordType.UNFINISHED;
-                }
-            }
-        }
-        for (String func : builtinFunctions) {
-            if (func.startsWith(s) && (returnType == KeywordType.UNFINISHED || returnType == null)) {
-                if (func.equals(s)) {
-                    returnType = KeywordType.BUILTIN_FUNCTION;
-                    break;
-                } else {
-                    returnType = KeywordType.UNFINISHED;
-                }
-            }
-        }
-        for (String keyword : keywords) {
-            if (keyword.startsWith(s) && (returnType == KeywordType.UNFINISHED || returnType == null)) {
-                if (keyword.equals(s)) {
-                    returnType = KeywordType.KEYWORD;
-                    break;
-                } else {
-                    returnType = KeywordType.UNFINISHED;
-                }
-            }
+        if (returnType == KeywordType.UNFINISHED || returnType == null) {
+            returnType = lookup(s, returnType, KeywordType.KEYWORD, keywordsTrie);
         }
 
         return returnType;
+    }
+
+    private static KeywordType lookup(String s, KeywordType currentType, KeywordType matchType, Trie searchTrie) {
+        Trie.MatchType match = searchTrie.search(s);
+        if (match == Trie.MatchType.FULL_MATCH) {
+            return matchType;
+        }
+        if (match == Trie.MatchType.PARTIAL_MATCH) {
+            return KeywordType.UNFINISHED;
+        }
+
+        return currentType;
     }
 }
