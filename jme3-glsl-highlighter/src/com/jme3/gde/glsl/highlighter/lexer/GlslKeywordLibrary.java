@@ -32,6 +32,8 @@
 package com.jme3.gde.glsl.highlighter.lexer;
 
 import com.jme3.gde.glsl.highlighter.util.Trie;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Brace, yourselves, this file contains every word that means something in
@@ -39,10 +41,14 @@ import com.jme3.gde.glsl.highlighter.util.Trie;
  *
  * @author grizeldi
  */
-final class GlslKeywordLibrary {
+public final class GlslKeywordLibrary {
     
     public enum KeywordType {
         KEYWORD, BUILTIN_FUNCTION, BUILTIN_VARIABLE, BASIC_TYPE, UNFINISHED;
+    }
+
+    public record Keyword(String keyword, KeywordType keywordType) {
+
     }
     
     private static final Trie keywords = new Trie();
@@ -468,6 +474,13 @@ final class GlslKeywordLibrary {
         builtinFunctions.insert("groupMemoryBarrier");
     }
 
+    /**
+     * Finds if given string is either a partial match, full match or nothing at
+     * all
+     *
+     * @param s string to search for
+     * @return returns the status of the string
+     */
     public static KeywordType lookup(String s) {
         KeywordType returnType = null;
         returnType = lookup(s, returnType, KeywordType.BASIC_TYPE, basicTypes);
@@ -482,6 +495,23 @@ final class GlslKeywordLibrary {
         }
 
         return returnType;
+    }
+
+    /**
+     * Gets all the possible matches for given string (auto-complete)
+     *
+     * @param s string to search for
+     * @return all the matches for given string
+     */
+    public static List<Keyword> lookupAll(String s) {
+        List<Keyword> matches = new ArrayList<>();
+
+        matches.addAll(basicTypes.searchAll(s).stream().map((keyword) -> new Keyword(keyword, KeywordType.BASIC_TYPE)).toList());
+        matches.addAll(builtinVariables.searchAll(s).stream().map((keyword) -> new Keyword(keyword, KeywordType.BUILTIN_VARIABLE)).toList());
+        matches.addAll(builtinFunctions.searchAll(s).stream().map((keyword) -> new Keyword(keyword, KeywordType.BUILTIN_FUNCTION)).toList());
+        matches.addAll(keywords.searchAll(s).stream().map((keyword) -> new Keyword(keyword, KeywordType.KEYWORD)).toList());
+
+        return matches;
     }
 
     private static KeywordType lookup(String s, KeywordType currentType, KeywordType matchType, Trie searchTrie) {

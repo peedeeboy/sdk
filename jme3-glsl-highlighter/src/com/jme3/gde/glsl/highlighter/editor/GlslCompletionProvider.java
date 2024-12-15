@@ -31,12 +31,19 @@
  */
 package com.jme3.gde.glsl.highlighter.editor;
 
+import com.jme3.gde.glsl.highlighter.editor.completion.FunctionCompletionItem;
+import com.jme3.gde.glsl.highlighter.editor.completion.KeywordCompletionItem;
+import com.jme3.gde.glsl.highlighter.editor.completion.TypeCompletionItem;
+import com.jme3.gde.glsl.highlighter.editor.completion.VariableCompletionItem;
+import com.jme3.gde.glsl.highlighter.lexer.GlslKeywordLibrary;
+import java.util.List;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.StyledDocument;
 import org.netbeans.api.editor.mimelookup.MimeRegistration;
+import org.netbeans.spi.editor.completion.CompletionItem;
 import org.netbeans.spi.editor.completion.CompletionProvider;
 import org.netbeans.spi.editor.completion.CompletionResultSet;
 import org.netbeans.spi.editor.completion.CompletionTask;
@@ -58,27 +65,49 @@ public class GlslCompletionProvider implements CompletionProvider {
             protected void query(CompletionResultSet completionResultSet,
                     Document document, int caretOffset) {
 
-                String filter = getFilter(caretOffset, document);
+                String filter = "";
+                int startOffset = caretOffset - 1;
 
-                // TODO: get the posibilities
-                // TODO: filter out the special chars
-
-                completionResultSet.finish();
-            }
-
-            private String getFilter(int caretOffset, Document document) {
                 try {
                     final StyledDocument bDoc = (StyledDocument) document;
                     final int lineStartOffset = getRowFirstNonWhite(bDoc, caretOffset);
                     final char[] line = bDoc.getText(lineStartOffset, caretOffset - lineStartOffset).toCharArray();
                     final int whiteOffset = indexOfWhite(line);
-
-                    return new String(line, whiteOffset + 1, line.length - whiteOffset - 1);
+                    filter = new String(line, whiteOffset + 1, line.length - whiteOffset - 1);
+                    if (whiteOffset > 0) {
+                        startOffset = lineStartOffset + whiteOffset + 1;
+                    } else {
+                        startOffset = lineStartOffset;
+                    }
                 } catch (BadLocationException ex) {
                     Exceptions.printStackTrace(ex);
                 }
 
-                return "";
+                setCompletionItems(filter, completionResultSet, startOffset, caretOffset);
+
+                completionResultSet.finish();
+            }
+
+            private void setCompletionItems(String filter, CompletionResultSet completionResultSet, int startOffset, int caretOffset) {
+                List<GlslKeywordLibrary.Keyword> keywords = GlslKeywordLibrary.lookupAll(filter);
+                completionResultSet.addAllItems(keywords.stream().map((keyword) -> createCompletionItem(keyword, startOffset, caretOffset)).toList());
+            }
+
+            private CompletionItem createCompletionItem(GlslKeywordLibrary.Keyword keyword, int dotOffset, int caretOffset) {
+                return switch (keyword.keywordType()) {
+                    case KEYWORD ->
+                        new KeywordCompletionItem(keyword.keyword(), dotOffset, caretOffset);
+                    case BUILTIN_FUNCTION ->
+                        new FunctionCompletionItem(keyword.keyword(), dotOffset, caretOffset);
+                    case BUILTIN_VARIABLE ->
+                        new VariableCompletionItem(keyword.keyword(), dotOffset, caretOffset);
+                    case BASIC_TYPE ->
+                        new TypeCompletionItem(keyword.keyword(), dotOffset, caretOffset);
+                    case UNFINISHED ->
+                        throw new AssertionError("Keyword type invalid");
+                    default ->
+                        throw new AssertionError("Keyword type not implemented");
+                };
             }
         }, component);
     }
