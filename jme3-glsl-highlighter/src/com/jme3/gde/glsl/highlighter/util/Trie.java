@@ -31,7 +31,12 @@
  */
 package com.jme3.gde.glsl.highlighter.util;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +50,10 @@ public class Trie {
 
         Map<Character, TrieNode> children = new HashMap<>();
         boolean isEndOfWord = false;
+    }
+
+    private record Pair(TrieNode node, StringBuilder prefix) {
+
     }
 
     public enum MatchType {
@@ -70,6 +79,18 @@ public class Trie {
         current.isEndOfWord = true;
     }
 
+    private TrieNode findNode(String word) {
+        TrieNode current = root;
+        for (char ch : word.toCharArray()) {
+            if (!current.children.containsKey(ch)) {
+                return null;
+            }
+            current = current.children.get(ch);
+        }
+
+        return current;
+    }
+
     /**
      * Searches for the string
      *
@@ -77,15 +98,50 @@ public class Trie {
      * @return match type
      */
     public MatchType search(String word) {
-        TrieNode current = root;
-        for (char ch : word.toCharArray()) {
-            if (!current.children.containsKey(ch)) {
-                return MatchType.NO_MATCH;
-            }
-            current = current.children.get(ch);
+        TrieNode node = findNode(word);
+        if (node == null) {
+            return MatchType.NO_MATCH;
         }
 
-        return current.isEndOfWord ? MatchType.FULL_MATCH : MatchType.PARTIAL_MATCH;
+        return node.isEndOfWord ? MatchType.FULL_MATCH : MatchType.PARTIAL_MATCH;
+    }
+
+    /**
+     * Searches for the string and gives out all the possible matches
+     *
+     * @param word word to search for
+     */
+    public List<String> searchAll(String word) {
+        TrieNode node = findNode(word);
+        if (node == null) {
+            return Collections.emptyList();
+        }
+
+        return collectAllWords(node, word);
+    }
+
+    private static List<String> collectAllWords(TrieNode startNode, String prefix) {
+        List<String> results = new ArrayList<>();
+        Deque<Pair> stack = new ArrayDeque<>();
+        stack.push(new Pair(startNode, new StringBuilder(prefix)));
+
+        while (!stack.isEmpty()) {
+            Pair pair = stack.pop();
+            TrieNode node = pair.node;
+            StringBuilder currentPrefix = pair.prefix;
+
+            if (node.isEndOfWord) {
+                results.add(currentPrefix.toString());
+            }
+
+            for (Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+                char nextChar = entry.getKey();
+                TrieNode childNode = entry.getValue();
+                stack.push(new Pair(childNode, new StringBuilder(currentPrefix).append(nextChar)));
+            }
+        }
+
+        return results;
     }
 
 }
