@@ -39,6 +39,8 @@ import java.util.Map;
  */
 public class Trie {
 
+    private final TrieNode root;
+
     private static class TrieNode {
 
         Map<Character, TrieNode> children = new HashMap<>();
@@ -50,8 +52,6 @@ public class Trie {
         PARTIAL_MATCH,
         FULL_MATCH
     }
-
-    private final TrieNode root;
 
     public Trie() {
         root = new TrieNode();
