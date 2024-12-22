@@ -31,3 +31,4 @@ jdks/*.zip
 dist/
 /.nb-gradle/
 application/target
+branding/target
