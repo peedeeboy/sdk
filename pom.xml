@@ -50,7 +50,7 @@
     </modules>
 
     <properties>
-        <netbeans.version>RELEASE220</netbeans.version>
+        <netbeans.version>RELEASE240</netbeans.version>
         <brandingToken>jmonkeyenginesdk</brandingToken>
     </properties>
 </project>
