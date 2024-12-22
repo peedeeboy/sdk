@@ -30,3 +30,4 @@ jdks/*.exe
 jdks/*.zip
 dist/
 /.nb-gradle/
+application/target
