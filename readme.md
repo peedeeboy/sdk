@@ -27,35 +27,92 @@ Thus the prefered download is `jmonkeyplatform-windows-x64.exe` which essentiall
 After the SDK is up and running. A good starting point is to look at the jME examples. Under *File | New project | JME3 Tests* you can create a new project, populated with the jME build in examples. You can freely mess around with these and try out stuff. Your changes can always be reverted by simply creating a new *JME3 Tests* project. Once you are all comfortable and ready to embark on your own exciting journey, *File | New project | Basic game (with Gradle)* is the recommended starting point.
 
 ## Building the SDK
-Building the SDK is an easy process basically, but it depends on what kind of distribution you want to build. Currently the SDK requires __JDK 21__ to build.
-You also have to know that the build process changes from time to time, so have a look at the `.github/workflows/gradle.yml` file, or related, you will see how we build our releases then.  
+### Requirements
+* JDK21
 
-Technically the gradle task `buildSdk` is the main task which builds the sdk (Invoking `./gradlew buildSdk` or `gradlew.bat buildSdk` on Windows).
+### Process
+The jMonkeyEngine SDK is a Netbeans Platform Project, that uses Maven with the [Netbeans Module Plugin](https://bits.netbeans.org/mavenutilities/nbm-maven-plugin/nbm-maven-plugin/index.html) as its build system.
+The Netbeans Module Plugin handles downloading and configuring the Netbeans Harness used as the base for the SDK.
 
-__If you just want to run the SDK on your machine:__   
-    call `./gradlew run` (`gradlew.bat run`), which internally calls `buildSdk` and then uses `ant` to run the SDK.
-    
-__If you want to build the platform agnostic zip:__   
-    call `./gradlew buildSdk` and then you have the file in `dist/jmonkeyplatform.zip`  
+After cloning this repo, install the Maven dependencies and compile the application with:
 
-__If you want to build the platform installers (like we do):__   
-    call `./download-jdks.sh`, `./gradlew buildSdk` and then `ant build-installers`
-    You have to install ant for this to work (for Linux consult the internet, for Mac OS look into homebrew).
-    Note that this might take a long time, because a huge amount of data is compressed and such.
-    
-__If you want to build the platform installers (On Windows -> without having ant):__   
-    See above. You can bypass ant by declaring a gradle task, just like it has been done for run. There, the gradle included ant will be used).
-    Alternatively you can launch netbeans in `netbeans/`, open the SDK as Netbeans Project Collection and select __package as__:
-    ![Package as...](http://i.imgur.com/5V2uBHf.png).
-    Note that you still have to download and unpack the JDKs somehow, which is a cumbersome process, which is why it is discouraged to
-    build the installers on Windows (Linux and Mac OS are supported).
-    
-__If you want to debug the SDK inside an IDE:__   
-    See above. You want to open the SDK as Netbeans Project from within Netbeans (you can use the nb in `netbeans/`) and you can then treat it as regular project with the difference that there are several subproject.
+```shell
+./mvnw install
+```
 
-A note about the `netbeans/` folder: To save bandwidth `buildSdk` downloads netbeans once to said folder and uses it over and over again. Even when the download URL is changed (i.e. when you update the Netbeans version), you have to delete the netbeans folder and remove it from any cache so it can be reloaded.
+Then create the Netbeans cluster in the Application sub-project with:
+```shell
+cd application
+../mvnw nbm:cluster-app
+```
 
-## Developing/Contributing
+Finally, still in the `/application` folder, run the following to stand up the Netbeans harness with the currently compiled SDK code:
+```shell
+../mvnw nbm:run-platform
+```
+
+### Packaging the installers
+TODO
+
+
+## Developing
+The jMonkeyEngine SDK can be developed in any IDE that supports the Maven build tool, e.g. IntelliJ IDEA or Netbeans.  
+
+Given the SDK is a Netbeans Platform Application, some additional helpful tooling is available when developing in Netbeans.
+
+### Local Dependencies
+Local dependencies are stored in the `/lib` folder.  To import dependencies use the Maven `install-file` goal:
+
+```shell
+./mvnw install:install-file -Dfile=/path/to/libary/somelibrary.jar -DgroupId=com.someorganisation -DartifactId=somelibrary \
+ -Dversion=1.0 -Dpackaging=jar -DgeneratePom=true -DlocalRepositoryPath=./lib -DcreateChecksum=true
+```
+
+Add the `/lib` local repository to the `pom.xml` of the Module:
+```xml
+<repositories>
+    <repository>
+        <id>lib</id>
+        <name>Local Maven Repo</name>
+        <url>file://${maven.multiModuleProjectDirectory}/lib</url>
+    </repository>
+</repositories>
+```
+
+Then declare a Maven dependency as usual.
+
+### Implementation dependencies
+To declare a dependency on a Netbeans API without public access (to get around the `Module dependency has friend 
+dependency on org.netbeans.xxxx but is not listed as friend`, declare an 'Implementation Dependency' in the 
+`<configuration>` of the Netbeans plugin, e.g.
+
+```xml
+<configuration>
+    <moduleDependencies>
+        <dependency>
+            <id>org.netbeans.modules:org-netbeans-modules-editor-settings-storage</id>
+            <type>impl</type>
+        </dependency>
+    </moduleDependencies>
+</configuration>
+```
+
+### Netbeans Module Plugin help
+Run the following command to get a list of configuration options for the Netbeans Module Plugin:
+
+```shell
+./mvnw help:describe -Dplugin=org.apache.netbeans.utilities:nbm-maven-plugin -Ddetail
+```
+
+### Updating Netbeans
+To update the SDK to run on a newer version of Netbeans, update the `<netbeans.version>` property in the root `pom.xml`:
+
+`<netbeans.version>RELEASE240</netbeans.version>`
+
+This property should be referenced whenever declaring a dependency on a Netbeans Platform API, e.g. `${netbeans.version}` 
+so that an upgrade only involves updating this one property.
+
+## Contributing
 First of all, I suggest you to take a look at [docs/](https://github.com/jMonkeyEngine/sdk/tree/master/docs). Those docs are a loose collection of things I came across during development, but they prevent you from re-doing the same experiences. 
 Other than that, `Netbeans Platform` is your google keyword for any NB related issues.
 Basically the only tricky thing is how we handle custom entries in the SceneExplorer. This is called the Netbeans Nodes API and is somewhat unintuitive.
