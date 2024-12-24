@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Tue Dec 24 18:37:44 GMT 2024
+jbullet-local.jar>=
+jbullet-local.pom>=
