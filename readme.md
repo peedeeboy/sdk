@@ -112,6 +112,15 @@ To update the SDK to run on a newer version of Netbeans, update the `<netbeans.v
 This property should be referenced whenever declaring a dependency on a Netbeans Platform API, e.g. `${netbeans.version}` 
 so that an upgrade only involves updating this one property.
 
+### Updating jMonkeyEngine
+To update the underlying version of jMonkeyEngine powering the SDK, update the `<jmonkeyengine.version>` property in the
+root `pom.xml`:
+
+`<jmonkeyengine.version>3.7.0</jmonkeyengine.version>`
+
+This property is used in the `jme3-core-baselibs` project to download the jMonkeyEngine libraries.  Modules that need
+jMonkeyEngine libraries should declare a dependency on the `jme3-core-baselibs` module.
+
 ## Contributing
 First of all, I suggest you to take a look at [docs/](https://github.com/jMonkeyEngine/sdk/tree/master/docs). Those docs are a loose collection of things I came across during development, but they prevent you from re-doing the same experiences. 
 Other than that, `Netbeans Platform` is your google keyword for any NB related issues.
