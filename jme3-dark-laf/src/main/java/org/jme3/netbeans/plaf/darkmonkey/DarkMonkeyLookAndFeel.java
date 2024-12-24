@@ -384,7 +384,7 @@ public class DarkMonkeyLookAndFeel extends com.nilo.plaf.nimrod.NimRODLookAndFee
      * This Method will simplify the lookup of any theme-related value.
      * It will return null if the value wasn't found.
      * 
-     * @see #getThemeProperty(java.lang.String, java.lang.String) 
+     * @see #getThemeProperty(String, String)
      * @param name The Parameter to look for
      * @return The String Value of said property (or null)
      */

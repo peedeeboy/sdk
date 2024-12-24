@@ -46,6 +46,7 @@
         <module>application</module>
         <module>jme3-core-baselibs</module>
         <module>jme3-core-libraries</module>
+        <module>jme3-dark-laf</module>
     </modules>
 
     <properties>

@@ -2,7 +2,7 @@
 <!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.2//EN" "http://www.netbeans.org/dtds/filesystem-1_2.dtd">
 <filesystem>
     <!-- DarkMonkey Look and Feel Section -->
-    
+
     <!-- DarkMonkey Fonts and Colors Section -->
     <folder name="Editors">
         <!--  Begin with the first layer of Defaults for FaC "Dark Monkey"-->
@@ -36,7 +36,7 @@
                 </folder> <!-- "FontsColors" -->
             </folder> <!-- "css" -->
         </folder> <!-- application" -->
-        
+
         <!--  Begin with the mime-type specific layer of Defaults for FaC "Dark Monkey"-->
         <folder name="text">
             <folder name="css">
@@ -203,7 +203,7 @@
                         </folder> <!-- "Defaults" -->
                     </folder> <!-- "Dark Monkey" -->
                 </folder> <!-- "FontsColors" -->
-            </folder> <!-- "xml" -->         
+            </folder> <!-- "xml" -->
         </folder> <!-- "text" -->
-     </folder> <!-- "Editors" -->
+    </folder> <!-- "Editors" -->
 </filesystem>

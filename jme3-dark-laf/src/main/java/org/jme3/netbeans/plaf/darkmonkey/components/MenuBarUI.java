@@ -1,4 +1,4 @@
-/*package org.jme3.netbeans.plaf.darkmonkey.components;
+package org.jme3.netbeans.plaf.darkmonkey.components;/*package org.jme3.netbeans.plaf.darkmonkey.components;
 
 import com.apple.laf.AquaMenuBarUI;
 import java.awt.*;
