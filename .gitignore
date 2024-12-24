@@ -1,4 +1,4 @@
-jme3-core-baselibs/release/modules/ext
+jme3-core-baselibs-old/release/modules/ext
 jme3-core-libraries/release/modules/ext
 jme3-project-baselibs/release/libs
 io_export_ogreDotScene.py
@@ -15,7 +15,7 @@ JME3TestsTemplateAndroid/src/META-INF
 *.iml
 .idea
 jme3-project-baselibs/src/com/jme3/gde/project/baselibs
-jme3-core-baselibs/nbproject/project.xml
+jme3-core-baselibs-old/nbproject/project.xml
 jme3-core-libraries/nbproject/project.xml
 build/*
 */build/*
@@ -32,3 +32,4 @@ dist/
 /.nb-gradle/
 application/target
 branding/target
+jme3-core-baselibs/target/

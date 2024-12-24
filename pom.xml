@@ -44,13 +44,13 @@
     <modules>
         <module>branding</module>
         <module>application</module>
-        <!--
-        <module>MavenPlatformProject-ModuleOne</module>7
-        -->
+        <module>jme3-core-baselibs</module>
     </modules>
 
     <properties>
         <netbeans.version>RELEASE240</netbeans.version>
+        <jmonkeyengine.version>3.7.0</jmonkeyengine.version>
+        <jmonkeyengine.versionTag>stable</jmonkeyengine.versionTag>
         <brandingToken>jmonkeyenginesdk</brandingToken>
     </properties>
 </project>
