@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+OpenIDE-Module: com.jme3.gde.welcome
+OpenIDE-Module-Implementation-Version: 0
+OpenIDE-Module-Install: com/jme3/gde/welcome/Installer.class
+OpenIDE-Module-Localizing-Bundle: com/jme3/gde/welcome/Bundle.properti
+ es
+OpenIDE-Module-Requires: org.openide.windows.WindowManager
+OpenIDE-Module-Specification-Version: 1.0
+OpenIDE-Module-Build-Version: 202412270953
+OpenIDE-Module-Public-Packages: -
+OpenIDE-Module-Module-Dependencies: org.netbeans.api.annotations.commo
+ n/1 > 1.54, org.openide.modules > 7.74, org.openide.windows > 6.103, 
+ org.netbeans.modules.settings/1 > 1.75, org.openide.util.ui > 9.35, o
+ rg.openide.util > 9.34, com.jme3.gde.docs > 1.0
+

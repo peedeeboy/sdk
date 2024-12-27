@@ -129,3 +129,10 @@ Just take a look at the `Motion Event Pull Request`, which should've been added 
 
 Other than that, we are more than happy to help, even if your addition is incomplete. Make sure you use the Netbeans formatting, obvious variable naming and commented and especially documented code, though.
 If you think you've encountered a bug in the SDK, please open an issue to let the developers know or post [on the hub](https://hub.jmonkeyengine.org) using the `Troubleshooting | jmonkeyplatform` category.
+
+## Known Issues / To Do
+* The `jme3-documentation` module has an Ant task to try and download the current Wiki.
+It probably hasn't worked for a long time. It might be possible to get it working with the Maven
+Ant Run plugin, but there might be a better way to fix it.
+* The Application Test doesn't work (and is currently commented out) as it needs the JVM paramaters
+to open JVM modules.  Need to fix or refactor the SDK not to use non-public Java APIs.

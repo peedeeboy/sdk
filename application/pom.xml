@@ -86,7 +86,11 @@
             <artifactId>darkmonkey</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.jme3.gde</groupId>
+            <artifactId>welcome</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- NbModuleSuite functional in RELEASE70 or later: -->
         <dependency>
             <groupId>org.netbeans.api</groupId>
